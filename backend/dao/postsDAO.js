@@ -30,19 +30,32 @@ export default class PostsDAO {
             console.error('Unable to issue find command: ')
             return;
         }
+
+        const displayCursor = cursor.limit(postsPerPage).skip(postsPerPage * page);
+
+        const postsList = await displayCursor.toArray();
+        const totalPosts = await posts.countDocuments(query);
+        
+        return { postsList, totalPosts };
     }
 
     static async addPost(data) {
-        console.log("HEYY")
-        console.log(data)
         try {
-            const postDoc = {
-                text: "hey"
-            };
-            return await posts.insertOne(postDoc);
+            return await posts.insertOne(data);
         }
         catch (err) {
+            console.log(err)
             console.error('Unable to post: ');
+            return { error: err };
+        }
+    }
+
+    static async resetPost() {
+        try {
+            return await posts.deleteMany({});
+        }
+        catch (err) {
+            console.log("A");
             return { error: err };
         }
     }

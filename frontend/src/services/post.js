@@ -1,9 +1,15 @@
 import http from "../http-common";
 
 class PostDataService {
-    createPos(data) {
-        console.log(data)
-        return http.post("/post", JSON.stringify({"data": "hey"}));
+    getAll() {
+        return http.get("/");
+    }
+    createPost(data) {
+        console.log(data);
+        return http.post("/post", data);
+    }
+    reset() {
+        return http.post("/reset")
     }
 }
 
