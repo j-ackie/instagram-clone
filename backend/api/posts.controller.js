@@ -13,7 +13,23 @@ export default class PostsController {
         res.json(response);
     }
 
-    static async apiPost(req, res, next) {
+    static async apiGetPostById(req, res, next) {
+        try {
+            let postId = req.params.postId;
+            let post = await PostsDAO.getPostById(postId);
+            if (!post) {
+                res.status(404).json({ error: "Not found" });
+                return;
+            }
+            res.json(post);
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).json({ error: err });
+        }
+    }
+
+    static async apiCreatePost(req, res, next) {
         console.log(req.body);
         try {
             const PostResponse = await PostsDAO.addPost(req.body);
@@ -24,7 +40,9 @@ export default class PostsController {
         }
     }
 
-    static async apiReset(req, res, next) {
+    
+
+    static async apiResetPosts(req, res, next) {
         try {
             const PostResponse = await PostsDAO.resetPost();
             res.json({ status: "success" });

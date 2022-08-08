@@ -1,4 +1,59 @@
 .post {
-    outline: solid 1px black;
-    background-color: green;
+    margin: auto;
+    margin-top: 20px;
+    width: 400px;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+}
+
+.post img {
+    max-width: 400px;
+}
+
+.post a {
+    font-weight: bold;
+    color: inherit;
+    text-decoration: none;
+}
+
+.post p {
+    display: inherit;
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+}
+
+.header a {
+    margin-left: 10px;
+}
+
+.post-profile-photo {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    width: 40px;
+}
+
+.post-profile-photo:hover {
+    cursor: pointer;
+}
+
+.footer {
+    padding: 10px;
+}
+
+.description {
+    margin-top: 10px;
+}
+
+.description span {
+    margin-left: 5px;
+}
+
+.likes {
+    margin-top : 10px;
 }

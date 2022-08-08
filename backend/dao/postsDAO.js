@@ -1,4 +1,5 @@
 import mongodb from "mongodb";
+const ObjectId = mongodb.ObjectID;
 
 let posts;
 
@@ -31,12 +32,28 @@ export default class PostsDAO {
             return;
         }
 
-        const displayCursor = cursor.limit(postsPerPage).skip(postsPerPage * page);
+        const displayCursor = cursor.limit(postsPerPage).skip(postsPerPage * page).sort({'_id': -1});
 
         const postsList = await displayCursor.toArray();
         const totalPosts = await posts.countDocuments(query);
-        
+
         return { postsList, totalPosts };
+    }
+
+    static async getPostById(postId) {
+        
+        let query = { "_id": { $eq: new ObjectId(postId) } };
+        let doc;
+
+        try {
+            doc = await posts.findOne(query);
+        }
+        catch (err) {
+            console.error(err);
+            return;
+        }
+
+        return doc;
     }
 
     static async addPost(data) {

@@ -1,33 +1,30 @@
 import Post from "../Post/Post";
-import { useState } from "react";
-import PostDataService from "../../services/post"
+import { useEffect, useState } from "react";
+import PostDataService from "../../services/PostDataService"
+import testPostPhoto from "../../test_photos/322868_1100-800x825.jpg"
+import testProfilePhoto from "../../test_photos/Samoyed-Puppy-Closeup.jpg"
 
-export default function Home() {
-    const [posts, setPosts] = useState([]);
+import "./Home.css"
 
-    PostDataService.getAll()
-        .then(response => {
-            let postsList = [];
-            for (const post of response.data.posts) {
-                postsList.push(
-                    <Post
-                        username={ post.text }
-                    />
-                );
-            }
-            setPosts(postsList);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+export default function Home(props) {
+
+    useEffect(() => {
+        props.getAllPosts();
+    }, []);
 
     return (
-        <div id="Home">
-            { posts }
+        <div id="home">
             <Post 
-                username="hey"
+                username="DogMaster9000"
+                profile_image_url={ testProfilePhoto }
+                image_url={ testPostPhoto }    
             />
-
+            <Post 
+                username="Example Post"
+                profile_image_url={ testProfilePhoto }
+                image_url={ testPostPhoto }    
+            />
+            { props.posts }
             <button
                 onClick={ PostDataService.reset }
             >
