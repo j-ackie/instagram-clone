@@ -3,7 +3,7 @@
     margin-top: 20px;
     width: 400px;
     border-radius: 6px;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     font-size: 14px;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .post-profile-photo {
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     border-radius: 50%;
     width: 40px;
 }

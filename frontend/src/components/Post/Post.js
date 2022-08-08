@@ -21,15 +21,14 @@ export default function Post(props) {
             .then(response => {
                 info = response.data;
                 setPostInfo(info);
-
             })
             .then(response => {
                 PostDataService.getUserById(info.user_id)
                     .then(response => {
                         setUsername(response.data.username);
                     });
-            })
-    }, [])
+            });
+    }, [props.postId]);
 
     return (
         <div className="post">

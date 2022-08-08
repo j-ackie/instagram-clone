@@ -1,0 +1,55 @@
+import Home from "../Home/Home";
+import Navbar from "../Navbar/Navbar"
+import CreatePost from "../CreatePost/CreatePost"
+import Post from '../Post/Post';
+import { useState } from "react";
+
+import PostDataService from '../../services/PostDataService';
+
+export default function Content(props) {
+
+    const [posts, setPosts] = useState([]);
+    const [isPostIconClicked, setIsPostIconClicked] = useState(false);
+
+    const getAllPosts = () => {
+        PostDataService.getAll()
+            .then(response => {
+                console.log(response.data)
+                let postsList = [];
+                for (const post of response.data.posts) {
+                    console.log(post);
+                    postsList.push(
+                        <Post
+                            key={post._id}
+                            postId={post._id}
+                        />
+                    );
+                }
+                setPosts(postsList);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    return (
+        <div id="content">
+            <Navbar
+                user={ props.user }
+                setUser={ props.setUser }
+                getAllPosts={ getAllPosts }
+                setIsPostIconClicked={ setIsPostIconClicked }
+            />
+            <Home
+                posts={posts}
+                getAllPosts={getAllPosts}
+            />
+            { isPostIconClicked
+                ? <CreatePost 
+                    setIsPostIconClicked={ setIsPostIconClicked }
+                  />
+                : ''
+            }
+        </div>
+    )
+}
