@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Switch, Route, Link } from "react-router-dom";
 import PostDataService from './services/PostDataService';
-
 import Home from "./components/Home/Home";
 import Navbar from "./components/Navbar/Navbar"
 import Post from './components/Post/Post';
@@ -15,10 +14,13 @@ function App() {
   const getAllPosts = () => {
     PostDataService.getAll()
       .then(response => {
+          console.log(response.data)
           let postsList = [];
           for (const post of response.data.posts) {
+              console.log(post);
               postsList.push(
                   <Post
+                      key={ post._id }
                       postId={ post._id }
                   />
               );

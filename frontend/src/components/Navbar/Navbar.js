@@ -11,7 +11,10 @@ export default function Navbar(props) {
     const handleClick = () => {
         console.log("hey")
         let data = {
-            text: input
+            "user_id": null,
+            "date": null,
+            "likes": [],
+            "comments": []
         };
         PostDataService.createPost(data)
             .then(response => {
