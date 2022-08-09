@@ -14,7 +14,7 @@ router.route("/user/:userId").get(UsersController.apiGetUserById);
 
 router
     .route("/post")
-    .post(PostsController.apiCreatePost, upload.single("file"));
+    .post(upload.single("file"), PostsController.apiCreatePost);
 
 
 router

@@ -1,10 +1,16 @@
 import PostsDAO from "../dao/postsDAO.js"
+import upload, { get } from "../s3.js"
 
 export default class PostsController {
     static async apiGetPosts(req, res, next) {
         const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
         
         const { postsList, totalPosts } = await PostsDAO.getPosts();
+
+        for (const post of postsList) {
+            post.file = await get(post.filename);
+            delete post.filename;
+        }
 
         let response = {
             posts: postsList
@@ -30,8 +36,10 @@ export default class PostsController {
     }
 
     static async apiCreatePost(req, res, next) {
-        console.log(req.body);
-        return;
+        const filename = await upload(req.file);
+        req.body.filename = filename;
+        req.body.likes = JSON.parse(req.body.likes);
+        req.body.comments = JSON.parse(req.body.comments);
         try {
             const PostResponse = await PostsDAO.addPost(req.body);
             res.json({ status: "success" });
@@ -40,8 +48,6 @@ export default class PostsController {
             res.status(500).json({ error: err.message });
         }
     }
-
-    
 
     static async apiResetPosts(req, res, next) {
         try {
