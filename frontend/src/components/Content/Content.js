@@ -11,17 +11,18 @@ export default function Content(props) {
     const [posts, setPosts] = useState([]);
     const [isPostIconClicked, setIsPostIconClicked] = useState(false);
 
+    const [hey, setHey] = useState(null);
+
     const getAllPosts = () => {
         PostDataService.getAll()
             .then(response => {
-                console.log(response.data)
                 let postsList = [];
                 for (const post of response.data.posts) {
                     console.log(post);
                     postsList.push(
                         <Post
-                            key={post._id}
-                            postId={post._id}
+                            key={ post._id }
+                            postInfo={ post }
                         />
                     );
                 }

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import CreatePostUpload from "./CreatePostUpload";
-import CreatePostSubmit from "./CreatePostSubmit"
+import CreatePostCrop from "./CreatePostCrop"
+import CreatePostSubmit from "./CreatePostSubmit";
 import CreatePostHeader from "./CreatePostHeader"
 import "./CreatePost.css";
 
 export default function CreatePost(props) {
     const [file, setFile] = useState(null);
+    const [isCropped, setIsCropped] = useState(false);
     const [headers, setHeaders] = useState([]);
 
     const handleClick = (event) => {
@@ -21,20 +23,27 @@ export default function CreatePost(props) {
                     headers={ headers }
                 />
                 <div id="create-post-content">
-                {   file
-                        ? <CreatePostSubmit
-                            userInfo={ props.userInfo }
-                            getAllPosts={ props.getAllPosts }
-                            setIsPostIconClicked={ props.setIsPostIconClicked }
-                            file={ file }
-                            setFile={ setFile }
-                            setHeaders={ setHeaders }
-                          />
-                        : <CreatePostUpload 
-                            setFile={ setFile }
-                            setHeaders={ setHeaders }
-                          />
-                }
+                    {   
+                        !file ? <CreatePostUpload 
+                                    setFile={ setFile }
+                                    setHeaders={ setHeaders }
+                                /> :
+                   !isCropped ? <CreatePostCrop
+                                    file={ file }
+                                    setFile={ setFile }
+                                    setIsCropped={ setIsCropped }
+                                    setHeaders={ setHeaders }
+                                /> :
+                                <CreatePostSubmit 
+                                    userInfo={ props.userInfo }
+                                    getAllPosts={ props.getAllPosts }
+                                    setIsPostIconClicked={ props.setIsPostIconClicked }
+                                    file={ file }
+                                    setFile={ setFile }
+                                    setIsCropped={ setIsCropped }
+                                    setHeaders={ setHeaders }
+                                />
+                    }
                 </div>
             </div>
         </div>

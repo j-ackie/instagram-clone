@@ -31,6 +31,7 @@ export default class PostsController {
 
     static async apiCreatePost(req, res, next) {
         console.log(req.body);
+        return;
         try {
             const PostResponse = await PostsDAO.addPost(req.body);
             res.json({ status: "success" });

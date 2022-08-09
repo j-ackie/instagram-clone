@@ -14,7 +14,7 @@ export default function Home(props) {
 
     return (
         <div id="home">
-            <Post 
+            {/* <Post 
                 username="DogMaster9000"
                 profile_image_url={ testProfilePhoto }
                 image_url={ testPostPhoto }    
@@ -23,7 +23,7 @@ export default function Home(props) {
                 username="Example Post"
                 profile_image_url={ testProfilePhoto }
                 image_url={ testPostPhoto }    
-            />
+            /> */}
             { props.posts }
             <button
                 onClick={ PostDataService.reset }

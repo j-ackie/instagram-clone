@@ -5,30 +5,14 @@ import { useState, useEffect } from "react";
 
 export default function Post(props) {
 
-    const [postInfo, setPostInfo] = useState({
-        "_id": null,
-        "user_id": null,
-        "date": null,
-        "likes": [],
-        "comments": []
-    });
-
     const [username, setUsername] = useState("");
 
     useEffect(() => {
-        let info;
-        PostDataService.getPostById(props.postId)
+        PostDataService.getUserById(props.postInfo.user_id)
             .then(response => {
-                info = response.data;
-                setPostInfo(info);
-            })
-            .then(response => {
-                PostDataService.getUserById(info.user_id)
-                    .then(response => {
-                        setUsername(response.data.username);
-                    });
+                setUsername(response.data.username);
             });
-    }, [props.postId]);
+    }, []);
 
     return (
         <div className="post">
@@ -40,7 +24,7 @@ export default function Post(props) {
 
             </div>
             <img className="post-photo"
-                src={ props.image_url }
+                src={ props.postInfo.file }
             />
             <div className="footer">
                 <div className="icons">
@@ -51,7 +35,7 @@ export default function Post(props) {
                 <div className="likes">
                     <span>
                         <p>
-                            Liked by { postInfo.likes.length } others
+                            Liked by { props.postInfo.likes.length } others
                         </p>
                     </span>
                 </div>
@@ -59,10 +43,21 @@ export default function Post(props) {
                     <Link to="/a">{ username }</Link>
                     <span>
                         <p>
-                        While it may not be obvious to everyone, there are a number of reasons creating random paragraphs can be useful. A few examples of how some people use this generator are listed in the following paragraphs.
+                            { props.postInfo.description }
                         </p>
                     </span>
                 </div>
+                {
+                    props.postInfo.comments.length != 0
+                        ? <span>
+                            <p>
+                              {  }
+                            </p>
+                          </span>
+                        : <span>
+                                
+                          </span>
+                }
             </div>
         </div>
     )

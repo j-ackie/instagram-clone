@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect } from "react";
 import PostDataService from "../../services/PostDataService";
 
 function getBase64(file, callback) {
@@ -14,8 +14,8 @@ export default function CreatePostSubmit(props) {
     const handleClick = () => {
         getBase64(props.file, (event) => {
             let data = {
-                file: event.target.result,
                 user_id: props.userInfo.userId,
+                file: event.target.result,
                 date: new Date(),
                 likes: [],
                 comments: []
@@ -28,10 +28,12 @@ export default function CreatePostSubmit(props) {
         });        
     }
 
+
     useEffect(() => {
         let backButton = (
             <button 
-                onClick={() => props.setFile(null)}>
+                onClick={() => props.setIsCropped(false)}
+            >
                 Back
             </button>
         )
@@ -42,15 +44,11 @@ export default function CreatePostSubmit(props) {
                 Post
             </button>
         )
-        props.setHeaders([backButton, "Crop", postButton]);
+        props.setHeaders([backButton, "Create new post", postButton]);
     }, []);
-
     return (
-        <div id="create-post-submit">
-            <img 
-                id="create-post-preview"
-                src={ URL.createObjectURL(props.file) }
-            />
+        <div>
+            
         </div>
     )
 }
