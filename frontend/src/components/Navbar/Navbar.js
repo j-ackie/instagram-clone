@@ -1,27 +1,9 @@
-import { useState, useEffect } from "react";
-
-import PostDataService from "../../services/PostDataService";
 import postIcon from "../../icons/add.png"
 import "./Navbar.css";
 
 import Login from "../Login/Login"
 
 export default function Navbar(props) {
-    const handleClick = () => {
-        console.log("hey")
-        let data = {
-            "user_id": null,
-            "date": null,
-            "likes": [],
-            "comments": []
-        };
-        PostDataService.createPost(data)
-            .then(response => {
-                console.log("HEYY")
-                props.getAllPosts();
-            });
-    }
-
     const handlePostIconClick = () => {
         props.setIsPostIconClicked(true);
     } 
@@ -30,10 +12,10 @@ export default function Navbar(props) {
         <nav>
             <h1>Instagram</h1>
             <Login 
-                setUser={ props.setUser }
+                setUserInfo={ props.setUserInfo }
             />
             <h1>
-                { props.user }
+                { props.userInfo.username }
             </h1>
             <img 
                 className="navbar-icons"

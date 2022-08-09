@@ -35,8 +35,8 @@ export default function Content(props) {
     return (
         <div id="content">
             <Navbar
-                user={ props.user }
-                setUser={ props.setUser }
+                userInfo={ props.userInfo }
+                setUserInfo={ props.setUserInfo }
                 getAllPosts={ getAllPosts }
                 setIsPostIconClicked={ setIsPostIconClicked }
             />
@@ -45,7 +45,9 @@ export default function Content(props) {
                 getAllPosts={getAllPosts}
             />
             { isPostIconClicked
-                ? <CreatePost 
+                ? <CreatePost
+                    userInfo={ props.userInfo }
+                    getAllPosts={ getAllPosts } 
                     setIsPostIconClicked={ setIsPostIconClicked }
                   />
                 : ''

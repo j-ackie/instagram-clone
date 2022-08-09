@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, Route, Link } from "react-router-dom";
 
 import Content from "./components/Content/Content"
@@ -7,13 +7,16 @@ import Content from "./components/Content/Content"
 import "./App.css"
 
 function App() {
-    const [user, setUser] = useState(null);
+    const [userInfo, setUserInfo] = useState({
+        userId: "",
+        username: ""
+    });
     
     return (
         <div className="App">
             <Content 
-                user={ user }
-                setUser={ setUser }
+                userInfo={ userInfo }
+                setUserInfo={ setUserInfo }
             />
         </div>
     );

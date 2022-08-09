@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import CreatePostUpload from "./CreatePostUpload";
 import CreatePostSubmit from "./CreatePostSubmit"
 import CreatePostHeader from "./CreatePostHeader"
@@ -23,6 +23,9 @@ export default function CreatePost(props) {
                 <div id="create-post-content">
                 {   file
                         ? <CreatePostSubmit
+                            userInfo={ props.userInfo }
+                            getAllPosts={ props.getAllPosts }
+                            setIsPostIconClicked={ props.setIsPostIconClicked }
                             file={ file }
                             setFile={ setFile }
                             setHeaders={ setHeaders }

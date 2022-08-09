@@ -57,6 +57,7 @@ export default class PostsDAO {
     }
 
     static async addPost(data) {
+        data.user_id = new ObjectId(data.user_id);
         try {
             return await posts.insertOne(data);
         }

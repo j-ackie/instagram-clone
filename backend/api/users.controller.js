@@ -20,9 +20,13 @@ export default class UsersController {
 
     static async apiLogin(req, res, next) {
         try {
-            const LoginResponse = await UsersDAO.login(req.body);
-            if (LoginResponse) {
-                res.status(201).json({ status: "success" });
+            const loginResponse = await UsersDAO.login(req.body);
+            if (loginResponse) {
+                let data = {
+                    userId: loginResponse._id,
+                    username: loginResponse.username
+                };
+                res.status(201).json(data);
             }
             else {
                 res.status(401).json({ error: "nope" });

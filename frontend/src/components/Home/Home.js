@@ -1,5 +1,5 @@
 import Post from "../Post/Post";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PostDataService from "../../services/PostDataService"
 import testPostPhoto from "../../test_photos/322868_1100-800x825.jpg"
 import testProfilePhoto from "../../test_photos/Samoyed-Puppy-Closeup.jpg"
@@ -7,7 +7,7 @@ import testProfilePhoto from "../../test_photos/Samoyed-Puppy-Closeup.jpg"
 import "./Home.css"
 
 export default function Home(props) {
-
+    console.log(props)
     useEffect(() => {
         props.getAllPosts();
     }, []);

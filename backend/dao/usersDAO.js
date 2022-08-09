@@ -27,28 +27,21 @@ export default class UsersDAO {
             console.error(err);
             return;
         }
-        console.log(doc);
         return doc;
     }
 
     static async login(data) {
         let query = { "username": { $eq: data.username } };
-        let cursor;
+        let doc;
         
         try {
-            cursor = await users.find(query).limit(1);
+            doc = await users.findOne(query);
         }
         catch (err) {
             console.err(err);
-            return false;
+            return;
         }
         
-        let userInfo = await cursor.toArray();
-        if (userInfo.length === 0) {
-            return false;
-        }
-
-        userInfo = userInfo[0];
-        return userInfo.password === data.password;
+        return doc;
     }
 }
