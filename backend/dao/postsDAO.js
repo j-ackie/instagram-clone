@@ -62,7 +62,6 @@ export default class PostsDAO {
             return await posts.insertOne(data);
         }
         catch (err) {
-            console.log(err)
             console.error('Unable to post: ');
             return { error: err };
         }
@@ -73,7 +72,6 @@ export default class PostsDAO {
             return await posts.deleteMany({});
         }
         catch (err) {
-            console.log("A");
             return { error: err };
         }
     }

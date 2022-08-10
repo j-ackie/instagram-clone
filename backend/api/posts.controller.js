@@ -38,8 +38,9 @@ export default class PostsController {
     static async apiCreatePost(req, res, next) {
         const filename = await upload(req.file);
         req.body.filename = filename;
-        req.body.likes = JSON.parse(req.body.likes);
-        req.body.comments = JSON.parse(req.body.comments);
+        req.body.date = new Date();
+        req.body.likes = [];
+        req.body.comments = [];
         try {
             const PostResponse = await PostsDAO.addPost(req.body);
             res.json({ status: "success" });

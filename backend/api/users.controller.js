@@ -2,7 +2,6 @@ import UsersDAO from "../dao/usersDAO.js";
 
 export default class UsersController {
     static async apiGetUserById(req, res, next) {
-        console.log(req.params);
         try {
             let userId = req.params.userId;
             let user = await UsersDAO.getUserById(userId);
