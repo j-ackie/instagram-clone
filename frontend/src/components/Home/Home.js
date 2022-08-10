@@ -7,7 +7,6 @@ import testProfilePhoto from "../../test_photos/Samoyed-Puppy-Closeup.jpg"
 import "./Home.css"
 
 export default function Home(props) {
-    console.log(props)
     useEffect(() => {
         props.getAllPosts();
     }, []);

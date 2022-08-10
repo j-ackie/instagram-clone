@@ -21,9 +21,9 @@ export default function CreatePostCrop(props) {
     }, []);
 
     return (
-        <div id="create-post-submit">
+        <div id="create-post-crop">
             <img 
-                id="create-post-preview"
+                id="create-post-crop-preview"
                 src={ URL.createObjectURL(props.file) }
             />
         </div>

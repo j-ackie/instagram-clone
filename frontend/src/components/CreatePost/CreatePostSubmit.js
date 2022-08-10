@@ -1,33 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import PostDataService from "../../services/PostDataService";
 
-function getBase64(file, callback) {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = callback;
-    reader.onerror = () => {
-        console.error("error");
-    };
-}
-
 export default function CreatePostSubmit(props) {
-    const handleClick = () => {
-        getBase64(props.file, (event) => {
-            let data = {
-                user_id: props.userInfo.userId,
-                file: event.target.result,
-                date: new Date(),
-                likes: [],
-                comments: []
-            };
-            PostDataService.createPost(data)
-                .then(response => {
-                    props.setIsPostIconClicked(false);
-                    props.getAllPosts();
-                });
-        });        
-    }
+    const inputRef = useRef(null);
 
+    const handleClick = () => {
+        let data = new FormData();
+        data.append("user_id", props.userInfo.userId);
+        data.append("file", props.file);
+        data.append("caption", inputRef.current.value);
+
+        PostDataService.createPost(data)
+            .then(response => {
+                props.setIsPostIconClicked(false);
+                props.getAllPosts();
+            });
+    }
 
     useEffect(() => {
         let backButton = (
@@ -46,9 +34,30 @@ export default function CreatePostSubmit(props) {
         )
         props.setHeaders([backButton, "Create new post", postButton]);
     }, []);
+
     return (
-        <div>
-            
+        <div id="create-post-submit">
+            <div id="create-post-submit-preview">
+                <img 
+                    src={ URL.createObjectURL(props.file) }
+                />
+            </div>
+            <div id="create-post-options">
+                <span>
+                    <img
+                        src={ null }
+                    />
+                    <p>
+                        { props.userInfo.username }
+                    </p>
+                </span>
+                <div>
+                    <input
+                        ref={ inputRef }
+                        placeholder="Write a caption..."
+                    />
+                </div>
+            </div>
         </div>
     )
 }

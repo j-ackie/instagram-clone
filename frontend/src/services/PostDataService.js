@@ -10,8 +10,7 @@ class PostDataService {
     }
 
     createPost(data) {
-        console.log("Creating post: " + data);
-        return http.post("/post", data);
+        return http.post("/post", data, { headers: {"Content-type": "multipart/form-data"} });
     }
 
     getUserById(userId) {
@@ -19,7 +18,6 @@ class PostDataService {
     }
 
     login(data) {
-        console.log("Logging in: " + data);
         return http.post("/login", data);
     }
 

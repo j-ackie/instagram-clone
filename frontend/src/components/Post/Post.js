@@ -43,7 +43,7 @@ export default function Post(props) {
                     <Link to="/a">{ username }</Link>
                     <span>
                         <p>
-                            { props.postInfo.description }
+                            { props.postInfo.caption }
                         </p>
                     </span>
                 </div>

@@ -18,7 +18,13 @@ export default function CreatePost(props) {
 
     return (
         <div id="create-post" onClick={ handleClick }>
-            <div id="create-post-popup">
+            <div 
+                id= {!isCropped 
+                        ? "create-post-popup"
+                        : "extended-create-post-popup"
+                    }
+                
+                >
                 <CreatePostHeader 
                     headers={ headers }
                 />

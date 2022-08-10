@@ -11,8 +11,6 @@ export default function Content(props) {
     const [posts, setPosts] = useState([]);
     const [isPostIconClicked, setIsPostIconClicked] = useState(false);
 
-    const [hey, setHey] = useState(null);
-
     const getAllPosts = () => {
         PostDataService.getAll()
             .then(response => {
