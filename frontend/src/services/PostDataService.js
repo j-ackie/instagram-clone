@@ -13,6 +13,10 @@ class PostDataService {
         return http.post("/post", data, { headers: {"Content-type": "multipart/form-data"} });
     }
 
+    likePost(data) {
+        return http.post("/like", data);
+    }
+
     getUserById(userId) {
         return http.get("/user/" + userId);
     }

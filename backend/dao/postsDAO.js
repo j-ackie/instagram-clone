@@ -41,7 +41,6 @@ export default class PostsDAO {
     }
 
     static async getPostById(postId) {
-        
         let query = { "_id": { $eq: new ObjectId(postId) } };
         let doc;
 
@@ -63,6 +62,20 @@ export default class PostsDAO {
         }
         catch (err) {
             console.error('Unable to post: ');
+            return { error: err };
+        }
+    }
+
+    static async likePost(data) {
+        let query = { "_id": { $eq: new ObjectId(data.post_id) } };
+        let updateOperation = { $addToSet: {"likes": new ObjectId(data.user_id) } };
+        try {
+            const response = await posts.updateOne(query, updateOperation);
+            console.log(response);
+            return response;
+        }
+        catch {
+            console.error(err);
             return { error: err };
         }
     }

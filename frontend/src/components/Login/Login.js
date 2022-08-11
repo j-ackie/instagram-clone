@@ -12,7 +12,8 @@ export default function Login(props) {
         };
         PostDataService.login(data)
             .then(response => {
-                if (response.status === 201) {
+                console.log(response);
+                if (response.data.status === "success") {
                     props.setUserInfo(response.data);
                 }
             })

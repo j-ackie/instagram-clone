@@ -4,12 +4,13 @@ export default class UsersController {
     static async apiGetUserById(req, res, next) {
         try {
             let userId = req.params.userId;
-            let user = await UsersDAO.getUserById(userId);
-            if (!user) {
+            let userInfo = await UsersDAO.getUserById(userId);
+            if (!userInfo) {
                 res.status(404).json({ error: "Not found" });
                 return;
             }
-            res.json(user);
+            delete userInfo.password;
+            res.json(userInfo);
         }
         catch (err) {
             console.log(err);
@@ -22,6 +23,7 @@ export default class UsersController {
             const loginResponse = await UsersDAO.login(req.body);
             if (loginResponse) {
                 let data = {
+                    status: "success",
                     userId: loginResponse._id,
                     username: loginResponse.username
                 };

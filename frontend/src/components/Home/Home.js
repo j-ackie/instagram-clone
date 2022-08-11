@@ -7,10 +7,6 @@ import testProfilePhoto from "../../test_photos/Samoyed-Puppy-Closeup.jpg"
 import "./Home.css"
 
 export default function Home(props) {
-    useEffect(() => {
-        props.getAllPosts();
-    }, []);
-
     return (
         <div id="home">
             {/* <Post 

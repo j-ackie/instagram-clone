@@ -50,6 +50,22 @@ export default class PostsController {
         }
     }
 
+    static async apiLikePost(req, res, next) {
+        console.log(req.body)
+        try {
+            const likeResponse = await PostsDAO.likePost(req.body);
+            if (likeResponse.modifiedCount === 1) {
+                res.json({ status: "success" });
+            }
+            else {
+                res.status(404).json({ error: "Not found" });
+            }
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     static async apiResetPosts(req, res, next) {
         try {
             const PostResponse = await PostsDAO.resetPost();

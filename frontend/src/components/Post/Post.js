@@ -1,11 +1,12 @@
 import PostDataService from "../../services/PostDataService";
 import { Link } from "react-router-dom";
 import "./Post.css"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Post(props) {
-
     const [username, setUsername] = useState("");
+    // const [isLiked, setIsLiked] = useState(props.postInfo.likes.includes(props.userInfo.userId));
+    const [numLikes, setNumLikes] = useState(props.postInfo.likes.length);
 
     useEffect(() => {
         PostDataService.getUserById(props.postInfo.user_id)
@@ -28,14 +29,18 @@ export default function Post(props) {
             />
             <div className="footer">
                 <div className="icons">
-                    <button>Like</button>
+                    <button
+                        onClick={ () => props.handleLike(props.postInfo._id, numLikes, setNumLikes) }
+                    >
+                        Like
+                    </button>
                     <button>Comment</button>
                     <button>Share</button>
                 </div>
                 <div className="likes">
                     <span>
                         <p>
-                            Liked by { props.postInfo.likes.length } others
+                            Liked by { numLikes } others
                         </p>
                     </span>
                 </div>

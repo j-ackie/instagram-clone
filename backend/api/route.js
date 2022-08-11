@@ -16,6 +16,10 @@ router
     .route("/post")
     .post(upload.single("file"), PostsController.apiCreatePost);
 
+router
+    .route("/like")
+    .post(PostsController.apiLikePost);
+
 
 router
     .route("/login")
