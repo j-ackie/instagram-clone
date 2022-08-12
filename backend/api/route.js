@@ -20,6 +20,10 @@ router
     .route("/like")
     .post(PostsController.apiLikePost);
 
+router
+    .route("/comment")
+    .post(PostsController.apiCommentPost);
+
 
 router
     .route("/login")

@@ -5,8 +5,62 @@ import { useState, useEffect, useRef } from "react";
 
 export default function Post(props) {
     const [username, setUsername] = useState("");
-    // const [isLiked, setIsLiked] = useState(props.postInfo.likes.includes(props.userInfo.userId));
+    const [isLiked, setIsLiked] = useState(props.isLiked);
     const [numLikes, setNumLikes] = useState(props.postInfo.likes.length);
+
+    const commentRef = useRef("");
+
+    const handleLike = () => {
+        if (!isLiked) {
+            props.handleLike(props.postInfo._id, numLikes, setNumLikes)
+                .then(() => {
+                    setIsLiked(true);
+                });
+        }
+        else {
+
+        }
+    }
+
+    const handleComment = () => {
+        props.handleComment(props.postInfo._id, commentRef.current.value)
+            .then(() => {
+
+            });
+    }
+
+    const renderTimestamp = (timestamp) => {
+        timestamp = new Date(timestamp);
+        const msInHour = 1000 * 60 * 60;
+        const timePassed = new Date() - timestamp;
+        let hoursPassed = timePassed / msInHour;
+        
+        if (hoursPassed < 1) {
+            let minsPassed = Math.round(hoursPassed * 60);
+            return minsPassed + " MINUTES AGO";
+        }
+        else if (hoursPassed >= 1 && hoursPassed <= 24) {
+            hoursPassed = Math.round(hoursPassed);
+            if (hoursPassed === 1) {
+                return hoursPassed + " HOUR AGO";
+            }
+            return hoursPassed + " HOURS AGO";
+        }
+        else {
+            let daysPassed = hoursPassed / 24;
+            if (daysPassed <= 7) {
+                daysPassed = Math.round(daysPassed);
+                if (daysPassed === 1) {
+                    return daysPassed + " DAY AGO";
+                }
+                return daysPassed + " DAYS AGO"
+            }
+            else {
+                // TODO: Format string
+                return timestamp.toDateString();
+            }
+        }
+    }
 
     useEffect(() => {
         PostDataService.getUserById(props.postInfo.user_id)
@@ -14,6 +68,10 @@ export default function Post(props) {
                 setUsername(response.data.username);
             });
     }, []);
+
+    useEffect(() => {
+        setIsLiked(props.isLiked);
+    }, [props.isLiked]);
 
     return (
         <div className="post">
@@ -30,9 +88,9 @@ export default function Post(props) {
             <div className="footer">
                 <div className="icons">
                     <button
-                        onClick={ () => props.handleLike(props.postInfo._id, numLikes, setNumLikes) }
+                        onClick={ handleLike }
                     >
-                        Like
+                        Like { isLiked ? "hey" : "no" }
                     </button>
                     <button>Comment</button>
                     <button>Share</button>
@@ -52,17 +110,39 @@ export default function Post(props) {
                         </p>
                     </span>
                 </div>
-                {
-                    props.postInfo.comments.length != 0
-                        ? <span>
-                            <p>
-                              {  }
-                            </p>
-                          </span>
-                        : <span>
-                                
-                          </span>
-                }
+                <div className="view-comments">
+                    {
+                        props.postInfo.comments.length != 0
+                            ? <span>
+                                <p>
+                                    View {
+                                            props.postInfo.comments.length === 1
+                                                ? "1 comment"
+                                                : "all " + props.postInfo.comments.length + " comments"
+                                         }
+                                </p>
+                              </span>
+                            : ""
+                    }
+                </div>
+                <div className="timestamp">
+                    <span>
+                        { renderTimestamp(props.postInfo.date) }
+                    </span>
+                </div>
+            </div>
+            <div className="add-comment">
+                <div>
+                    <input
+                        ref={ commentRef }
+                        placeholder="Add a comment..."
+                    />
+                    <button
+                        onClick={ handleComment }
+                    >
+                        Post
+                    </button>
+                </div>
             </div>
         </div>
     )

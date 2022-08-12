@@ -58,12 +58,16 @@ export default class PostsController {
                 res.json({ status: "success" });
             }
             else {
-                res.status(404).json({ error: "Not found" });
+                res.json({ status: "no changes" });
             }
         }
         catch (err) {
             res.status(500).json({ error: err.message });
         }
+    }
+
+    static async apiCommentPost(req, res, next) {
+        console.log(req.body);
     }
 
     static async apiResetPosts(req, res, next) {

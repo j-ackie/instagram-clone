@@ -9,16 +9,6 @@ import "./Home.css"
 export default function Home(props) {
     return (
         <div id="home">
-            {/* <Post 
-                username="DogMaster9000"
-                profile_image_url={ testProfilePhoto }
-                image_url={ testPostPhoto }    
-            />
-            <Post 
-                username="Example Post"
-                profile_image_url={ testProfilePhoto }
-                image_url={ testPostPhoto }    
-            /> */}
             { props.posts }
             <button
                 onClick={ PostDataService.reset }
