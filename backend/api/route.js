@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import multer from "multer";
 import PostsController from "./posts.controller.js";
 import UsersController from "./users.controller.js";
+import CommentsController from "./comments.controller.js"
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router
 
 router
     .route("/comment")
-    .post(PostsController.apiCommentPost);
+    .post(CommentsController.apiCommentPost);
 
 
 router

@@ -33,7 +33,7 @@ export default function Content(props) {
         PostDataService.commentPost(data)
             .then(response => {
                 if (response.data.status === "success") {
-
+                    console.log(response.data);
                 }
             })
     }

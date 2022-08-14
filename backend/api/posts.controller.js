@@ -66,10 +66,6 @@ export default class PostsController {
         }
     }
 
-    static async apiCommentPost(req, res, next) {
-        console.log(req.body);
-    }
-
     static async apiResetPosts(req, res, next) {
         try {
             const PostResponse = await PostsDAO.resetPost();

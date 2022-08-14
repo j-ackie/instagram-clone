@@ -23,10 +23,7 @@ export default function Post(props) {
     }
 
     const handleComment = () => {
-        props.handleComment(props.postInfo._id, commentRef.current.value)
-            .then(() => {
-
-            });
+        props.handleComment(props.postInfo._id, commentRef.current.value);
     }
 
     const renderTimestamp = (timestamp) => {

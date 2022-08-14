@@ -68,7 +68,22 @@ export default class PostsDAO {
 
     static async likePost(data) {
         let query = { "_id": { $eq: new ObjectId(data.post_id) } };
-        let updateOperation = { $addToSet: {"likes": new ObjectId(data.user_id) } };
+        let updateOperation = { $addToSet: { "likes": new ObjectId(data.user_id) } };
+        try {
+            const response = await posts.updateOne(query, updateOperation);
+            console.log(response);
+            return response;
+        }
+        catch {
+            console.error(err);
+            return { error: err };
+        }
+    }
+
+    static async addComment(data) {
+        console.log(data)
+        let query = { "_id": { $eq: new ObjectId(data.post_id) } };
+        let updateOperation = { $addToSet: { "comments": new ObjectId(data.comment_id) } };
         try {
             const response = await posts.updateOne(query, updateOperation);
             console.log(response);
