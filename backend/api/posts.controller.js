@@ -40,7 +40,6 @@ export default class PostsController {
         req.body.filename = filename;
         req.body.date = new Date();
         req.body.likes = [];
-        req.body.comments = [];
         try {
             const PostResponse = await PostsDAO.addPost(req.body);
             res.json({ status: "success" });

@@ -12,6 +12,7 @@ const upload = multer({ storage: storage });
 router.route("/").get(PostsController.apiGetPosts);
 router.route("/post/:postId").get(PostsController.apiGetPostById);
 router.route("/user/:userId").get(UsersController.apiGetUserById);
+router.route("/comment/:postId").get(CommentsController.apiGetComments);
 
 router
     .route("/post")

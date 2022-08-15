@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import postIcon from "../../icons/add.png"
+import instagramLogo from "../../icons/instagram_logo.png"
 import "./Navbar.css";
 
 import Login from "../Login/Login"
@@ -10,7 +12,16 @@ export default function Navbar(props) {
 
     return (
         <nav>
-            <h1>Instagram</h1>
+            <Link
+                to="/"
+            >
+                <img
+                    src={ instagramLogo }
+                />
+            </Link>
+            <input
+                placeholder="Search"
+            />
             <Login 
                 setUserInfo={ props.setUserInfo }
             />

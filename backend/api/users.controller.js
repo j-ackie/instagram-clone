@@ -1,4 +1,5 @@
 import UsersDAO from "../dao/usersDAO.js";
+import upload, { get } from "../s3.js"
 
 export default class UsersController {
     static async apiGetUserById(req, res, next) {
@@ -10,6 +11,14 @@ export default class UsersController {
                 return;
             }
             delete userInfo.password;
+
+            if (userInfo.profile_picture) {
+                userInfo.profile_picture = await(get(userInfo.profile_picture));
+            }
+            else {
+                userInfo.profile_picture = null;
+            }
+
             res.json(userInfo);
         }
         catch (err) {

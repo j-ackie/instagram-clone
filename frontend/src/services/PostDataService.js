@@ -21,6 +21,10 @@ class PostDataService {
         return http.post("/comment", data);
     }
 
+    getComments(postId) {
+        return http.get("/comment/" + postId);
+    }
+
     getUserById(userId) {
         return http.get("/user/" + userId);
     }

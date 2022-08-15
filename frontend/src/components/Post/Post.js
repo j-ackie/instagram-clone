@@ -2,13 +2,20 @@ import PostDataService from "../../services/PostDataService";
 import { Link } from "react-router-dom";
 import "./Post.css"
 import { useState, useEffect, useRef } from "react";
+import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png"
+import LikedIcon from "../Icons/LikedIcon";
+import UnlikedIcon from "../Icons/UnlikedIcon";
+import CommentIcon from "../Icons/CommentIcon"
+import ShareIcon from "../Icons/ShareIcon";
+import SaveIcon from "../Icons/SaveIcon";
 
 export default function Post(props) {
     const [username, setUsername] = useState("");
     const [isLiked, setIsLiked] = useState(props.isLiked);
+    const [profilePicture, setProfilePicture] = useState(null);
     const [numLikes, setNumLikes] = useState(props.postInfo.likes.length);
-
-    const commentRef = useRef("");
+    const [comments, setComments] = useState([]);
+    const [currComment, setCurrComment] = useState("");
 
     const handleLike = () => {
         if (!isLiked) {
@@ -18,12 +25,12 @@ export default function Post(props) {
                 });
         }
         else {
-
+            // props.handleUnlike
         }
     }
 
     const handleComment = () => {
-        props.handleComment(props.postInfo._id, commentRef.current.value);
+        props.handleComment(props.postInfo._id, currComment);
     }
 
     const renderTimestamp = (timestamp) => {
@@ -62,7 +69,19 @@ export default function Post(props) {
     useEffect(() => {
         PostDataService.getUserById(props.postInfo.user_id)
             .then(response => {
+                console.log(response);
+                if (response.data.profile_picture) {
+                    setProfilePicture(response.data.profile_picture);
+                }
+                else {
+                    setProfilePicture(DefaultProfilePicture);
+                }
                 setUsername(response.data.username);
+            });
+        PostDataService.getComments(props.postInfo._id)
+            .then(response => {
+                console.log(response.data);
+                setComments(response.data.comments);
             });
     }, []);
 
@@ -70,11 +89,12 @@ export default function Post(props) {
         setIsLiked(props.isLiked);
     }, [props.isLiked]);
 
+
     return (
         <div className="post">
             <div className="header">
                 <img className="post-profile-photo"
-                    src={ props.profile_image_url }
+                    src={ profilePicture }
                 />
                 <Link to="/a">{ username }</Link>
 
@@ -84,13 +104,19 @@ export default function Post(props) {
             />
             <div className="footer">
                 <div className="icons">
-                    <button
-                        onClick={ handleLike }
-                    >
-                        Like { isLiked ? "hey" : "no" }
-                    </button>
-                    <button>Comment</button>
-                    <button>Share</button>
+                    <span id="left-hand">
+                        { isLiked
+                            ? <LikedIcon onClick={ handleLike }/>
+                            : <UnlikedIcon onClick={ handleLike }/> 
+                        }
+                        <CommentIcon onClick={ () => {} }/>
+                        <ShareIcon onClick={ () => {} }/>
+                    </span>
+                    
+                    <span id="right-hand">
+                        <SaveIcon onClick={ () => {} } />
+                    </span>
+                    
                 </div>
                 <div className="likes">
                     <span>
@@ -109,13 +135,13 @@ export default function Post(props) {
                 </div>
                 <div className="view-comments">
                     {
-                        props.postInfo.comments.length != 0
-                            ? <span>
+                        comments.length != 0
+                            ? <span onClick={ () => {console.log(comments)} }>
                                 <p>
                                     View {
-                                            props.postInfo.comments.length === 1
+                                            comments.length === 1
                                                 ? "1 comment"
-                                                : "all " + props.postInfo.comments.length + " comments"
+                                                : "all " + comments.length + " comments"
                                          }
                                 </p>
                               </span>
@@ -131,11 +157,16 @@ export default function Post(props) {
             <div className="add-comment">
                 <div>
                     <input
-                        ref={ commentRef }
+                        value={ currComment }
+                        onChange={ event => setCurrComment(event.target.value) }
                         placeholder="Add a comment..."
                     />
                     <button
                         onClick={ handleComment }
+                        className={ currComment !== ""
+                                        ? "enabled"
+                                        : "disabled"
+                                  }
                     >
                         Post
                     </button>

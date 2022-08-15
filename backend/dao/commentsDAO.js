@@ -16,6 +16,21 @@ export default class CommentsDAO {
         }
     }
 
+    static async getComments(data) {
+        let query = { "post_id": new ObjectId(data) }
+        let cursor;
+        try {
+            cursor = await comments.find(query).sort({'_id': -1});
+            const commentsList = await cursor.toArray();
+            return commentsList;
+        }
+        catch (err) {
+            console.error(err);
+            return;
+        }
+
+    }
+
     static async addComment(data) {
         data.post_id = new ObjectId(data.post_id);
         data.user_id = new ObjectId(data.user_id);
@@ -28,6 +43,7 @@ export default class CommentsDAO {
             return { error: err };
         }
     }
+
 
 }
 
