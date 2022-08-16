@@ -10,6 +10,10 @@ export default function Navbar(props) {
         props.setIsPostIconClicked(true);
     } 
 
+    const handleProfilePictureClick = () => {
+
+    }
+
     return (
         <nav>
             <Link
@@ -22,16 +26,16 @@ export default function Navbar(props) {
             <input
                 placeholder="Search"
             />
-            <Login 
-                setUserInfo={ props.setUserInfo }
-            />
-            <h1>
-                { props.userInfo.username }
-            </h1>
             <img 
                 className="navbar-icons"
                 src={ postIcon }
                 onClick={ handlePostIconClick }
+            />
+            <img
+                className="navbar-icons"
+                id="navbar-profile-picture"
+                src={ props.userInfo.profile_picture }
+                onClick={ handleProfilePictureClick }
             />
         </nav>
     )

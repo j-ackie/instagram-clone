@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Switch, Route, Link } from "react-router-dom";
 
-import Content from "./components/Content/Content"
+import Content from "./components/Content/Content";
+import LoginRegisterPage from './components/LoginRegisterPage/LoginRegisterPage';
 
 
 import "./App.css"
@@ -12,13 +13,18 @@ function App() {
         username: ""
     });
     
-
     return (
         <div className="App">
-            <Content 
-                userInfo={ userInfo }
-                setUserInfo={ setUserInfo }
-            />
+            {
+                userInfo.userId === ""
+                    ? <LoginRegisterPage 
+                        setUserInfo={ setUserInfo }
+                      />
+                    : <Content 
+                        userInfo={ userInfo }
+                        setUserInfo={ setUserInfo }
+                      />
+            }
         </div>
     );
 }
