@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import PostDataService from '../../services/PostDataService';
 
 export default function Content(props) {
-
     const [posts, setPosts] = useState([]);
     const [isPostIconClicked, setIsPostIconClicked] = useState(false);
 
@@ -62,6 +61,7 @@ export default function Content(props) {
     }
 
     useEffect(() => {
+        console.log(props.userInfo);
         getAllPosts();
     }, [props.userInfo]);
 

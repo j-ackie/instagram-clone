@@ -3,7 +3,7 @@ nav {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 15px;
     background-color: white;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     position: fixed;
@@ -26,4 +26,8 @@ nav img {
 
 .navbar-icons:hover {
     cursor: pointer;
+}
+
+#navbar-profile-picture {
+    border-radius: 50%;
 }
