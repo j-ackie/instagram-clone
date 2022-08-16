@@ -8,6 +8,7 @@ import UnlikedIcon from "../Icons/UnlikedIcon";
 import CommentIcon from "../Icons/CommentIcon"
 import ShareIcon from "../Icons/ShareIcon";
 import SaveIcon from "../Icons/SaveIcon";
+import SettingsIcon from "../Icons/SettingsIcon";
 
 export default function Post(props) {
     const [username, setUsername] = useState("");
@@ -93,11 +94,13 @@ export default function Post(props) {
     return (
         <div className="post">
             <div className="header">
-                <img className="post-profile-photo"
-                    src={ profilePicture }
-                />
-                <Link to="/a">{ username }</Link>
-
+                <span>
+                    <img className="post-profile-photo"
+                        src={ profilePicture }
+                    />
+                    <Link to="/a">{ username }</Link>
+                </span>
+                <SettingsIcon onClick={ () => {}  }/>
             </div>
             <img className="post-photo"
                 src={ props.postInfo.file }
