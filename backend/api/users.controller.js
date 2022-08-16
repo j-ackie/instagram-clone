@@ -30,13 +30,12 @@ export default class UsersController {
     static async apiLogin(req, res, next) {
         try {
             const loginResponse = await UsersDAO.login(req.body);
+            
             if (loginResponse) {
-                let data = {
-                    status: "success",
-                    userId: loginResponse._id,
-                    username: loginResponse.username
-                };
-                res.status(201).json(data);
+                delete loginResponse.password;
+                loginResponse.status = "success";
+                loginResponse.profile_picture = await get(loginResponse.profile_picture);
+                res.status(201).json(loginResponse);
             }
             else {
                 res.status(401).json({ error: "nope" });

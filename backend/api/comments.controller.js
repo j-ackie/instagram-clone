@@ -5,7 +5,6 @@ export default class CommentsController {
         console.log(req.params);
         try {
             const getCommentsResponse = await CommentsDAO.getComments(req.params.postId);
-            console.log(getCommentsResponse);
 
             let response = {
                 comments: getCommentsResponse
@@ -20,7 +19,6 @@ export default class CommentsController {
 
 
     static async apiCommentPost(req, res, next) {
-        console.log(req.body);
         try {
             await CommentsDAO.addComment(req.body);
             res.json({ status: "success" });
