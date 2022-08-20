@@ -66,12 +66,27 @@ export default class PostsDAO {
         }
     }
 
+    static async deletePost(postId, userId) {
+        console.log(postId, userId);
+        let query = {
+            _id: ObjectId(postId),
+            user_id: ObjectId(userId)
+        };
+        try {
+            const response = await posts.deleteOne(query);
+            console.log(response);
+            return response;
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
+
     static async likePost(data) {
         let query = { "_id": { $eq: new ObjectId(data.post_id) } };
         let updateOperation = { $addToSet: { "likes": new ObjectId(data.user_id) } };
         try {
             const response = await posts.updateOne(query, updateOperation);
-            console.log(response);
             return response;
         }
         catch {
@@ -81,12 +96,10 @@ export default class PostsDAO {
     }
 
     static async addComment(data) {
-        console.log(data)
         let query = { "_id": { $eq: new ObjectId(data.post_id) } };
         let updateOperation = { $addToSet: { "comments": new ObjectId(data.comment_id) } };
         try {
             const response = await posts.updateOne(query, updateOperation);
-            console.log(response);
             return response;
         }
         catch {

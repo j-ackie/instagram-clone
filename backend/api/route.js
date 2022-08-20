@@ -16,7 +16,8 @@ router.route("/comment/:postId").get(CommentsController.apiGetComments);
 
 router
     .route("/post")
-    .post(upload.single("file"), PostsController.apiCreatePost);
+    .post(upload.single("file"), PostsController.apiCreatePost)
+    .delete(PostsController.apiDeletePost);
 
 router
     .route("/like")
@@ -29,7 +30,11 @@ router
 
 router
     .route("/login")
-    .post(UsersController.apiLogin)
+    .post(UsersController.apiLogin);
+
+router
+    .route("/register")
+    .post(UsersController.apiRegister);
 
 router
     .route("/reset")

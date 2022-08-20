@@ -3,12 +3,17 @@ import Navbar from "../Navbar/Navbar"
 import CreatePost from "../CreatePost/CreatePost"
 import Post from '../Post/Post';
 import { useState, useEffect } from "react";
+import "./Content.css"
 
 import PostDataService from '../../services/PostDataService';
+import PostOptions from "../PostOptions/PostOptions";
 
 export default function Content(props) {
     const [posts, setPosts] = useState([]);
     const [isPostIconClicked, setIsPostIconClicked] = useState(false);
+    const [isOptionsIconClicked, setIsOptionsIconClicked] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState(null);
+    const [isUserPost, setIsUserPost] = useState(false);
 
     const handleLike = async(postId, numLikes, setNumLikes) => {
         let data = {
@@ -37,6 +42,21 @@ export default function Content(props) {
             })
     }
 
+    const handleDelete = () => {
+        let data = {
+            postId: selectedPostId,
+            userId: props.userInfo.userId
+        }
+        PostDataService.deletePost(data)
+            .then(response => {
+                if (response.data.status === "success") {
+                    setPosts(posts.filter((post) => {
+                        return post.props.postInfo._id !== selectedPostId;
+                    }));
+                }
+            })
+    }
+
     const getAllPosts = () => {
         PostDataService.getAll()
             .then(response => {
@@ -50,6 +70,7 @@ export default function Content(props) {
                             isLiked={ isLiked }
                             handleLike={ handleLike }
                             handleComment={ handleComment }
+                            handleOptionsClick={ handleOptionsClick }
                         />
                     );
                 }
@@ -58,6 +79,17 @@ export default function Content(props) {
             .catch(err => {
                 console.log(err);
             });
+    }
+
+    const handleOptionsClick = (postId, postUserId) => {
+        setIsOptionsIconClicked(true);
+        setSelectedPostId(postId);
+        if (postUserId === props.userInfo.userId) {
+            setIsUserPost(true);
+        }
+        else {
+            setIsUserPost(false);
+        }
     }
 
     useEffect(() => {
@@ -74,15 +106,26 @@ export default function Content(props) {
             />
             <Home
                 posts={ posts }
-                userInfo={ props.userInfo }
             />
-            { isPostIconClicked
-                ? <CreatePost
-                    userInfo={ props.userInfo }
-                    getAllPosts={ getAllPosts } 
-                    setIsPostIconClicked={ setIsPostIconClicked }
-                  />
-                : ''
+            { 
+                isPostIconClicked
+                    ? <CreatePost
+                        userInfo={ props.userInfo }
+                        getAllPosts={ getAllPosts } 
+                        setIsPostIconClicked={ setIsPostIconClicked }
+                    />
+                    : ''
+            }
+            {
+                isOptionsIconClicked
+                    ? <PostOptions
+                        userInfo={ props.userInfo } 
+                        isUserPost={ isUserPost }
+                        selectedPostId={ selectedPostId }
+                        setIsOptionsIconClicked={ setIsOptionsIconClicked }
+                        handleDelete={ handleDelete }
+                      />
+                    : ''
             }
         </div>
     )

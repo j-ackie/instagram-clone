@@ -13,6 +13,10 @@ class PostDataService {
         return http.post("/post", data, { headers: {"Content-type": "multipart/form-data"} });
     }
 
+    deletePost(data) {
+        return http.delete("/post?postId=" + data.postId, { data: { userId: data.userId } });
+    }
+
     likePost(data) {
         return http.post("/like", data);
     }
@@ -31,6 +35,10 @@ class PostDataService {
 
     login(data) {
         return http.post("/login", data);
+    }
+
+    register(data) {
+        return http.post("/register", data);
     }
 
     reset() {

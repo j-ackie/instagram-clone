@@ -49,6 +49,18 @@ export default class PostsController {
         }
     }
 
+    static async apiDeletePost(req, res, next) {
+        console.log(req.body);
+        console.log(req.query);
+        try {
+            const deleteResponse = await PostsDAO.deletePost(req.query.postId, req.body.userId);
+            res.json({ status: "success" })
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     static async apiLikePost(req, res, next) {
         console.log(req.body)
         try {
