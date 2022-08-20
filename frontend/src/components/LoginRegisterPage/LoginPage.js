@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
+import "./LoginRegisterPage.css"
 
 export default function LoginPage(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         if (username !== "" && password !== "") {
@@ -16,7 +20,13 @@ export default function LoginPage(props) {
                 .then(response => {
                     console.log(response);
                     if (response.data.status === "success") {
-                        props.setUserInfo(response.data);
+                        let userInfo = {
+                            userId: response.data._id,
+                            username: data.username,
+                            profile_picture: response.data.profile_picture
+                        };
+                        props.setUserInfo(userInfo);
+                        navigate("/");
                     }
                 })
                 .catch(err => {
@@ -25,7 +35,7 @@ export default function LoginPage(props) {
         }
     }
     return (
-        <div>
+        <div className="login-register-page">
             <div id="login-container">
                 <img
                     src={ instagramLogo }
@@ -55,7 +65,7 @@ export default function LoginPage(props) {
             <div className="alternative-container">
                 <span>
                     <p>
-                        Don't have an account? <span onClick={ () => props.setIsLogin(false) } id="register">Sign up</span>
+                        Don't have an account? <span onClick={ () => navigate("/register") } id="register">Sign up</span>
                     </p>
                 </span>
             </div>

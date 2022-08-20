@@ -30,15 +30,36 @@ export default class UsersController {
     static async apiLogin(req, res, next) {
         try {
             const loginResponse = await UsersDAO.login(req.body);
-            
             if (loginResponse) {
                 delete loginResponse.password;
                 loginResponse.status = "success";
-                loginResponse.profile_picture = await get(loginResponse.profile_picture);
+                if (loginResponse.profile_picture) {
+                    loginResponse.profile_picture = await get(loginResponse.profile_picture);
+                }
                 res.status(201).json(loginResponse);
             }
             else {
                 res.status(401).json({ error: "nope" });
+            }
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiRegister(req, res, next) {
+        try {
+            const registerResponse = await UsersDAO.register(req.body);
+            if (registerResponse) {
+                let data = {
+                    status: "success",
+                    userId: registerResponse,
+                    profile_picture: ""
+                }
+                res.status(201).json(data);
+            }
+            else {
+                res.status(401).json({ error: "unable to register" });
             }
         }
         catch (err) {

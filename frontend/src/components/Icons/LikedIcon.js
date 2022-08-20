@@ -3,7 +3,7 @@ export default function LikedIcon(props) {
         <svg
             onClick={ props.onClick } 
             aria-label="Unlike" 
-            class="_ab6-" 
+            className="_ab6-" 
             color="#ed4956" 
             fill="#ed4956" 
             height="24" 

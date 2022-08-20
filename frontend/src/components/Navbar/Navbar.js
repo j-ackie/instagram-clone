@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import postIcon from "../../icons/add.png"
 import instagramLogo from "../../icons/instagram_logo.png"
+import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import "./Navbar.css";
 
 import Login from "../Login/Login"
@@ -34,7 +35,11 @@ export default function Navbar(props) {
             <img
                 className="navbar-icons"
                 id="navbar-profile-picture"
-                src={ props.userInfo.profile_picture }
+                src={ 
+                    props.userInfo.profile_picture === ""
+                        ? DefaultProfilePicture
+                        : props.userInfo.profile_picture 
+                }
                 onClick={ handleProfilePictureClick }
             />
         </nav>

@@ -1,4 +1,4 @@
-#login-register-page {
+.login-register-page {
     height: 100%;
     width: 100%;
     position: fixed;
@@ -8,7 +8,7 @@
     justify-content: center;
 }
 
-#login-register-page div div {
+.login-register-page div {
     width: 250px;
     padding: 50px;
     padding-top: 20px;
@@ -21,17 +21,16 @@
     border-radius: 5px;
 }
 
-#login-register-page div * {
+.login-register-page div * {
     width: 100%;
 }
 
-#login-register-page img {
+.login-register-page img {
     width: 200px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
-
-#login-register-page input {
+.login-register-page input {
     border: none;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -40,17 +39,18 @@
     box-sizing: border-box;
 }
 
-#login-register-page input:focus {
+.login-register-page input:focus {
     outline: none;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
 }
 
-#login-register-page button {
+.login-register-page button {
     font-weight: bold;
     border-radius: 5px;
     padding: 10px;
     background-color: #00A0FF;
     margin-top: 5px;
+    margin-bottom: 20px;
     color: white;
     border: none;
 }

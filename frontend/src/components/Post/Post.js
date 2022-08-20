@@ -2,13 +2,14 @@ import PostDataService from "../../services/PostDataService";
 import { Link } from "react-router-dom";
 import "./Post.css"
 import { useState, useEffect, useRef } from "react";
+import PostOptions from "../PostOptions/PostOptions";
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png"
 import LikedIcon from "../Icons/LikedIcon";
 import UnlikedIcon from "../Icons/UnlikedIcon";
 import CommentIcon from "../Icons/CommentIcon"
 import ShareIcon from "../Icons/ShareIcon";
 import SaveIcon from "../Icons/SaveIcon";
-import SettingsIcon from "../Icons/SettingsIcon";
+import OptionsIcon from "../Icons/OptionsIcon";
 
 export default function Post(props) {
     const [username, setUsername] = useState("");
@@ -17,6 +18,8 @@ export default function Post(props) {
     const [numLikes, setNumLikes] = useState(props.postInfo.likes.length);
     const [comments, setComments] = useState([]);
     const [currComment, setCurrComment] = useState("");
+
+    const commentRef = useRef(null);
 
     const handleLike = () => {
         if (!isLiked) {
@@ -31,7 +34,23 @@ export default function Post(props) {
     }
 
     const handleComment = () => {
-        props.handleComment(props.postInfo._id, currComment);
+        if (currComment !== "") { 
+            props.handleComment(props.postInfo._id, currComment)
+                .then(() => {
+                    let newComments = [...comments];
+                    newComments.push(currComment);
+                    console.log(newComments);
+                    setComments(newComments);
+                    setCurrComment("");
+                });
+        }
+    }
+
+    const handleOnKeyDown = (event) => {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            handleComment();
+        }
     }
 
     const renderTimestamp = (timestamp) => {
@@ -90,6 +109,9 @@ export default function Post(props) {
         setIsLiked(props.isLiked);
     }, [props.isLiked]);
 
+    useEffect(() => {
+        commentRef.current.textContent = currComment;
+    }, [currComment]);
 
     return (
         <div className="post">
@@ -100,7 +122,7 @@ export default function Post(props) {
                     />
                     <Link to="/a">{ username }</Link>
                 </span>
-                <SettingsIcon onClick={ () => {}  }/>
+                <OptionsIcon onClick={ () => props.handleOptionsClick(props.postInfo._id, props.postInfo.user_id) }/>
             </div>
             <img className="post-photo"
                 src={ props.postInfo.file }
@@ -159,11 +181,15 @@ export default function Post(props) {
             </div>
             <div className="add-comment">
                 <div>
-                    <input
-                        value={ currComment }
-                        onChange={ event => setCurrComment(event.target.value) }
-                        placeholder="Add a comment..."
+                    <div className="comment-container">
+                    <div
+                        ref={ commentRef }
+                        className="comment"
+                        onInput={ event => setCurrComment(event.target.textContent) }
+                        onKeyDown={ handleOnKeyDown }
+                        contentEditable="true"
                     />
+                    </div>
                     <button
                         onClick={ handleComment }
                         className={ currComment !== ""

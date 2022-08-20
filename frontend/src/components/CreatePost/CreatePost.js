@@ -17,7 +17,7 @@ export default function CreatePost(props) {
     }
 
     return (
-        <div id="create-post" onClick={ handleClick }>
+        <div className="pop-up" id="create-post" onClick={ handleClick }>
             <div 
                 id= {!isCropped 
                         ? "create-post-popup"

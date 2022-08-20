@@ -2,7 +2,6 @@ import CommentsDAO from "../dao/commentsDAO.js"
 
 export default class CommentsController {
     static async apiGetComments(req, res, next) {
-        console.log(req.params);
         try {
             const getCommentsResponse = await CommentsDAO.getComments(req.params.postId);
 
