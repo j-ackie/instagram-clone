@@ -12,11 +12,8 @@ export default class UsersController {
             }
             delete userInfo.password;
 
-            if (userInfo.profile_picture) {
-                userInfo.profile_picture = await(get(userInfo.profile_picture));
-            }
-            else {
-                userInfo.profile_picture = null;
+            if (userInfo.profilePicture) {
+                userInfo.profilePicture = await(get(userInfo.profilePicture));
             }
 
             res.json(userInfo);
@@ -29,18 +26,26 @@ export default class UsersController {
 
     static async apiLogin(req, res, next) {
         try {
-            const loginResponse = await UsersDAO.login(req.body);
-            if (loginResponse) {
-                delete loginResponse.password;
-                loginResponse.status = "success";
-                if (loginResponse.profile_picture) {
-                    loginResponse.profile_picture = await get(loginResponse.profile_picture);
-                }
-                res.status(201).json(loginResponse);
+            const getResponse = await UsersDAO.getUserByName(req.body.username);
+
+            if (!getResponse) {
+                res.status(401).json({ error: "user not found" });
+                return;
             }
-            else {
-                res.status(401).json({ error: "nope" });
+
+            if (getResponse.password !== req.body.password) {
+                res.status(401).json({ error: "incorrect password" });
+                return;
             }
+
+            let userInfo = {
+                userId: getResponse._id,
+                profilePicture: getResponse.profilePicture
+                                    ? await get(getResponse.profilePicture)
+                                    : ""
+            };
+            
+            res.json(userInfo);
         }
         catch (err) {
             res.status(500).json({ error: err.message });
@@ -54,7 +59,7 @@ export default class UsersController {
                 let data = {
                     status: "success",
                     userId: registerResponse,
-                    profile_picture: ""
+                    profilePicture: ""
                 }
                 res.status(201).json(data);
             }

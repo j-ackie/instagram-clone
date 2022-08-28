@@ -18,7 +18,11 @@ class PostDataService {
     }
 
     likePost(data) {
-        return http.post("/like", data);
+        return http.post("/likes", data);
+    }
+
+    getLikesById(postId) {
+        return http.get("/likes?postId=" + postId);
     }
 
     commentPost(data) {

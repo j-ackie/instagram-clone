@@ -41,7 +41,6 @@ export default function CreatePost(props) {
                                     setHeaders={ setHeaders }
                                 /> :
                                 <CreatePostSubmit 
-                                    userInfo={ props.userInfo }
                                     getAllPosts={ props.getAllPosts }
                                     setIsPostIconClicked={ props.setIsPostIconClicked }
                                     file={ file }

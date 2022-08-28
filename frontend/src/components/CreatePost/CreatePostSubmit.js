@@ -1,12 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
+import UserContext from "../../UserProvider";
 import PostDataService from "../../services/PostDataService";
 
 export default function CreatePostSubmit(props) {
+    const userInfo = useContext(UserContext);
+
     const inputRef = useRef(null);
 
     const handleClick = () => {
         let data = new FormData();
-        data.append("user_id", props.userInfo.userId);
+        data.append("user_id", userInfo.userId);
         data.append("file", props.file);
         data.append("caption", inputRef.current.value);
 
@@ -48,7 +51,7 @@ export default function CreatePostSubmit(props) {
                         src={ null }
                     />
                     <p>
-                        { props.userInfo.username }
+                        { userInfo.username }
                     </p>
                 </span>
                 <div>

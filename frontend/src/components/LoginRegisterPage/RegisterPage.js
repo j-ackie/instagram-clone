@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import PostDataService from "../../services/PostDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
+import PasswordField from "./PasswordField";
 import "./LoginRegisterPage.css"
 
 export default function RegisterPage(props) {
@@ -16,11 +17,9 @@ export default function RegisterPage(props) {
     }
 
     const handleSubmit = () => {
-        if (!isFilledOut()) {
-            return;
-        }
         if (password !== confirmPassword) {
             alert("Passwords do not match");
+            return;
         }
         let data = {
             username: username,
@@ -32,7 +31,7 @@ export default function RegisterPage(props) {
                     let userInfo = {
                         userId: response.data.userId,
                         username: data.username,
-                        profile_picture: ""
+                        profilePicture: ""
                     };
                     props.setUserInfo(userInfo);
                     navigate("/");
@@ -51,25 +50,20 @@ export default function RegisterPage(props) {
                     placeholder="Username"
                     onChange={ event => setUsername(event.target.value) }
                 />
-                <input 
-                    type="password"
-                    value={ password }
+                <PasswordField
+                    password={ password }
+                    setPassword={ setPassword }
                     placeholder="Password"
-                    onChange={ event => setPassword(event.target.value) }
                 />
-                <input
-                    type="password"
-                    value={ confirmPassword }
+                <PasswordField
+                    password={ confirmPassword }
+                    setPassword={ setConfirmPassword }
                     placeholder="Confirm password"
-                    onChange={ event => setConfirmPassword(event.target.value) }
                 />
                 <button
                     onClick={ handleSubmit }
-                    className={
-                        isFilledOut()
-                            ? "enabled"
-                            : "disabled"    
-                    }
+                    className="submit"
+                    disabled={ !isFilledOut() }
                 >
                     Sign up
                 </button>

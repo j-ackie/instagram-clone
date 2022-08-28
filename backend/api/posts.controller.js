@@ -1,5 +1,6 @@
-import PostsDAO from "../dao/postsDAO.js"
-import upload, { get } from "../s3.js"
+import PostsDAO from "../dao/postsDAO.js";
+import LikesDAO from "../dao/likesDAO.js";
+import upload, { get } from "../s3.js";
 
 export default class PostsController {
     static async apiGetPosts(req, res, next) {
@@ -27,7 +28,17 @@ export default class PostsController {
                 res.status(404).json({ error: "Not found" });
                 return;
             }
-            res.json(post);
+
+            let data = {
+                postId: post._id,
+                userId: post.user_id,
+                caption: post.caption,
+                file: await get(post.filename),
+                date: post.date,
+                likes: post.likes
+            }
+
+            res.json(data);
         }
         catch (err) {
             console.log(err);
@@ -62,15 +73,39 @@ export default class PostsController {
     }
 
     static async apiLikePost(req, res, next) {
-        console.log(req.body)
         try {
-            const likeResponse = await PostsDAO.likePost(req.body);
-            if (likeResponse.modifiedCount === 1) {
-                res.json({ status: "success" });
+            const createResponse = await LikesDAO.createLike(req.body.postId, req.body.userId);
+            const { error } = createResponse;
+            if (error) {
+                res.status(409).json({ error: "unable to like" });
+                return;
             }
-            else {
-                res.json({ status: "no changes" });
-            }
+            res.json({ status: "success" });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+        // try {
+        //     const likeResponse = await PostsDAO.likePost(req.body);
+        //     if (likeResponse.modifiedCount === 1) {
+        //         res.json({ status: "success" });
+        //     }
+        //     else {
+        //         res.json({ status: "no changes" });
+        //     }
+        // }
+        // catch (err) {
+        //     res.status(500).json({ error: err.message });
+        // }
+    }
+
+    static async apiGetLikesById(req, res, next) {
+        try {
+            const getResponse = await LikesDAO.getLikesById(req.query.postId);
+            res.json({
+                status: "success",
+                likes: getResponse
+            });
         }
         catch (err) {
             res.status(500).json({ error: err.message });

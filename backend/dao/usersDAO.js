@@ -45,22 +45,6 @@ export default class UsersDAO {
         return doc;
     }
 
-    static async login(data) {
-        let query = { "username": { $eq: data.username } };
-        let doc;
-        
-        try {
-            doc = await users.findOne(query);
-            
-        }
-        catch (err) {
-            console.err(err);
-            return;
-        }
-        
-        return doc;
-    }
-
     static async register(data) {
         console.log(data);
         try {

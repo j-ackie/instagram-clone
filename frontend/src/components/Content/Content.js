@@ -10,7 +10,6 @@ import PostOptions from "../PostOptions/PostOptions";
 
 export default function Content(props) {
     const [posts, setPosts] = useState([]);
-    const [isPostIconClicked, setIsPostIconClicked] = useState(false);
     const [isOptionsIconClicked, setIsOptionsIconClicked] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState(null);
     const [isUserPost, setIsUserPost] = useState(false);
@@ -66,6 +65,7 @@ export default function Content(props) {
                     postsList.push(
                         <Post
                             key={ post._id }
+                            userId={ props.userInfo.userId }
                             postInfo={ post }
                             isLiked={ isLiked }
                             handleLike={ handleLike }
@@ -93,29 +93,14 @@ export default function Content(props) {
     }
 
     useEffect(() => {
-        console.log(props.userInfo);
         getAllPosts();
-    }, [props.userInfo]);
+    }, []);
 
     return (
         <div id="content">
-            <Navbar
-                userInfo={ props.userInfo }
-                setUserInfo={ props.setUserInfo }
-                setIsPostIconClicked={ setIsPostIconClicked }
-            />
             <Home
                 posts={ posts }
             />
-            { 
-                isPostIconClicked
-                    ? <CreatePost
-                        userInfo={ props.userInfo }
-                        getAllPosts={ getAllPosts } 
-                        setIsPostIconClicked={ setIsPostIconClicked }
-                    />
-                    : ''
-            }
             {
                 isOptionsIconClicked
                     ? <PostOptions

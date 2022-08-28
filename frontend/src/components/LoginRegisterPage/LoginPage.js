@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
+import PasswordField from "./PasswordField";
 import "./LoginRegisterPage.css"
 
 export default function LoginPage(props) {
@@ -11,28 +12,25 @@ export default function LoginPage(props) {
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        if (username !== "" && password !== "") {
-            let data = {
-                username: username,
-                password: password
-            };
-            PostDataService.login(data)
-                .then(response => {
-                    console.log(response);
-                    if (response.data.status === "success") {
-                        let userInfo = {
-                            userId: response.data._id,
-                            username: data.username,
-                            profile_picture: response.data.profile_picture
-                        };
-                        props.setUserInfo(userInfo);
-                        navigate("/");
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
+        let data = {
+            username: username,
+            password: password
+        };
+        PostDataService.login(data)
+            .then(response => {
+                console.log(response)
+                let userInfo = {
+                    userId: response.data.userId,
+                    username: data.username,
+                    profilePicture: response.data.profilePicture
+                };
+                props.setUserInfo(userInfo);
+                navigate("/");
+            })
+            .catch(err => {
+                // Alert that user has inputted an incorrect password
+                console.log(err);
+            });
     }
     return (
         <div className="login-register-page">
@@ -45,19 +43,15 @@ export default function LoginPage(props) {
                     placeholder="Username"
                     onChange={ event => setUsername(event.target.value) }
                 />
-                <input 
-                    type="password"
-                    value={ password }
+                <PasswordField 
+                    password={ password }
+                    setPassword={ setPassword }
                     placeholder="Password"
-                    onChange={ event => setPassword(event.target.value) }
                 />
                 <button
                     onClick={ handleSubmit }
-                    className={
-                        username !== "" && password !== ""
-                            ? "enabled"
-                            : "disabled"    
-                    }
+                    className="submit"
+                    disabled={ username === "" || password === "" }
                 >
                     Log In
                 </button>

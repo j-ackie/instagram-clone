@@ -24,8 +24,10 @@ export default function PostOptions(props) {
     else {
         options = (
             <ul>
-                <li>Hey</li>
-                <li></li>
+                <li>Go to post</li>
+                <li>Share to...</li>
+                <li>Copy link</li>
+                <li onClick={ () => props.setIsOptionsIconClicked(false) }>Cancel</li>
             </ul>
         )
     }

@@ -76,7 +76,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
 
 .comment-container {
@@ -112,12 +114,12 @@
     outline: none;
 }
 
-.disabled {
-    opacity: 50%;
+.add-comment button:enabled {
+    cursor: pointer;
 }
 
-.enabled:hover {
-    cursor: pointer;
+.add-comment button:disabled {
+    opacity: 50%;
 }
 
 .icons {
@@ -133,19 +135,13 @@
     opacity: 50%;
 }
 
-#left-hand {
-    width: 25%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+#left-hand svg {
+    padding-right: 10px;
 }
 
-.view-comments {
+.view-comments a {
+    font-weight: normal;
     color: #8F8F8F;
-}
-
-.view-comments span:hover {
-    cursor: pointer;
 }
 
 .timestamp {

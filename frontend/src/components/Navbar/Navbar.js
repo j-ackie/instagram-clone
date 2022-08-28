@@ -1,12 +1,14 @@
+import { useContext } from "react";
+import UserContext from "../../UserProvider";
 import { Link } from "react-router-dom";
 import postIcon from "../../icons/add.png"
 import instagramLogo from "../../icons/instagram_logo.png"
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import "./Navbar.css";
 
-import Login from "../Login/Login"
-
 export default function Navbar(props) {
+    const userInfo = useContext(UserContext);
+
     const handlePostIconClick = () => {
         props.setIsPostIconClicked(true);
     } 
@@ -36,9 +38,9 @@ export default function Navbar(props) {
                 className="navbar-icons"
                 id="navbar-profile-picture"
                 src={ 
-                    props.userInfo.profile_picture === ""
+                    userInfo.profilePicture === ""
                         ? DefaultProfilePicture
-                        : props.userInfo.profile_picture 
+                        : userInfo.profilePicture 
                 }
                 onClick={ handleProfilePictureClick }
             />

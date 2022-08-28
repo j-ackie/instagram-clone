@@ -44,7 +44,7 @@
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
 }
 
-.login-register-page button {
+.submit {
     font-weight: bold;
     border-radius: 5px;
     padding: 10px;
@@ -53,6 +53,14 @@
     margin-bottom: 20px;
     color: white;
     border: none;
+}
+
+.submit:enabled {
+    cursor: pointer;
+}
+
+.submit:disabled {
+    opacity: 50%;
 }
 
 .alternative-container {
@@ -67,4 +75,37 @@
 
 #register:hover {
     cursor: pointer;
+}
+
+#password-input {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+#password-input input {
+    box-shadow: none;
+    margin: 0;
+    padding: 10px;
+}
+
+#password-input button {
+    border: 0;
+    background-color: transparent;
+    width: fit-content;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+}
+
+#password-input button:hover {
+    cursor: pointer;
+}
+
+#password-input button:active {
+    opacity: 60%;
 }
