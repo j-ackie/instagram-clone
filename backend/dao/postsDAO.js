@@ -56,7 +56,7 @@ export default class PostsDAO {
     }
 
     static async addPost(data) {
-        data.user_id = new ObjectId(data.user_id);
+        data.userId = ObjectId(data.userId);
         try {
             return await posts.insertOne(data);
         }
@@ -70,7 +70,7 @@ export default class PostsDAO {
         console.log(postId, userId);
         let query = {
             _id: ObjectId(postId),
-            user_id: ObjectId(userId)
+            userId: ObjectId(userId)
         };
         try {
             const response = await posts.deleteOne(query);

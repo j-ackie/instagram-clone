@@ -3,9 +3,6 @@ import PostComment from "./PostComment";
 import PostDataService from "../../services/PostDataService";
 
 export default function PostCommentSection(props) {
-    const [comments, setComments] = useState([]);
-    
-
     useEffect(() => {
         PostDataService.getComments(props.postId)
             .then(response => {
@@ -18,13 +15,13 @@ export default function PostCommentSection(props) {
                         />
                     )
                 }
-                setComments(commentsList);
+                props.setComments(commentsList);
             });
     }, []);
 
     return (
         <div className="comment-section">
-            { comments }
+            { props.comments }
         </div>
     )
 }

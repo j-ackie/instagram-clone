@@ -19,8 +19,8 @@ export default class CommentsController {
 
     static async apiCommentPost(req, res, next) {
         try {
-            await CommentsDAO.addComment(req.body);
-            res.json({ status: "success" });
+            const createResponse = await CommentsDAO.addComment(req.body);
+            res.json({ status: "success", insertedId: createResponse.insertedId });
         }
         catch (err) {
             res.status(500).json({ error: err });

@@ -29,16 +29,18 @@ export default class PostsController {
                 return;
             }
 
-            let data = {
-                postId: post._id,
-                userId: post.user_id,
-                caption: post.caption,
-                file: await get(post.filename),
-                date: post.date,
-                likes: post.likes
-            }
+            post.file = await get(post.filename);
+            delete post.filename;
 
-            res.json(data);
+            // let data = {
+            //     postId: post._id,
+            //     userId: post.userId,
+            //     caption: post.caption,
+            //     file: await get(post.filename),
+            //     date: post.date
+            // }
+
+            res.json(post);
         }
         catch (err) {
             console.log(err);
@@ -50,10 +52,9 @@ export default class PostsController {
         const filename = await upload(req.file);
         req.body.filename = filename;
         req.body.date = new Date();
-        req.body.likes = [];
         try {
-            const PostResponse = await PostsDAO.addPost(req.body);
-            res.json({ status: "success" });
+            const createResponse = await PostsDAO.addPost(req.body);
+            res.json({ status: "success", postId: createResponse.insertedId });
         }
         catch (err) {
             res.status(500).json({ error: err.message });

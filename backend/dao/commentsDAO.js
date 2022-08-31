@@ -17,7 +17,7 @@ export default class CommentsDAO {
     }
 
     static async getComments(data) {
-        let query = { "post_id": new ObjectId(data) }
+        let query = { "postId": ObjectId(data) }
         let cursor;
         try {
             cursor = await comments.find(query).sort({'_id': -1});
@@ -32,18 +32,15 @@ export default class CommentsDAO {
     }
 
     static async addComment(data) {
-        data.post_id = new ObjectId(data.post_id);
-        data.user_id = new ObjectId(data.user_id);
+        data.postId = new ObjectId(data.postId);
+        data.userId = new ObjectId(data.userId);
         try {
-            let response = await comments.insertOne(data);
-            return response.insertedId;
+            return await comments.insertOne(data);
         }
         catch (err) {
             console.error(err);
             return { error: err };
         }
     }
-
-
 }
 

@@ -25,6 +25,7 @@ export default function LoginPage(props) {
                     profilePicture: response.data.profilePicture
                 };
                 props.setUserInfo(userInfo);
+                localStorage.setItem("userInfo", JSON.stringify(userInfo));
                 navigate("/");
             })
             .catch(err => {

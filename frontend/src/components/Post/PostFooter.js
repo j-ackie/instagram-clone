@@ -12,15 +12,18 @@ import PostDataService from "../../services/PostDataService";
 
 export default function PostFooter(props) {
     const [timestamp, setTimestamp] = useState("");
-    const [comments, setComments] = useState([]);
     const [likes, setLikes] = useState([]);
     const [numLikes, setNumLikes] = useState(0);
+    const [numComments, setNumComments] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
     const userInfo = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!props.postInfo._id) {
+            return;
+        }
         PostDataService.getLikesById(props.postInfo._id)
             .then(response => {
                 setLikes(response.data.likes);
@@ -34,9 +37,9 @@ export default function PostFooter(props) {
             });
         PostDataService.getComments(props.postInfo._id)
             .then(response => {
-                setComments(response.data.comments);
+                setNumComments(response.data.comments.length);
             });
-    }, []);
+    }, [props.postInfo]);
 
     useEffect(() => {
         setTimestamp(renderTimestamp(props.postInfo.date).toUpperCase());
@@ -100,16 +103,16 @@ export default function PostFooter(props) {
                 !props.isExtendedPost
                     ? <div className="view-comments">
                         {
-                            comments.length != 0
+                            numComments != 0
                                 ? <Link 
                                     to={ "/post/" + props.postInfo._id } 
                                     onClick={ props.handleViewComments }
                                   >
                                     <p>
                                         View {
-                                                comments.length === 1
+                                                numComments === 1
                                                     ? "1 comment"
-                                                    : "all " + comments.length + " comments"
+                                                    : "all " + numComments + " comments"
                                             }
                                     </p>
                                   </Link>

@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from 'react';
-import { BrowserRouter, Routes, Navigate, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Navigate, Switch, Route, Link, useNavigate } from "react-router-dom";
 import { UserProvider } from './UserProvider';
 import Layout from './components/Layout/Layout';
 import Content from "./components/Content/Content";
@@ -18,17 +18,18 @@ function App() {
         profilePicture: ""
     });
 
-    const isLoggedIn = () => {
-        return userInfo.userId !== "";
-    };
-    
+    const localUserInfo = localStorage.getItem("userInfo");
+    if (localUserInfo && !userInfo.userId) {
+        setUserInfo(JSON.parse(localUserInfo));
+    }
+
     return (
         <UserProvider userInfo={ userInfo }>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Layout/>}>
                         <Route index element={ 
-                            isLoggedIn()
+                            userInfo.userId !== ""
                                 ? <Content userInfo={ userInfo } setUserInfo={ setUserInfo } /> 
                                 : <Navigate to="/login" />
                         }/>

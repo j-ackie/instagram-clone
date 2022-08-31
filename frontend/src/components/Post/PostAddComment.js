@@ -1,7 +1,12 @@
-import { useState, useRef, forwardRef } from "react"
+import { useState, useRef, forwardRef, useContext, useEffect } from "react";
+import PostDataService from "../../services/PostDataService";
+import UserContext from "../../UserProvider";
+import PostComment from "./PostComment";
 
 const PostAddComment = forwardRef((props, ref) => {
     const [currComment, setCurrComment] = useState("");
+    
+    const userInfo = useContext(UserContext);
 
     const handleOnInput = (event) => {
         setCurrComment(event.target.textContent);
@@ -9,7 +14,6 @@ const PostAddComment = forwardRef((props, ref) => {
 
     const handleOnKeyDown = (event) => {
         if (event.keyCode === 13 && !event.shiftKey) {
-            console.log("hey")
             event.preventDefault();
             handleComment();
         }
@@ -19,7 +23,26 @@ const PostAddComment = forwardRef((props, ref) => {
         if (currComment === "") {
             return;
         }
-        
+        const data = {
+            postId: props.postId,
+            userId: userInfo.userId,
+            comment: currComment
+        }
+        PostDataService.commentPost(data)
+            .then(response => {
+                setCurrComment("");
+                ref.current.textContent = "";
+                props.setComments(
+                    [
+                        <PostComment 
+                            key={ response.data.insertedId } 
+                            comment={ data } 
+                            isUserComment={ true }    
+                        />, 
+                        ... props.comments
+                    ]
+                );
+            });
     }
 
     return (

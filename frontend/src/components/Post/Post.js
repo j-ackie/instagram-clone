@@ -9,6 +9,7 @@ import { useState, useEffect, useRef, createRef } from "react";
 export default function Post(props) {
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(null);
+    const [comments, setComments] = useState([]);
 
     const commentRef = createRef();
 
@@ -25,7 +26,7 @@ export default function Post(props) {
     // }
 
     useEffect(() => {
-        PostDataService.getUserById(props.postInfo.user_id)
+        PostDataService.getUserById(props.postInfo.userId)
             .then(response => {
                 console.log(response);
                 if (response.data.profilePicture) {
@@ -41,7 +42,6 @@ export default function Post(props) {
     return (
         <div className="post">
             <PostHeader
-                handleOptionsClick={ props.handleOptionsClick }
                 username={ username }
                 profilePicture={ profilePicture }
                 postInfo={ props.postInfo }
@@ -53,9 +53,14 @@ export default function Post(props) {
                 isExtendedPost={ false }
                 username={ username }
                 postInfo={ props.postInfo }
+                comments={ comments }
+                setComments={ setComments }
             />
-            <PostAddComment 
+            <PostAddComment
                 ref={ commentRef }
+                postId={ props.postInfo._id }
+                comments={ comments }
+                setComments={ setComments }
             />
         </div>
     )

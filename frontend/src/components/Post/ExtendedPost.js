@@ -6,6 +6,7 @@ import PostCommentSection from "./PostCommentSection";
 import PostFooter from "./PostFooter";
 import PostAddComment from "./PostAddComment";
 import loadPost from "../../helpers";
+import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import "./ExtendedPost.css";
 import "./Post.css"
 
@@ -16,39 +17,36 @@ export default function ExtendedPost(props) {
         userId: "",
         caption: "",
         file: "",
-        date: "",
-        likes: []
+        date: ""
     });
     const [profilePicture, setProfilePicture] = useState("");
     const [username, setUsername] = useState("");
-    const [isLiked, setIsLiked] = useState(false);
-    const [numLikes, setNumLikes] = useState(0);
     const [comments, setComments] = useState([]);
 
     const commentRef = createRef();
 
-    const handleLike = async(postId, numLikes, setNumLikes) => {
-        let data = {
-            post_id: postInfo.postId,
-            user_id: props.userInfo.userId
-        }
-        PostDataService.likePost(data)
-            .then(response => {
-                if (response.data.status === "success") {
-                    setNumLikes(numLikes + 1);
-                }
-            });
-    }
-
     useEffect(() => {
         PostDataService.getPostById(postId)
             .then(response => {
+                console.log(response.data)
                 setPostInfo(response.data);
-                setNumLikes(response.data.likes.length); // TODO: Remove this later
-                setIsLiked(response.data.likes.includes(props.userInfo.userId));
-                loadPost(response.data, setProfilePicture, setUsername, setComments);
+
+                PostDataService.getUserById(response.data.userId)
+                    .then(response => {
+                        if (response.data.profilePicture) {
+                            setProfilePicture(response.data.profilePicture);
+                        }
+                        else {
+                            setProfilePicture(DefaultProfilePicture);
+                        }
+                        setUsername(response.data.username);
+                    });
             });
     }, []);
+
+    useEffect(() => {
+        console.log(comments);
+    }, [comments])
     
     return (
         <div className="extended-post-container">
@@ -61,26 +59,28 @@ export default function ExtendedPost(props) {
                 </div>
                 <div className="extended-post-info">
                     <PostHeader
-                        // handleOptionsClick={}
                         profilePicture={ profilePicture }
                         username={ username }
+                        postInfo={ postInfo }
                     />
                     <PostCommentSection
                         postId={ postId }
+                        comments={ comments }
+                        setComments={ setComments }
                     />
                     <PostFooter
                         commentRef={ commentRef }
                         isExtendedPost={ true }
-                        isLiked={ isLiked }
-                        handleLike={ handleLike }
-                        numLikes={ numLikes }
                         username={ username }
                         postInfo={ postInfo }
                         comments={ comments }
-                        isExtendedPost={ true }
+                        setComments={ setComments }
                     />
                     <PostAddComment
                         ref={ commentRef }
+                        postId={ postId }
+                        comments={ comments }
+                        setComments={ setComments }
                     />
                 </div>
             </div>

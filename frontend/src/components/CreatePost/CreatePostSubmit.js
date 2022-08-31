@@ -1,6 +1,7 @@
 import { useEffect, useRef, useContext } from "react";
 import UserContext from "../../UserProvider";
 import PostDataService from "../../services/PostDataService";
+import Post from "../Post/Post";
 
 export default function CreatePostSubmit(props) {
     const userInfo = useContext(UserContext);
@@ -9,14 +10,27 @@ export default function CreatePostSubmit(props) {
 
     const handleClick = () => {
         let data = new FormData();
-        data.append("user_id", userInfo.userId);
+        data.append("userId", userInfo.userId);
         data.append("file", props.file);
         data.append("caption", inputRef.current.value);
 
         PostDataService.createPost(data)
             .then(response => {
+                console.log(response)
                 props.setIsPostIconClicked(false);
-                props.getAllPosts();
+                PostDataService.getPostById(response.data.postId)
+                    .then(response => {
+                        console.log(response)
+                        props.setPosts(
+                            [
+                                <Post
+                                    key={ response.data.postId }
+                                    postInfo={ response.data }
+                                />,
+                                ... props.posts
+                            ]
+                        );
+                    });
             });
     }
 

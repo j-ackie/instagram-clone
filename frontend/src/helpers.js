@@ -1,7 +1,7 @@
 import PostDataService from "./services/PostDataService";
 import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
 
-export default function loadPost(postInfo, setProfilePicture, setUsername, setComments) {
+export default function loadPost(postInfo, setProfilePicture, setUsername, setComments, setLikes) {
     PostDataService.getUserById(postInfo.userId)
         .then(response => {
             if (response.data.profilePicture) {
@@ -12,9 +12,14 @@ export default function loadPost(postInfo, setProfilePicture, setUsername, setCo
             }
             setUsername(response.data.username);
         });
-    PostDataService.getComments(postInfo.postId)
+    PostDataService.getComments(postInfo._id)
         .then(response => {
+            
             setComments(response.data.comments);
+        });
+    PostDataService.getLikesById(postInfo._id)
+        .then(response => {
+            setLikes(response.data);
         });
 }
 

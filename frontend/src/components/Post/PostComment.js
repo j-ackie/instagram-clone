@@ -1,26 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PostUser from "./PostUser";
 import PostDataService from "../../services/PostDataService";
+import UserContext from "../../UserProvider";
 
 export default function PostComment(props) {
-    const [userInfo, setUserInfo] = useState({
+    const [commentUserInfo, setCommentUserInfo] = useState({
         userId: "",
         username: "",
         profilePicture: ""
     });
+
+    const userInfo = useContext(UserContext);
+    
     useEffect(() => {
-        PostDataService.getUserById(props.comment.user_id)
+        if (props.isUserComment) {
+            setCommentUserInfo(userInfo);
+            return;
+        }
+        PostDataService.getUserById(props.comment.userId)
             .then(response => {
-                setUserInfo(response.data);
-                console.log(response);
-            })
+                setCommentUserInfo(response.data);
+            });
     }, []);
-    console.log(props.comment);
+
     return (
         <div className="post-comment">
             <PostUser
-                profilePicture={ userInfo.profilePicture }
-                username={ userInfo.username }
+                profilePicture={ commentUserInfo.profilePicture }
+                username={ commentUserInfo.username }
             />
             { props.comment.comment }
         </div>
