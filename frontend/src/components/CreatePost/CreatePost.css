@@ -22,17 +22,34 @@
 #create-post-header {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
     margin: 0;
     padding: 12px;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+    font-size: 15px;
+    font-weight: bold;
 }
 
-#create-post-header button {
-    margin: 0;
-    padding: 0;
+#left-header {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+#center-header {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+#right-header {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+#create-post-header svg:hover {
+    cursor: pointer;
 }
 
 #create-post-content {
@@ -50,8 +67,23 @@
     max-height: 100%;
 }
 
+#create-post-upload {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 #create-post-upload input {
     display: none;
+}
+
+#create-post-upload p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
 }
 
 #create-post-submit {
@@ -60,6 +92,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -77,7 +110,48 @@
 }
 
 #create-post-options {
+    text-align: left;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     height: 100%;
     width: 40%;
+}
+
+#create-post-options-user {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#create-post-options-user span {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+#caption {
+    padding: 10px;
+}
+
+#caption textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    padding: 0;
+    font: inherit;
+}
+
+#caption textarea:focus {
+    outline: none;
+}
+
+.action {
+    color: #00A0FF;
+}
+
+.action:hover {
+    cursor: pointer;
+}
+
+.profile-picture {
+    width: 30px;
 }

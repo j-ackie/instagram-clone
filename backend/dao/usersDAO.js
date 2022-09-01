@@ -48,13 +48,8 @@ export default class UsersDAO {
     static async register(data) {
         console.log(data);
         try {
-            const getResponse = await this.getUserByName(data.username);
-
-            if (!getResponse) {
-                data.profile_picture = "";
-                const insertResponse = await users.insertOne(data);
-                return insertResponse.insertedId;
-            }
+            data.profilePicture = "";
+            return await users.insertOne(data);
         }
         catch (err) {
             console.err(err);

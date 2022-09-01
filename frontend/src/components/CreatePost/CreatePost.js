@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useContext, useState, useRef } from "react";
 import CreatePostUpload from "./CreatePostUpload";
 import CreatePostCrop from "./CreatePostCrop"
 import CreatePostSubmit from "./CreatePostSubmit";
-import CreatePostHeader from "./CreatePostHeader"
+import CreatePostHeader from "./CreatePostHeader";
 import "./CreatePost.css";
+import Post from "../Post/Post";
+import PostDataService from "../../services/PostDataService";
+import UserContext from "../../UserProvider";
 
 export default function CreatePost(props) {
     const [file, setFile] = useState(null);
     const [isCropped, setIsCropped] = useState(false);
-    const [headers, setHeaders] = useState([]);
+
+    const userInfo = useContext(UserContext);
+    const inputRef = useRef(null);
 
     const handleClick = (event) => {
         if (event.target.id === "create-post") {
@@ -16,29 +21,55 @@ export default function CreatePost(props) {
         }
     }
 
+    const handleShare = () => {
+        let data = new FormData();
+        data.append("userId", userInfo.userId);
+        data.append("file", file);
+        data.append("caption", inputRef.current.value);
+
+        PostDataService.createPost(data)
+            .then(response => {
+                props.setIsPostIconClicked(false);
+                PostDataService.getPostById(response.data.postId)
+                    .then(response => {
+                        props.setPosts(
+                            [
+                                <Post
+                                    key={ response.data.postId }
+                                    postInfo={ response.data }
+                                />,
+                                ... props.posts
+                            ]
+                        );
+                    });
+            });
+    }
+
     return (
         <div className="pop-up" id="create-post" onClick={ handleClick }>
             <div 
-                id= {!isCropped 
+                id={ 
+                    !isCropped 
                         ? "create-post-popup"
                         : "extended-create-post-popup"
-                    }
-                
-                >
+                }
+            >
                 <CreatePostHeader 
-                    headers={ headers }
+                    file={ file }
+                    isCropped={ isCropped }
+                    setFile={ setFile }
+                    setIsCropped={ setIsCropped }
+                    handleShare={ handleShare }
                 />
                 <div id="create-post-content">
                     {   
                         !file ? <CreatePostUpload 
                                     setFile={ setFile }
-                                    setHeaders={ setHeaders }
                                 /> :
                    !isCropped ? <CreatePostCrop
                                     file={ file }
                                     setFile={ setFile }
                                     setIsCropped={ setIsCropped }
-                                    setHeaders={ setHeaders }
                                 /> :
                                 <CreatePostSubmit 
                                     posts={ props.posts }
@@ -47,7 +78,7 @@ export default function CreatePost(props) {
                                     file={ file }
                                     setFile={ setFile }
                                     setIsCropped={ setIsCropped }
-                                    setHeaders={ setHeaders }
+                                    ref={ inputRef }
                                 />
                     }
                 </div>

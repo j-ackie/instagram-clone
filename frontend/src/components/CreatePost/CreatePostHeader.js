@@ -1,17 +1,48 @@
+import BackIcon from "../Icons/BackIcon";
+
 export default function CreatePostHeader(props) {
     let headers = [];
     
-    for (const header of props.headers) {
-        headers.push(
-            <span>
-                { header }
-            </span>
-        )
+    if (!props.file) {
+        headers = [
+            <span className=""/>,
+            <span>Create new post</span>,
+            <span />
+        ];
     }
-    if (props.headers.length === 1) {
-        headers.unshift(<span />);
-        headers.push(<span />);
+    else if (!props.isCropped) {
+        headers = [
+            <BackIcon onClick={ () => props.setFile(null) }/>,
+            <span>Crop</span>,
+            <span onClick={ () => props.setIsCropped(true) } className="action">Next</span>
+        ];
     }
+    else {
+        headers = [
+            <BackIcon onClick={ () => props.setIsCropped(false) } />,
+            <span>Create new post</span>,
+            <span onClick={ props.handleShare } className="action">Share</span>
+        ];
+    }
+
+    headers[0] = (
+        <div id="left-header">
+            { headers[0] }
+        </div>
+    );
+
+    headers[1] = (
+        <div id="center-header">
+            { headers[1] }
+        </div>
+    );
+
+    headers[2] = (
+        <div id="right-header">
+            { headers[2] }
+        </div>
+    );
+
     return (
         <div id="create-post-header">
             { headers }

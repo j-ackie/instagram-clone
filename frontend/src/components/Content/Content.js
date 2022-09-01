@@ -1,4 +1,3 @@
-import Home from "../Home/Home";
 import Navbar from "../Navbar/Navbar"
 import CreatePost from "../CreatePost/CreatePost"
 import Post from '../Post/Post';

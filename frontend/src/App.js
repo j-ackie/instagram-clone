@@ -27,7 +27,7 @@ function App() {
         <UserProvider userInfo={ userInfo }>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Layout/>}>
+                    <Route path="/" element={<Layout setUserInfo={ setUserInfo }/>}>
                         <Route index element={ 
                             userInfo.userId !== ""
                                 ? <Content userInfo={ userInfo } setUserInfo={ setUserInfo } /> 

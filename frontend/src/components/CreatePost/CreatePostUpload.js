@@ -1,10 +1,6 @@
 import { useEffect, useRef } from "react";
 
 export default function CreatePostUpload(props) {
-    useEffect(() => {
-        props.setHeaders(["Create new post"]);
-    }, []);
-
     const inputFile = useRef(null);
 
     const handleDrag = (event) => {
@@ -42,6 +38,7 @@ export default function CreatePostUpload(props) {
                 onChange={handleSubmit}
             />
             <button
+                className="submit"
                 onClick={() => { inputFile.current.click() }}
             >
                 Select from computer

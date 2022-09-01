@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
+import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import instagramLogo from "../../icons/instagram_logo.png";
 import PasswordField from "./PasswordField";
 import "./LoginRegisterPage.css"
@@ -18,11 +19,12 @@ export default function LoginPage(props) {
         };
         PostDataService.login(data)
             .then(response => {
-                console.log(response)
                 let userInfo = {
                     userId: response.data.userId,
                     username: data.username,
-                    profilePicture: response.data.profilePicture
+                    profilePicture: response.data.profilePicture === ""
+                                        ? DefaultProfilePicture
+                                        : response.data.profilePicture
                 };
                 props.setUserInfo(userInfo);
                 localStorage.setItem("userInfo", JSON.stringify(userInfo));

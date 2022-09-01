@@ -6,29 +6,111 @@ nav {
     padding: 15px;
     background-color: white;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 99;
 }
 
-nav * {
-    display: inline-block;
-    vertical-align: middle;
-}
-
 nav img {
     width: 100px;
 }
 
-.navbar-icons {
-    width: 30px;
+#left-container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
 }
 
-.navbar-icons:hover {
+#center-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+#right-container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+#right-container img {
     cursor: pointer;
+    width: 30px;
+    margin-right: 20px;
+}
+
+.clicked {
+    outline: 1px solid black;
+    outline-offset: 1px;
+}
+
+#right-container > div {
+    height: 30px;
+    position: relative;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+#right-container > div > img {
+    margin: 0 !important;
+}
+
+#navbar-profile-picture-container {
+    height: 30px;
+    position: relative;
 }
 
 #navbar-profile-picture {
     border-radius: 50%;
+}
+
+.popup {
+    position: absolute;
+    top: 45px;
+    background-color: white;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+#profile-picture-popup {
+    width: 200px;
+    right: -10px;
+}
+
+.popup ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.popup li {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px;
+}
+
+#profile-picture-popup img {
+    margin-right: 10px;
+    width: 20px;
+}
+
+#profile-picture-popup li:hover {
+    background-color: #F9F9F9;
+}
+
+#logout {
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+#activity-icon-popup {
+    width: 450px;
+    right: -10px;
+}
+
+#follow-requests {
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
 }

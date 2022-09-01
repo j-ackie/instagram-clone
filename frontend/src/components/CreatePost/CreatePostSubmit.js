@@ -1,56 +1,8 @@
-import { useEffect, useRef, useContext } from "react";
+import { useContext, forwardRef } from "react";
 import UserContext from "../../UserProvider";
-import PostDataService from "../../services/PostDataService";
-import Post from "../Post/Post";
 
-export default function CreatePostSubmit(props) {
+const CreatePostSubmit = forwardRef((props, ref) => {
     const userInfo = useContext(UserContext);
-
-    const inputRef = useRef(null);
-
-    const handleClick = () => {
-        let data = new FormData();
-        data.append("userId", userInfo.userId);
-        data.append("file", props.file);
-        data.append("caption", inputRef.current.value);
-
-        PostDataService.createPost(data)
-            .then(response => {
-                console.log(response)
-                props.setIsPostIconClicked(false);
-                PostDataService.getPostById(response.data.postId)
-                    .then(response => {
-                        console.log(response)
-                        props.setPosts(
-                            [
-                                <Post
-                                    key={ response.data.postId }
-                                    postInfo={ response.data }
-                                />,
-                                ... props.posts
-                            ]
-                        );
-                    });
-            });
-    }
-
-    useEffect(() => {
-        let backButton = (
-            <button 
-                onClick={() => props.setIsCropped(false)}
-            >
-                Back
-            </button>
-        )
-        let postButton = (
-            <button
-                onClick={ handleClick }
-            >
-                Post
-            </button>
-        )
-        props.setHeaders([backButton, "Create new post", postButton]);
-    }, []);
 
     return (
         <div id="create-post-submit">
@@ -60,21 +12,52 @@ export default function CreatePostSubmit(props) {
                 />
             </div>
             <div id="create-post-options">
-                <span>
+                <div id="create-post-options-user">
                     <img
-                        src={ null }
+                        className="profile-picture"
+                        src={ userInfo.profilePicture }
                     />
-                    <p>
+                    <span>
                         { userInfo.username }
-                    </p>
-                </span>
-                <div>
-                    <input
-                        ref={ inputRef }
+                    </span>
+                </div>
+                <div id="caption">
+                    <textarea
+                        ref={ ref }
                         placeholder="Write a caption..."
                     />
                 </div>
             </div>
         </div>
     )
-}
+})
+
+export default CreatePostSubmit;
+
+// export default function CreatePostSubmit(props) {
+//     return (
+//         <div id="create-post-submit">
+//             <div id="create-post-submit-preview">
+//                 <img 
+//                     src={ URL.createObjectURL(props.file) }
+//                 />
+//             </div>
+//             <div id="create-post-options">
+//                 <span>
+//                     <img
+//                         src={ null }
+//                     />
+//                     <p>
+//                         { userInfo.username }
+//                     </p>
+//                 </span>
+//                 <div>
+//                     <input
+//                         ref={ inputRef }
+//                         placeholder="Write a caption..."
+//                     />
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
