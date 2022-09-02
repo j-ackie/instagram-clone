@@ -9,6 +9,10 @@ class PostDataService {
         return http.get("/post/" + postId);
     }
 
+    getPostsByUserId(userId) {
+        return http.get("/post?userId=" + userId);
+    }
+
     createPost(data) {
         return http.post("/post", data, { headers: {"Content-type": "multipart/form-data"} });
     }
@@ -35,6 +39,10 @@ class PostDataService {
 
     getUserById(userId) {
         return http.get("/user/" + userId);
+    }
+
+    getUserByName(username) {
+        return http.get("/user/" + username + "?getBy=username")
     }
 
     login(data) {

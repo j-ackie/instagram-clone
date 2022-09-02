@@ -6,7 +6,7 @@ export default function PostUser(props) {
             <img className="post-profile-photo"
                 src={ props.profilePicture }
             />
-            <Link to="/a">{ props.username }</Link>
+            <Link to={ "/user/" + props.username }>{ props.username }</Link>
         </span>
     )
 }

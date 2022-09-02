@@ -44,7 +44,26 @@ export default class PostsController {
         }
         catch (err) {
             console.log(err);
-            res.status(500).json({ error: err });
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiGetPostsByUserId(req, res, next) {
+        console.log(req.query)
+        try {
+            const getResponse = await PostsDAO.getPostsByUserId(req.query.userId);
+
+            for (const post of getResponse) {
+                post.file = await get(post.filename);
+                delete post.filename;
+            }
+            
+            res.json({
+                posts: getResponse
+            });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
         }
     }
 

@@ -1,4 +1,4 @@
-import mongodb from "mongodb";
+import mongodb, { ObjectID } from "mongodb";
 const ObjectId = mongodb.ObjectID;
 
 let posts;
@@ -55,6 +55,18 @@ export default class PostsDAO {
         return doc;
     }
 
+    static async getPostsByUserId(userId) {
+        let query = { "userId": ObjectId(userId) };
+        
+        try {
+            const postsList = await posts.find(query).toArray();
+            return postsList;
+        }
+        catch (err) {
+            return;
+        }
+    }
+
     static async addPost(data) {
         data.userId = ObjectId(data.userId);
         try {
@@ -74,7 +86,6 @@ export default class PostsDAO {
         };
         try {
             const response = await posts.deleteOne(query);
-            console.log(response);
             return response;
         }
         catch (err) {

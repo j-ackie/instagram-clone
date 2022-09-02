@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import UserContext from "../../UserProvider";
 import Navbar from "../Navbar/Navbar";
 import CreatePost from "../CreatePost/CreatePost";

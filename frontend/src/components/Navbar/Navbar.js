@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import UserContext from "../../UserProvider";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import ProfilePicturePopup from "./ProfilePicturePopup";
 import ActivityIconPopup from "./ActivityIconPopup";
 import homeIcon from "../../icons/home.svg";
+import filledHomeIcon from "../../icons/home-fill.svg";
 import plusIcon from "../../icons/plus.svg";
 import filledPlusIcon from "../../icons/plus-fill.svg";
 import chatIcon from "../../icons/chat.svg";
@@ -15,7 +16,9 @@ import "./Navbar.css";
 
 export default function Navbar(props) {
     const userInfo = useContext(UserContext);
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     return (
         <nav>
             <div id="left-container">
@@ -34,7 +37,12 @@ export default function Navbar(props) {
             </div>
             <div id="right-container">
                 <img
-                    src={ homeIcon }
+                    src={
+                        location.pathname === "/"
+                            ? filledHomeIcon
+                            : homeIcon
+                    }
+                    onClick={ () => navigate("/") }
                 />
                 <img 
                     src={ chatIcon }
@@ -77,12 +85,18 @@ export default function Navbar(props) {
                 >
                     <img
                         id="navbar-profile-picture"
+                        className={
+                            location.pathname === "/user/" + userInfo.username
+                                ? "clicked"
+                                : ""
+                        }
                         src={ userInfo.profilePicture }
                         onClick={ () => props.setIsProfilePictureClicked(true) }
                     />
                     {
                         props.isProfilePictureClicked
-                            ? <ProfilePicturePopup 
+                            ? <ProfilePicturePopup
+                                setIsProfilePictureClicked={ props.setIsProfilePictureClicked }
                                 setUserInfo={ props.setUserInfo }
                               />
                             : ""

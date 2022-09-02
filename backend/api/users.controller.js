@@ -3,27 +3,57 @@ import upload, { get } from "../s3.js"
 import { genSalt, hash, compare } from "bcrypt";
 
 export default class UsersController {
-    static async apiGetUserById(req, res, next) {
+    static async apiGetUser(req, res, next) {
         try {
-            let userId = req.params.userId;
-            let userInfo = await UsersDAO.getUserById(userId);
-            if (!userInfo) {
-                res.status(404).json({ error: "Not found" });
+            let getResponse;
+            if (req.query.getBy === "username") {
+                getResponse = await UsersDAO.getUserByName(req.params.userId);
+            }
+            else {
+                getResponse = await UsersDAO.getUserById(req.params.userId);
+            }
+
+            if (!getResponse) {
+                res.status(404).json({ error: "not found" });
                 return;
             }
-            delete userInfo.password;
 
-            if (userInfo.profilePicture) {
-                userInfo.profilePicture = await(get(userInfo.profilePicture));
-            }
+            const userInfo = {
+                userId: getResponse._id,
+                username: getResponse.username,
+                profilePicture: getResponse.profilePicture
+                                    ? await get(getResponse.profilePicture)
+                                    : ""
+            };
 
             res.json(userInfo);
         }
         catch (err) {
-            console.log(err);
             res.status(500).json({ error: err });
         }
     }
+
+    // static async apiGetUserById(req, res, next) {
+    //     try {
+    //         let userId = req.params.userId;
+    //         let userInfo = await UsersDAO.getUserById(userId);
+    //         if (!userInfo) {
+    //             res.status(404).json({ error: "Not found" });
+    //             return;
+    //         }
+    //         delete userInfo.password;
+
+    //         if (userInfo.profilePicture) {
+    //             userInfo.profilePicture = await(get(userInfo.profilePicture));
+    //         }
+
+    //         res.json(userInfo);
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //         res.status(500).json({ error: err });
+    //     }
+    // }
 
     static async apiLogin(req, res, next) {
         try {

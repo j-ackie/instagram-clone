@@ -1,0 +1,134 @@
+.profile-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+}
+
+.profile-page-container p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.profile-page {
+    width: 900px;
+}
+
+.profile-page-picture {
+    border-radius: 50%;
+    width: 150px;
+}
+
+.profile-page-header {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    padding: 30px;
+    width: 100%;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+.profile-page-header-info {
+    align-items: flex-start;
+    margin-left: 50px;
+    height: 100%;
+}
+
+.profile-page-header-info div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.profile-page-header-info div span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.profile-page-header-info-top {
+    margin-bottom: 20px;
+}
+
+.profile-page-header-info-top * {
+    margin-right: 20px;
+}
+
+.profile-page-header-info-top img {
+    width: 25px;
+}
+
+.profile-page-username {
+    font-size: 26px;
+}
+
+.profile-page-header-info-bottom span {
+    margin-right: 40px;
+}
+
+.profile-page-post {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-page-post * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-page-post img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+}
+
+.profile-page-images {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 30px;
+    width: 100%;
+}
+
+#empty {
+    width: 280px;
+}
+
+.profile-page-post-hover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    color: white;
+}
+
+.profile-page-post-hover a {
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.profile-page-post-hover img {
+    width: 20px;
+    height: auto;
+}
+
+.darken {
+    opacity: 0.5;
+}
+
+.num-likes {
+    margin-right: 30px;
+}
