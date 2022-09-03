@@ -45,8 +45,16 @@ class PostDataService {
         return http.get("/user/" + username + "?getBy=username")
     }
 
+    checkLogin() {
+        return http.get("/login");
+    }
+
     login(data) {
         return http.post("/login", data);
+    }
+
+    logout() {
+        return http.post("/logout");
     }
 
     register(data) {

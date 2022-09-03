@@ -5,6 +5,7 @@ import bookmarkIcon from "../../icons/bookmark.svg";
 import gearIcon from "../../icons/gear.svg";
 import switchIcon from "../../icons/switch.svg";
 import UserContext from "../../UserProvider";
+import PostDataService from "../../services/PostDataService";
 
 export default function ProfilePicturePopup(props) {
     const userInfo = useContext(UserContext);
@@ -17,13 +18,16 @@ export default function ProfilePicturePopup(props) {
     }
 
     const handleLogout = () => {
-        localStorage.clear();
-        props.setUserInfo({
-            userId: "",
-            username: "",
-            profilePicture: ""
-        });
-        navigate("/login")
+        PostDataService.logout()
+            .then(response => {
+                console.log(response);
+                props.setUserInfo({
+                    userId: "",
+                    username: "",
+                    profilePicture: ""
+                });
+                navigate("/login")
+            });
     };
 
     return (

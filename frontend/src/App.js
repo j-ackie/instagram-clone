@@ -9,6 +9,7 @@ import LoginPage from './components/LoginRegisterPage/LoginPage';
 import RegisterPage from './components/LoginRegisterPage/RegisterPage';
 
 import "./App.css"
+import PostDataService from './services/PostDataService';
 
 export const UserContext = createContext();
 
@@ -18,29 +19,44 @@ function App() {
         username: "",
         profilePicture: ""
     });
+    const [loading, setLoading] = useState(true);
 
-    const localUserInfo = localStorage.getItem("userInfo");
-    if (localUserInfo && !userInfo.userId) {
-        setUserInfo(JSON.parse(localUserInfo));
-    }
+    useEffect(() => {
+        PostDataService.checkLogin()
+            .then(response => {
+                setLoading(false);
+                if (response.data.loggedIn) {
+                    setUserInfo(response.data.userInfo);
+                }
+            })
+    }, []);
+
+    // const localUserInfo = localStorage.getItem("userInfo");
+    // if (localUserInfo && !userInfo.userId) {
+    //     setUserInfo(JSON.parse(localUserInfo));
+    // }
 
     return (
         <UserProvider userInfo={ userInfo }>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Layout setUserInfo={ setUserInfo }/>}>
-                        <Route index element={ 
-                            userInfo.userId !== ""
+            <Routes>
+                <Route path="/" element={
+                    !loading
+                        ? <Layout setUserInfo={ setUserInfo }/>
+                        : ""
+                }>
+                    <Route index element={ 
+                        loading
+                            ? <RegisterPage />
+                            : userInfo.userId !== ""
                                 ? <Content /> 
                                 : <Navigate to="/login" />
-                        }/>
-                        <Route path="post/:postId" element={ <ExtendedPost /> } />
-                        <Route path="user/:username" element={ <Profile /> } />
-                    </Route>
-                    <Route path="/login" element={ <LoginPage setUserInfo={ setUserInfo } /> } />
-                    <Route path="/register" element={ <RegisterPage setUserInfo={ setUserInfo } /> } />
-                </Routes>
-            </BrowserRouter>
+                    }/>
+                    <Route path="post/:postId" element={ <ExtendedPost /> } />
+                    <Route path="user/:username" element={ <Profile /> } />
+                </Route>
+                <Route path="/login" element={ <LoginPage setUserInfo={ setUserInfo } /> } />
+                <Route path="/register" element={ <RegisterPage setUserInfo={ setUserInfo } /> } />
+            </Routes>
         </UserProvider>
     );
 }

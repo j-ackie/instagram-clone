@@ -62,6 +62,13 @@
     width: 25px;
 }
 
+.profile-page-header-info-top button {
+    padding: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100px;
+}
+
 .profile-page-username {
     font-size: 26px;
 }
@@ -131,4 +138,12 @@
 
 .num-likes {
     margin-right: 30px;
+}
+
+.edit {
+    border-radius: 5px;
+    border: none;
+    outline: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: transparent;
+    font-weight: bold;
 }

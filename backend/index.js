@@ -5,6 +5,7 @@ import PostsDAO from "./dao/postsDAO.js";
 import UsersDAO from "./dao/usersDAO.js";
 import CommentsDAO from "./dao/commentsDAO.js";
 import LikesDAO from "./dao/likesDAO.js";
+import FollowersDAO from "./dao/followersDAO.js";
 import { S3Client } from "@aws-sdk/client-s3";
 
 dotenv.config();
@@ -36,6 +37,7 @@ MongoClient.connect(
     await UsersDAO.injectDB(client);
     await CommentsDAO.injectDB(client);
     await LikesDAO.injectDB(client);
+    await FollowersDAO.injectDB(client);
     app.listen(port, () => {
         console.log('Listening on port ' + port);
     });

@@ -49,7 +49,7 @@ export default class PostsController {
     }
 
     static async apiGetPostsByUserId(req, res, next) {
-        console.log(req.query)
+        console.log(req.session)
         try {
             const getResponse = await PostsDAO.getPostsByUserId(req.query.userId);
 
@@ -57,7 +57,7 @@ export default class PostsController {
                 post.file = await get(post.filename);
                 delete post.filename;
             }
-            
+
             res.json({
                 posts: getResponse
             });

@@ -33,27 +33,17 @@ export default class UsersController {
         }
     }
 
-    // static async apiGetUserById(req, res, next) {
-    //     try {
-    //         let userId = req.params.userId;
-    //         let userInfo = await UsersDAO.getUserById(userId);
-    //         if (!userInfo) {
-    //             res.status(404).json({ error: "Not found" });
-    //             return;
-    //         }
-    //         delete userInfo.password;
-
-    //         if (userInfo.profilePicture) {
-    //             userInfo.profilePicture = await(get(userInfo.profilePicture));
-    //         }
-
-    //         res.json(userInfo);
-    //     }
-    //     catch (err) {
-    //         console.log(err);
-    //         res.status(500).json({ error: err });
-    //     }
-    // }
+    static async apiCheckLogin(req, res, next) {
+        if (req.session.userInfo) {
+            res.json({
+                loggedIn: true,
+                userInfo: req.session.userInfo
+            });
+        }
+        else {
+            res.json({ loggedIn: false });
+        }
+    }
 
     static async apiLogin(req, res, next) {
         try {
@@ -71,16 +61,29 @@ export default class UsersController {
 
             let userInfo = {
                 userId: getResponse._id,
+                username: req.body.username,
                 profilePicture: getResponse.profilePicture
                                     ? await get(getResponse.profilePicture)
                                     : ""
             };
             
+            req.session.userInfo = userInfo;
+
             res.json(userInfo);
+            
         }
         catch (err) {
             res.status(500).json({ error: err.message });
         }
+    }
+
+    static async apiLogout(req, res, next) {
+        if (!req.session.userInfo) {
+            res.status(401).json({ error: "not logged in" });
+            return;
+        }
+        delete req.session.userInfo;
+        res.json({ status: "logged out" });
     }
 
     static async apiRegister(req, res, next) {
@@ -110,5 +113,9 @@ export default class UsersController {
         catch (err) {
             res.status(500).json({ error: err.message });
         }
+    }
+
+    static async apiFollowUser(req, res, next) {
+        
     }
 }

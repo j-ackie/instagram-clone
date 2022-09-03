@@ -4,6 +4,7 @@ import PostDataService from "../../services/PostDataService";
 import ProfilePost from "./ProfilePost";
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import gearIcon from "../../icons/gear.svg";
+import settingsIcon from "../../icons/three-dots.svg";
 import "./Profile.css";
 import UserContext from "../../UserProvider";
 
@@ -40,7 +41,7 @@ export default function Profile() {
                         setPosts(postsList);
                     });
             });
-    }, []);
+    }, [username]);
 
 
     return (
@@ -54,8 +55,18 @@ export default function Profile() {
                 <div className="profile-page-header-info">
                     <div className="profile-page-header-info-top">
                         <p className="profile-page-username">{ profileUserInfo.username }</p>
-                        <button>Edit profile</button>
-                        <img src={ gearIcon } />
+                        {   
+                            profileUserInfo.userId === userInfo.userId
+                                ? <span>
+                                    <button className="edit">Edit profile</button>
+                                    <img src={ gearIcon } />
+                                  </span>
+                                : <span>
+                                    <button className="submit">Follow</button>
+                                    <img src={ settingsIcon } />
+                                  </span>
+                            
+                        }
                     </div>
                     <div className="profile-page-header-info-bottom">
                         <span>
