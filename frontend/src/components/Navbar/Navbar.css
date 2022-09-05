@@ -17,6 +17,19 @@ nav img {
     width: 100px;
 }
 
+nav input {
+    background-color: #E9E9E9;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+    font-size: 16px;
+}
+
+nav input:focus {
+    outline: none;
+}
+
 #left-container {
     display: flex;
     flex: 1;
@@ -114,4 +127,25 @@ nav img {
 
 #follow-requests {
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+#search-popup {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    top: 70px;
+    overflow: hidden;
+}
+
+#search-popup a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#search-popup a:hover {
+    background-color: #FAFAFA;
+}
+
+#search-popup a span {
+    padding: 10px;
 }

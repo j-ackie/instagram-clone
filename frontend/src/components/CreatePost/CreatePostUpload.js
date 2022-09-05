@@ -12,12 +12,23 @@ export default function CreatePostUpload(props) {
         event.preventDefault();
         event.stopPropagation();
         if (event.dataTransfer.files) {
+            for (const file of event.dataTransfer.files) {
+                if (file.type !== "image/jpeg" && file.type !== "image/png") {
+                    console.error("incompatible file type");
+                    return;
+                }
+            }
             props.setFile(event.dataTransfer.files[0]);
         }
     }
 
     const handleSubmit = (event) => {
-        console.log(event.target.files[0])
+        for (const file of event.target.files) {
+            if (file.type !== "image/jpeg" && file.type !== "image/png") {
+                console.error("incompatible file type");
+                return;
+            }
+        }
         props.setFile(event.target.files[0]);
     }
 

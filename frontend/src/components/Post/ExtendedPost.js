@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef, createRef } from "react";
+import { useState, useEffect, createRef } from "react";
 import { useParams } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
 import PostHeader from "./PostHeader";
 import PostCommentSection from "./PostCommentSection";
 import PostFooter from "./PostFooter";
 import PostAddComment from "./PostAddComment";
-import loadPost from "../../helpers";
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import "./ExtendedPost.css";
 import "./Post.css"
@@ -42,7 +41,7 @@ export default function ExtendedPost(props) {
                         setUsername(response.data.username);
                     });
             });
-    }, []);
+    }, [postId]);
 
     useEffect(() => {
         console.log(comments);
@@ -53,6 +52,7 @@ export default function ExtendedPost(props) {
             <div className="extended-post">
                 <div className="extended-post-image-container">
                     <img 
+                        alt="Post"
                         src={ postInfo.file } 
                         className="extended-post-image"
                     />
@@ -62,9 +62,13 @@ export default function ExtendedPost(props) {
                         profilePicture={ profilePicture }
                         username={ username }
                         postInfo={ postInfo }
+                        isExtendedPost={ true }
                     />
                     <PostCommentSection
                         postId={ postId }
+                        username={ username }
+                        profilePicture={ profilePicture }
+                        caption={ postInfo.caption }
                         comments={ comments }
                         setComments={ setComments }
                     />

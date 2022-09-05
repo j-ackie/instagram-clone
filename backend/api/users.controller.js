@@ -1,8 +1,28 @@
 import UsersDAO from "../dao/usersDAO.js";
 import upload, { get } from "../s3.js"
 import { genSalt, hash, compare } from "bcrypt";
+import FollowersDAO from "../dao/followersDAO.js";
 
 export default class UsersController {
+    static async apiSearchUsers(req, res, next) {
+        // Handling for if req.query.username is not defined
+        try {
+            const searchResponse = await UsersDAO.searchUsers(req.query.username);
+            
+            for (const user of searchResponse) {
+                delete user.password;
+                if (user.profilePicture) {
+                    user.profilePicture = await get(user.profilePicture);
+                }
+            }
+
+            res.json({ users: searchResponse });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     static async apiGetUser(req, res, next) {
         try {
             let getResponse;
@@ -78,10 +98,6 @@ export default class UsersController {
     }
 
     static async apiLogout(req, res, next) {
-        if (!req.session.userInfo) {
-            res.status(401).json({ error: "not logged in" });
-            return;
-        }
         delete req.session.userInfo;
         res.json({ status: "logged out" });
     }
@@ -115,7 +131,48 @@ export default class UsersController {
         }
     }
 
+    static async apiGetFollowers(req, res, next) {
+        try {
+            const getResponse = await FollowersDAO.getFollowers(req.query);
+            res.json({ followers: getResponse });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     static async apiFollowUser(req, res, next) {
+        if (req.body.userId === req.session.userInfo.userId) {
+            res.status(401).json({ error: "cannot follow yourself" });
+            return;
+        }
+
+        try {
+            const getUserResponse = await UsersDAO.getUserById(req.body.userId);
+
+            if (!getUserResponse) {
+                res.status(401).json({ error: "user does not exist" });
+            }
+
+            const getFollowerResponse = await FollowersDAO.getFollowerByIds(req.body.userId, req.session.userInfo.userId);
+            
+            if (getFollowerResponse) {
+                res.status(401).json({ error: "already following" });
+                return;
+            }
+
+            const createResponse = await FollowersDAO.createFollower(req.body.userId, req.session.userInfo.userId);
+            
+            const { error } = createResponse;
+            if (error) {
+                throw new Error("hey")
+            }
+
+            res.status(201).json({ status: "success" });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message })
+        }
         
     }
 }

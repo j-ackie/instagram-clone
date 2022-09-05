@@ -44,7 +44,7 @@ export default function CreatePostHeader(props) {
     );
 
     return (
-        <div id="create-post-header">
+        <div id="create-post-header" className="popup-header">
             { headers }
         </div>
     )

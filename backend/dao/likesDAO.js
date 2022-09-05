@@ -50,20 +50,29 @@ export default class LikesDAO {
         }
     }
 
+    static async getLikeByIds(postId, userId) {
+        const query = { 
+            "postId": ObjectId(postId),
+            "userId": ObjectId(userId)
+        };
+
+        try {
+            return await likes.findOne(query);
+        }
+
+        catch (err) {
+            return { error: err };
+        }
+    }
+
     static async createLike(postId, userId) {
-        console.log(postId, userId);
         const query = { 
             "postId": ObjectId(postId),
             "userId": ObjectId(userId)
         };
         
         try {
-            if (await likes.countDocuments(query) === 0) {
-                return await likes.insertOne(query);
-            }
-            else {
-                return { error: "wad" }
-            }
+            return await likes.insertOne(query);
         }
         catch (err) {
             console.error(err);

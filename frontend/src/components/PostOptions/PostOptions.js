@@ -15,17 +15,16 @@ export default function PostOptions(props) {
     };
 
     const handleDelete = () => {
-        const data = {
-            postId: props.selectedPostId,
-            userId: userInfo.userId
-        };
-
-        PostDataService.deletePost(data)
+        PostDataService.deletePost(props.selectedPostId)
             .then(response => {
                 props.setIsOptionsIconClicked(false);
                 props.setPosts(props.posts.filter(post => {
                     return post.props.postInfo._id !== props.selectedPostId;
                 }));
+                
+                if (props.isExtendedPost) {
+                    navigate("/user/" + userInfo.username);
+                }
             })
     };
 

@@ -49,7 +49,6 @@ export default class PostsController {
     }
 
     static async apiGetPostsByUserId(req, res, next) {
-        console.log(req.session)
         try {
             const getResponse = await PostsDAO.getPostsByUserId(req.query.userId);
 
@@ -68,9 +67,15 @@ export default class PostsController {
     }
 
     static async apiCreatePost(req, res, next) {
+        if (!req.file) {
+            res.status(401).json({ error: "no file" });
+            return;
+        }
+
         const filename = await upload(req.file);
         req.body.filename = filename;
         req.body.date = new Date();
+
         try {
             const createResponse = await PostsDAO.addPost(req.body);
             res.json({ status: "success", postId: createResponse.insertedId });
@@ -81,11 +86,18 @@ export default class PostsController {
     }
 
     static async apiDeletePost(req, res, next) {
-        console.log(req.body);
-        console.log(req.query);
         try {
-            const deleteResponse = await PostsDAO.deletePost(req.query.postId, req.body.userId);
-            res.json({ status: "success" })
+            const getResponse = await PostsDAO.getPostById(req.params.postId);
+            if (!getResponse) {
+                res.status(401).json({ error: "post does not exist" });
+                return;
+            }
+            if (req.session.userInfo.userId !== getResponse.userId.toString()) {
+                res.status(401).json({ error: "not user's post" });
+                return;
+            }
+            const deleteResponse = await PostsDAO.deletePost(req.params.postId);
+            res.json({ status: "success" });
         }
         catch (err) {
             res.status(500).json({ error: err.message });
@@ -94,36 +106,25 @@ export default class PostsController {
 
     static async apiLikePost(req, res, next) {
         try {
-            const createResponse = await LikesDAO.createLike(req.body.postId, req.body.userId);
-            const { error } = createResponse;
-            if (error) {
-                res.status(409).json({ error: "unable to like" });
+            const getResponse = await LikesDAO.getLikeByIds(req.body.postId, req.session.userInfo.userId);
+            
+            if (getResponse) {
+                res.status(401).json({ error: "already liked" });
                 return;
             }
+
+            const createResponse = await LikesDAO.createLike(req.body.postId, req.session.userInfo.userId);
             res.json({ status: "success" });
         }
         catch (err) {
             res.status(500).json({ error: err.message });
         }
-        // try {
-        //     const likeResponse = await PostsDAO.likePost(req.body);
-        //     if (likeResponse.modifiedCount === 1) {
-        //         res.json({ status: "success" });
-        //     }
-        //     else {
-        //         res.json({ status: "no changes" });
-        //     }
-        // }
-        // catch (err) {
-        //     res.status(500).json({ error: err.message });
-        // }
     }
 
     static async apiGetLikesById(req, res, next) {
         try {
             const getResponse = await LikesDAO.getLikesById(req.query.postId);
             res.json({
-                status: "success",
                 likes: getResponse
             });
         }

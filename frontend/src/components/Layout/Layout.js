@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Outlet } from "react-router-dom";
 import UserContext from "../../UserProvider";
 import Navbar from "../Navbar/Navbar";
 import CreatePost from "../CreatePost/CreatePost";
@@ -14,6 +14,7 @@ export default function Layout(props) {
     const [isActivityIconClicked, setIsActivityIconClicked] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState(null);
     const [isUserPost, setIsUserPost] = useState(false);
+    const [isExtendedPost, setIsExtendedPost] = useState(false);
 
     const userInfo = useContext(UserContext);
 
@@ -26,10 +27,11 @@ export default function Layout(props) {
         }
     }
 
-    const handleOptionsClick = (postId, postUserId) => {
+    const handleOptionsClick = (postId, postUserId, isExtendedPost) => {
         setIsOptionsIconClicked(true);
         setSelectedPostId(postId);
         setIsUserPost(postUserId === userInfo.userId);
+        setIsExtendedPost(isExtendedPost);
     }
 
     return (
@@ -63,6 +65,7 @@ export default function Layout(props) {
                 isOptionsIconClicked
                     ? <PostOptions
                         isUserPost={ isUserPost }
+                        isExtendedPost={ isExtendedPost }
                         selectedPostId={ selectedPostId }
                         setIsOptionsIconClicked={ setIsOptionsIconClicked }
                         posts={ posts }

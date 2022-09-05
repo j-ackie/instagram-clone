@@ -11,34 +11,45 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const auth = (req, res, next) => {
-    if (req.session.userInfo) {
-        next();
-    }
-    else {
+    if (!req.session.userInfo) {
         res.status(401).json({ error: "not logged in" });
+        return;
     }
+    next();
 }
 
 router.route("/").get(auth, PostsController.apiGetPosts);
-router.route("/post/:postId").get(PostsController.apiGetPostById);
 router.route("/likes/:postId").get(PostsController.apiGetLikesById);
-router.route("/user/:userId").get(UsersController.apiGetUser);
-router.route("/comment/:postId").get(CommentsController.apiGetComments);
+router.route("/users/:userId").get(UsersController.apiGetUser);
+router.route("/comments/:postId").get(CommentsController.apiGetComments);
 
 router
-    .route("/post")
+    .route("/users")
+    .get(UsersController.apiSearchUsers)
+
+router
+    .route("/posts/:postId")
+    .get(PostsController.apiGetPostById)
+    .delete(auth, PostsController.apiDeletePost);
+
+router
+    .route("/posts")
     .get(PostsController.apiGetPostsByUserId)
     .post(auth, upload.single("file"), PostsController.apiCreatePost)
-    .delete(auth, PostsController.apiDeletePost);
 
 router
     .route("/likes")
     .get(PostsController.apiGetLikesById)
-    .post(PostsController.apiLikePost);
+    .post(auth, PostsController.apiLikePost);
 
 router
-    .route("/comment")
-    .post(CommentsController.apiCommentPost);
+    .route("/comments")
+    .post(auth, CommentsController.apiCommentPost);
+
+router
+    .route("/followers")
+    .get(UsersController.apiGetFollowers)
+    .post(auth, UsersController.apiFollowUser);
 
 
 router
@@ -48,7 +59,7 @@ router
 
 router
     .route("/logout")
-    .post(UsersController.apiLogout);
+    .post(auth, UsersController.apiLogout);
 
 router
     .route("/register")

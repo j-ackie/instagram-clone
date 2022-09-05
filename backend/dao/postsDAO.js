@@ -41,7 +41,7 @@ export default class PostsDAO {
     }
 
     static async getPostById(postId) {
-        let query = { "_id": { $eq: new ObjectId(postId) } };
+        let query = { "_id": ObjectId(postId) };
         let doc;
 
         try {
@@ -78,11 +78,9 @@ export default class PostsDAO {
         }
     }
 
-    static async deletePost(postId, userId) {
-        console.log(postId, userId);
+    static async deletePost(postId) {
         let query = {
             _id: ObjectId(postId),
-            userId: ObjectId(userId)
         };
         try {
             const response = await posts.deleteOne(query);

@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from 'react';
-import { BrowserRouter, Routes, Navigate, Switch, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Navigate, Route, useLocation } from "react-router-dom";
 import { UserProvider } from './UserProvider';
 import Layout from './components/Layout/Layout';
 import Content from "./components/Content/Content";
@@ -10,6 +10,7 @@ import RegisterPage from './components/LoginRegisterPage/RegisterPage';
 
 import "./App.css"
 import PostDataService from './services/PostDataService';
+import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
 
 export const UserContext = createContext();
 
@@ -21,20 +22,25 @@ function App() {
     });
     const [loading, setLoading] = useState(true);
 
+    const location = useLocation();
+
     useEffect(() => {
         PostDataService.checkLogin()
             .then(response => {
                 setLoading(false);
                 if (response.data.loggedIn) {
+                    if (!response.data.userInfo.profilePicture) {
+                        response.data.userInfo.profilePicture = DefaultProfilePicture;
+                    }
                     setUserInfo(response.data.userInfo);
                 }
             })
     }, []);
 
-    // const localUserInfo = localStorage.getItem("userInfo");
-    // if (localUserInfo && !userInfo.userId) {
-    //     setUserInfo(JSON.parse(localUserInfo));
-    // }
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location.pathname]);
 
     return (
         <UserProvider userInfo={ userInfo }>

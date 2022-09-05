@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PostComment from "./PostComment";
+import PostUser from "./PostUser";
 import PostDataService from "../../services/PostDataService";
 
 export default function PostCommentSection(props) {
@@ -17,10 +18,21 @@ export default function PostCommentSection(props) {
                 }
                 props.setComments(commentsList);
             });
-    }, []);
+    }, [props]);
 
     return (
         <div className="comment-section">
+            {
+                props.caption !== ""
+                    ? <div className="post-comment">
+                        <PostUser
+                            profilePicture={ props.profilePicture }
+                            username={ props.username }
+                        />
+                        { props.caption }
+                     </div>
+                    : ""
+            }
             { props.comments }
         </div>
     )

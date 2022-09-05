@@ -6,19 +6,19 @@ class PostDataService {
     }
 
     getPostById(postId) {
-        return http.get("/post/" + postId);
+        return http.get("/posts/" + postId);
     }
 
     getPostsByUserId(userId) {
-        return http.get("/post?userId=" + userId);
+        return http.get("/posts?userId=" + userId);
     }
 
     createPost(data) {
-        return http.post("/post", data, { headers: {"Content-type": "multipart/form-data"} });
+        return http.post("/posts", data, { headers: {"Content-type": "multipart/form-data"} });
     }
 
-    deletePost(data) {
-        return http.delete("/post?postId=" + data.postId, { data: { userId: data.userId } });
+    deletePost(postId) {
+        return http.delete("/posts/" + postId);
     }
 
     likePost(data) {
@@ -30,19 +30,31 @@ class PostDataService {
     }
 
     commentPost(data) {
-        return http.post("/comment", data);
+        return http.post("/comments", data);
     }
 
     getComments(postId) {
-        return http.get("/comment/" + postId);
+        return http.get("/comments/" + postId);
+    }
+
+    searchUsers(query) {
+        return http.get("/users?username=" + query);
     }
 
     getUserById(userId) {
-        return http.get("/user/" + userId);
+        return http.get("/users/" + userId);
     }
 
     getUserByName(username) {
-        return http.get("/user/" + username + "?getBy=username")
+        return http.get("/users/" + username + "?getBy=username")
+    }
+
+    getFollowers(by, query) {
+        return http.get("/followers?" + by + "=" + query);
+    }
+
+    followUser(data) {
+        return http.post("/followers", data);
     }
 
     checkLogin() {

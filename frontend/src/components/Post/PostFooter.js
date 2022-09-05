@@ -39,16 +39,15 @@ export default function PostFooter(props) {
             .then(response => {
                 setNumComments(response.data.comments.length);
             });
-    }, [props.postInfo]);
+    }, [props.postInfo, userInfo.userId]);
 
     useEffect(() => {
         setTimestamp(renderTimestamp(props.postInfo.date).toUpperCase());
     }, [props.postInfo.date]);
 
     const handleLikeIconClick = () => {
-        let data = {
-            postId: props.postInfo._id,
-            userId: userInfo.userId
+        const data = {
+            postId: props.postInfo._id
         };
         PostDataService.likePost(data)
             .then(response => {
@@ -103,7 +102,7 @@ export default function PostFooter(props) {
                 !props.isExtendedPost
                     ? <div className="view-comments">
                         {
-                            numComments != 0
+                            numComments !== 0
                                 ? <Link 
                                     to={ "/post/" + props.postInfo._id } 
                                     onClick={ props.handleViewComments }
@@ -126,6 +125,7 @@ export default function PostFooter(props) {
                     { timestamp }
                 </span>
             </div>
+            {/* <div className="pop-up">hey</div> */}
         </div>
     )
 }

@@ -1,8 +1,5 @@
 import { useOutletContext } from "react-router-dom";
-import { useState, useContext } from "react";
-import UserContext from "../../UserProvider";
 import PostUser from "./PostUser";
-import PostOptions from "../PostOptions/PostOptions";
 import OptionsIcon from "../Icons/OptionsIcon";
 
 export default function PostHeader(props) {
@@ -15,7 +12,7 @@ export default function PostHeader(props) {
                 username={ props.username }
                 profilePicture={ props.profilePicture }
             />
-            <OptionsIcon onClick={ () => handleOptionsClick(props.postInfo._id, props.postInfo.userId) }/>
+            <OptionsIcon onClick={ () => handleOptionsClick(props.postInfo._id, props.postInfo.userId, props.isExtendedPost) }/>
         </div>
     )
 }
