@@ -25,6 +25,7 @@ export default function ProfilePopupUser(props) {
             <PostUser 
                 username={ followerUserInfo.username }
                 profilePicture={ followerUserInfo.profilePicture }
+                handleUserClick={ props.handleUserClick }
             />
         </div>
     )

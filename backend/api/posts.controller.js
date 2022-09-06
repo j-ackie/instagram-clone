@@ -1,23 +1,33 @@
 import PostsDAO from "../dao/postsDAO.js";
+import FollowersDAO from "../dao/followersDAO.js";
 import LikesDAO from "../dao/likesDAO.js";
 import upload, { get } from "../s3.js";
 
 export default class PostsController {
     static async apiGetPosts(req, res, next) {
-        const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
-        
-        const { postsList, totalPosts } = await PostsDAO.getPosts();
+        try {
+            const getFollowersResponse = await FollowersDAO.getFollowers({
+                userId: req.userId
+            });
 
-        for (const post of postsList) {
-            post.file = await get(post.filename);
-            delete post.filename;
+            const followersList = getFollowersResponse.map(element => {
+                return element.followerId;
+            });
+
+            // const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
+            const getPostsResponse = await PostsDAO.getPosts(req.userId, followersList);
+            for (const post of getPostsResponse) {
+                post.file = await get(post.filename);
+                delete post.filename;
+            }
+
+            res.json({
+                posts: getPostsResponse
+            });
         }
-
-        let response = {
-            posts: postsList
-        };
-
-        res.json(response);
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
 
     static async apiGetPostById(req, res, next) {
@@ -73,6 +83,7 @@ export default class PostsController {
         }
 
         const filename = await upload(req.file);
+        req.body.userId = req.userId;
         req.body.filename = filename;
         req.body.date = new Date();
 

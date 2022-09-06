@@ -16,28 +16,29 @@ export default class PostsDAO {
         }
     }
 
-    static async getPosts({
-        filters = null,
-        page = 0,
-        postsPerPage = 20
-    } = {}) {
-        let query;
-        
-        let cursor;
+    static async getPosts(userId, followers) {
+        const query = {
+            $or: [
+                {
+                    userId: { $eq: ObjectId(userId) }
+                },
+                {
+                    userId: { $in: followers }
+                }
+            ]
+        };
+
         try {
-            cursor = await posts.find(query);
+            return await posts.find(query).sort({ date: -1 }).toArray();
+            // const displayCursor = cursor.limit(postsPerPage).skip(postsPerPage * page).sort({'_id': -1});
+
+            // const postsList = await displayCursor.toArray();
+    
+            // return postsList;
         }
         catch (err) {
-            console.error('Unable to issue find command: ')
-            return;
+            return { error: err };
         }
-
-        const displayCursor = cursor.limit(postsPerPage).skip(postsPerPage * page).sort({'_id': -1});
-
-        const postsList = await displayCursor.toArray();
-        const totalPosts = await posts.countDocuments(query);
-
-        return { postsList, totalPosts };
     }
 
     static async getPostById(postId) {
@@ -87,32 +88,6 @@ export default class PostsDAO {
             return response;
         }
         catch (err) {
-            return { error: err };
-        }
-    }
-
-    static async likePost(data) {
-        let query = { "_id": { $eq: new ObjectId(data.post_id) } };
-        let updateOperation = { $addToSet: { "likes": new ObjectId(data.user_id) } };
-        try {
-            const response = await posts.updateOne(query, updateOperation);
-            return response;
-        }
-        catch {
-            console.error(err);
-            return { error: err };
-        }
-    }
-
-    static async addComment(data) {
-        let query = { "_id": { $eq: new ObjectId(data.post_id) } };
-        let updateOperation = { $addToSet: { "comments": new ObjectId(data.comment_id) } };
-        try {
-            const response = await posts.updateOne(query, updateOperation);
-            return response;
-        }
-        catch {
-            console.error(err);
             return { error: err };
         }
     }

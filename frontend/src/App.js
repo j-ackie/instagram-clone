@@ -27,7 +27,6 @@ function App() {
     useEffect(() => {
         PostDataService.checkLogin()
             .then(response => {
-                console.log(response.data);
                 setLoading(false);
                 if (response.data.loggedIn) {
                     if (!response.data.userInfo.profilePicture) {

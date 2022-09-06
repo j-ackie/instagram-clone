@@ -7,12 +7,17 @@ export default function ProfileFollowing(props) {
         }
     }
 
+    const handleUserClick = event => {
+        props.setIsFollowingClicked(false);
+    }
+
     let followingList = [];
     for (const following of props.following) {
         followingList.push(
             <ProfilePopupUser
                 key={ following.userId }
                 userId={ following.userId }
+                handleUserClick={ handleUserClick }
             />
         );
     }

@@ -1,5 +1,3 @@
-import Navbar from "../Navbar/Navbar"
-import CreatePost from "../CreatePost/CreatePost"
 import Post from '../Post/Post';
 import { useState, useEffect, useContext } from "react";
 import "./Content.css"
@@ -17,6 +15,7 @@ export default function Content(props) {
     const getAllPosts = () => {
         PostDataService.getAll()
             .then(response => {
+                console.log(response);
                 let postsList = [];
                 for (const post of response.data.posts) {
                     postsList.push(

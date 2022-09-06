@@ -45,6 +45,7 @@ export default function CreatePostUpload(props) {
             </p>
             <input
                 type="file"
+                accept="image/png, image/jpeg"
                 ref={inputFile}
                 onChange={handleSubmit}
             />

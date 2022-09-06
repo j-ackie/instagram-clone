@@ -26,6 +26,7 @@ export default function PostFooter(props) {
         }
         PostDataService.getLikesById(props.postInfo._id)
             .then(response => {
+                console.log(response);
                 setLikes(response.data.likes);
                 setNumLikes(response.data.likes.length);
                 for (const like of response.data.likes) {
@@ -37,6 +38,7 @@ export default function PostFooter(props) {
             });
         PostDataService.getComments(props.postInfo._id)
             .then(response => {
+                console.log(response);
                 setNumComments(response.data.comments.length);
             });
     }, [props.postInfo, userInfo.userId]);
@@ -83,15 +85,19 @@ export default function PostFooter(props) {
                     <SaveIcon onClick={ () => {} } />
                 </span>
             </div>
-            <div className="likes">
-                <span>
-                    <p>
-                        Liked by { numLikes } others
-                    </p>
-                </span>
-            </div>
+            {
+                numLikes !== 0
+                    ? <div className="likes" onClick={ () => props.setIsLikesClicked(true) }>
+                        <span>
+                            <p>
+                                Liked by { numLikes } others
+                            </p>
+                        </span>
+                      </div>
+                    : ""
+            }
             { 
-                !props.isExtendedPost
+                !props.isExtendedPost && props.postInfo.caption !== ""
                     ? <PostDescription
                         username={ props.username }
                         caption={ props.postInfo.caption }

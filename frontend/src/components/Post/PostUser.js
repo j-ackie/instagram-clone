@@ -8,7 +8,13 @@ export default function PostUser(props) {
             />
             {
                 !props.suggestedUser
-                    ? <Link className="post-username" to={ "/user/" + props.username }>{ props.username }</Link>
+                    ? <Link 
+                        onClick={ props.handleUserClick }
+                        className="post-username" 
+                        to={ "/user/" + props.username }
+                    >
+                        { props.username }
+                    </Link>
                     : <span className="post-username">{props.username}</span>
             }
         </span>

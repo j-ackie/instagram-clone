@@ -18,7 +18,7 @@ export default function PostCommentSection(props) {
                 }
                 props.setComments(commentsList);
             });
-    }, [props]);
+    }, []);
 
     return (
         <div className="comment-section">

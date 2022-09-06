@@ -7,7 +7,7 @@ export default function CreatePostHeader(props) {
         headers = [
             <span className=""/>,
             <span>Create new post</span>,
-            <span />
+            <span className=""/>
         ];
     }
     else if (!props.isCropped) {
@@ -26,19 +26,19 @@ export default function CreatePostHeader(props) {
     }
 
     headers[0] = (
-        <div id="left-header">
+        <div key="0" id="left-header">
             { headers[0] }
         </div>
     );
 
     headers[1] = (
-        <div id="center-header">
+        <div key="1" id="center-header">
             { headers[1] }
         </div>
     );
 
     headers[2] = (
-        <div id="right-header">
+        <div key="2" id="right-header">
             { headers[2] }
         </div>
     );
