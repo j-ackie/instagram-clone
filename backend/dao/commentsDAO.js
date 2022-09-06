@@ -31,9 +31,9 @@ export default class CommentsDAO {
 
     }
 
-    static async addComment(data) {
+    static async addComment(data, userId) {
         data.postId = new ObjectId(data.postId);
-        data.userId = new ObjectId(data.userId);
+        data.userId = new ObjectId(userId);
         try {
             return await comments.insertOne(data);
         }

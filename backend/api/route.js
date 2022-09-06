@@ -4,6 +4,7 @@ import PostsController from "./posts.controller.js";
 import UsersController from "./users.controller.js";
 import CommentsController from "./comments.controller.js";
 import LikesController from "./likes.controller.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -11,11 +12,21 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const auth = (req, res, next) => {
-    if (!req.session.userInfo) {
+    const token = req.cookies.token;
+
+    if (!token) {
         res.status(401).json({ error: "not logged in" });
         return;
     }
-    next();
+
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        if (err) {
+            res.status(401).json({ error: err.message });
+            return;
+        }
+        req.userId = decoded.userId;
+        next();
+    });
 }
 
 router.route("/").get(auth, PostsController.apiGetPosts);

@@ -92,7 +92,7 @@ export default class PostsController {
                 res.status(401).json({ error: "post does not exist" });
                 return;
             }
-            if (req.session.userInfo.userId !== getResponse.userId.toString()) {
+            if (req.userId !== getResponse.userId.toString()) {
                 res.status(401).json({ error: "not user's post" });
                 return;
             }
@@ -106,14 +106,14 @@ export default class PostsController {
 
     static async apiLikePost(req, res, next) {
         try {
-            const getResponse = await LikesDAO.getLikeByIds(req.body.postId, req.session.userInfo.userId);
+            const getResponse = await LikesDAO.getLikeByIds(req.body.postId, req.userId);
             
             if (getResponse) {
                 res.status(401).json({ error: "already liked" });
                 return;
             }
 
-            const createResponse = await LikesDAO.createLike(req.body.postId, req.session.userInfo.userId);
+            const createResponse = await LikesDAO.createLike(req.body.postId, req.userId);
             res.json({ status: "success" });
         }
         catch (err) {

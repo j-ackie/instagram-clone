@@ -1,7 +1,8 @@
 import UsersDAO from "../dao/usersDAO.js";
-import upload, { get } from "../s3.js"
-import { genSalt, hash, compare } from "bcrypt";
 import FollowersDAO from "../dao/followersDAO.js";
+import jwt from "jsonwebtoken";
+import upload, { get } from "../s3.js"
+import { hash, compare } from "bcrypt";
 
 export default class UsersController {
     static async apiSearchUsers(req, res, next) {
@@ -53,16 +54,36 @@ export default class UsersController {
         }
     }
 
+    // Consider changing to apiGetLogin
     static async apiCheckLogin(req, res, next) {
-        if (req.session.userInfo) {
+        const token = req.cookies.token;
+
+        if (!token) {
+            res.json({ loggedIn: false });
+            return;
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET_KEY, async(err, decoded) => {
+            if (err) {
+                res.status(401).json({ error: err.message });
+                return;
+            }
+            
+            const getResponse = await UsersDAO.getUserById(decoded.userId);
+
+            const userInfo = {
+                userId: getResponse._id,
+                username: getResponse.username,
+                profilePicture: getResponse.profilePicture
+                                    ? await get(getResponse.profilePicture)
+                                    : ""
+            };
+
             res.json({
                 loggedIn: true,
-                userInfo: req.session.userInfo
+                userInfo: userInfo
             });
-        }
-        else {
-            res.json({ loggedIn: false });
-        }
+        });
     }
 
     static async apiLogin(req, res, next) {
@@ -86,11 +107,18 @@ export default class UsersController {
                                     ? await get(getResponse.profilePicture)
                                     : ""
             };
-            
-            req.session.userInfo = userInfo;
+
+            const payload = { userId: userInfo.userId };
+
+            const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+                expiresIn: "1h"
+            });
+
+            res.cookie("token", token, {
+                httpOnly: true
+            });
 
             res.json(userInfo);
-            
         }
         catch (err) {
             res.status(500).json({ error: err.message });
@@ -98,8 +126,8 @@ export default class UsersController {
     }
 
     static async apiLogout(req, res, next) {
-        delete req.session.userInfo;
-        res.json({ status: "logged out" });
+        res.clearCookie("token");
+        res.status(201).json({ status: "logged out" });
     }
 
     static async apiRegister(req, res, next) {
@@ -142,7 +170,7 @@ export default class UsersController {
     }
 
     static async apiFollowUser(req, res, next) {
-        if (req.body.userId === req.session.userInfo.userId) {
+        if (req.body.userId === req.userId) {
             res.status(401).json({ error: "cannot follow yourself" });
             return;
         }
@@ -154,14 +182,14 @@ export default class UsersController {
                 res.status(401).json({ error: "user does not exist" });
             }
 
-            const getFollowerResponse = await FollowersDAO.getFollowerByIds(req.body.userId, req.session.userInfo.userId);
+            const getFollowerResponse = await FollowersDAO.getFollowerByIds(req.body.userId, req.userId);
             
             if (getFollowerResponse) {
                 res.status(401).json({ error: "already following" });
                 return;
             }
 
-            const createResponse = await FollowersDAO.createFollower(req.body.userId, req.session.userInfo.userId);
+            const createResponse = await FollowersDAO.createFollower(req.body.userId, req.userId);
             
             const { error } = createResponse;
             if (error) {
