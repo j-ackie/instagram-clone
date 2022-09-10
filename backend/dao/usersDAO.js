@@ -1,5 +1,4 @@
-import mongodb from "mongodb"
-const ObjectId = mongodb.ObjectID;
+import { ObjectId } from "mongodb";
 
 let users;
 
@@ -43,7 +42,7 @@ export default class UsersDAO {
     }
 
     static async getUserById(userId) {
-        let query = { "_id": { $eq: new ObjectId(userId) } };
+        let query = { "_id": ObjectId(userId) };
         let doc;
 
         try {
@@ -72,7 +71,6 @@ export default class UsersDAO {
     }
 
     static async register(data) {
-        console.log(data);
         try {
             data.profilePicture = "";
             return await users.insertOne(data);

@@ -65,7 +65,10 @@ export default class UsersController {
 
         jwt.verify(token, process.env.JWT_SECRET_KEY, async(err, decoded) => {
             if (err) {
-                res.status(401).json({ error: err.message });
+                res.clearCookie("token");
+                res.json({
+                    loggedIn: false
+                });
                 return;
             }
             
@@ -201,6 +204,39 @@ export default class UsersController {
         catch (err) {
             res.status(500).json({ error: err.message })
         }
-        
+    }
+
+    static async apiUnfollowUser(req, res, next) {
+        if (req.query.userId === req.userId) {
+            res.status(400).json({ error: "cannot unfollow yourself" });
+            return;
+        }
+
+        try {
+            const getUserResponse = await UsersDAO.getUserById(req.query.userId);
+
+            if (!getUserResponse) {
+                res.status(400).json({ error: "user does not exist" });
+            }
+
+            const getFollowerResponse = await FollowersDAO.getFollowerByIds(req.query.userId, req.userId);
+            
+            if (!getFollowerResponse) {
+                res.status(400).json({ error: "already not following" });
+                return;
+            }
+
+            const deleteResponse = await FollowersDAO.deleteFollower(req.query.userId, req.userId);
+            
+            const { error } = deleteResponse;
+            if (error) {
+                throw new Error("hey")
+            }
+
+            res.status(201).json({ status: "success" });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
 }

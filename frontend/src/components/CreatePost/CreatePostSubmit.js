@@ -2,12 +2,13 @@ import { useContext, forwardRef } from "react";
 import UserContext from "../../UserProvider";
 
 const CreatePostSubmit = forwardRef((props, ref) => {
-    const userInfo = useContext(UserContext);
+    const [userInfo, setUserInfo] = useContext(UserContext);
 
     return (
         <div id="create-post-submit">
             <div id="create-post-submit-preview">
                 <img 
+                    className="create-post-preview"
                     src={ URL.createObjectURL(props.file) }
                 />
             </div>
@@ -33,31 +34,3 @@ const CreatePostSubmit = forwardRef((props, ref) => {
 })
 
 export default CreatePostSubmit;
-
-// export default function CreatePostSubmit(props) {
-//     return (
-//         <div id="create-post-submit">
-//             <div id="create-post-submit-preview">
-//                 <img 
-//                     src={ URL.createObjectURL(props.file) }
-//                 />
-//             </div>
-//             <div id="create-post-options">
-//                 <span>
-//                     <img
-//                         src={ null }
-//                     />
-//                     <p>
-//                         { userInfo.username }
-//                     </p>
-//                 </span>
-//                 <div>
-//                     <input
-//                         ref={ inputRef }
-//                         placeholder="Write a caption..."
-//                     />
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }

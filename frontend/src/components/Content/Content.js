@@ -8,9 +8,7 @@ import UserContext from "../../UserProvider";
 import { useOutletContext } from "react-router-dom";
 
 export default function Content(props) {
-    const OutletContext = useOutletContext();
-    const posts = OutletContext.posts;
-    const setPosts = OutletContext.setPosts;
+    const { posts, setPosts } = useOutletContext();
 
     const getAllPosts = () => {
         PostDataService.getAll()

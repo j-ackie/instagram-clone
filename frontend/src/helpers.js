@@ -1,5 +1,6 @@
 import PostDataService from "./services/PostDataService";
 import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
+import { Navigate } from "react-router-dom";
 
 export default function loadPost(postInfo, setProfilePicture, setUsername, setComments, setLikes) {
     PostDataService.getUserById(postInfo.userId)
@@ -54,4 +55,23 @@ export function renderTimestamp(timestamp) {
             return timestamp.toDateString();
         }
     }
+}
+
+export function resetUserInfo(setUserInfo) {
+    setUserInfo({
+        userId: "",
+        username: "",
+        profilePicture: ""
+    });
+}
+
+export function handleError(error, functions) {
+    const message = error.response.data.error;
+    if (message === "jwt expired" || message === "not logged in") {
+        functions.navigate("/login");
+        resetUserInfo(functions.setUserInfo);
+        return;
+    }
+
+    console.error("error");
 }

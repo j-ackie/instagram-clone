@@ -1,5 +1,4 @@
-import mongodb from "mongodb";
-const ObjectId = mongodb.ObjectID;
+import { ObjectId } from "mongodb";
 
 let followers;
 
@@ -55,6 +54,19 @@ export default class FollowersDAO {
         }
         catch (err) {
             return { error: err }
+        }
+    }
+
+    static async deleteFollower(userId, followerId) {
+        const query = {
+            userId: ObjectId(userId),
+            followerId: ObjectId(followerId)
+        }
+        try {
+            return await followers.deleteOne(query);
+        }
+        catch (err) {
+            return { error: err };
         }
     }
 

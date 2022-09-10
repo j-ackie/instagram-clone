@@ -1,12 +1,15 @@
 import { useState, useRef, forwardRef, useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
 import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
 import PostComment from "./PostComment";
+import { handleError } from "../../helpers";
 
 const PostAddComment = forwardRef((props, ref) => {
     const [currComment, setCurrComment] = useState("");
     
-    const userInfo = useContext(UserContext);
+    const [userInfo, setUserInfo] = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleOnInput = (event) => {
         setCurrComment(event.target.textContent);
@@ -34,15 +37,18 @@ const PostAddComment = forwardRef((props, ref) => {
                 ref.current.textContent = "";
                 props.setComments(
                     [
+                        ... props.comments,
                         <PostComment 
                             key={ response.data.insertedId } 
                             comment={ data } 
                             isUserComment={ true }    
-                        />, 
-                        ... props.comments
+                        />
                     ]
                 );
-            });
+            })
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
+            })
     }
 
     return (

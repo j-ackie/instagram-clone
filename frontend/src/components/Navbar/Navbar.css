@@ -70,6 +70,23 @@ nav input:focus {
     margin: 0 !important;
 }
 
+#right-container > button {
+    margin: 0;
+}
+
+.register {
+    margin-left: 10px !important;
+    cursor: pointer;
+    font-weight: bold;
+    color: #00A0FF;
+    border: none;
+    background-color: white;
+}
+
+.register:active {
+    opacity: 50%;
+}
+
 #navbar-profile-picture-container {
     height: 30px;
     position: relative;
@@ -79,7 +96,7 @@ nav input:focus {
     border-radius: 50%;
 }
 
-.popup {
+.navbar-pop-up {
     position: absolute;
     top: 45px;
     background-color: white;
@@ -93,13 +110,13 @@ nav input:focus {
     right: -10px;
 }
 
-.popup ul {
+.navbar-pop-up ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.popup li {
+.navbar-pop-up li {
     display: flex;
     align-items: center;
     cursor: pointer;

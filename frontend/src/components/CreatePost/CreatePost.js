@@ -1,4 +1,5 @@
 import { useContext, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import CreatePostUpload from "./CreatePostUpload";
 import CreatePostCrop from "./CreatePostCrop"
 import CreatePostSubmit from "./CreatePostSubmit";
@@ -12,8 +13,9 @@ export default function CreatePost(props) {
     const [file, setFile] = useState(null);
     const [isCropped, setIsCropped] = useState(false);
 
-    const userInfo = useContext(UserContext);
+    const [userInfo, setUserInfo] = useContext(UserContext);
     const inputRef = useRef(null);
+    const navigate = useNavigate();
 
     const handleClick = (event) => {
         if (event.target.id === "create-post") {
@@ -32,6 +34,10 @@ export default function CreatePost(props) {
                 props.setIsPostIconClicked(false);
                 PostDataService.getPostById(response.data.postId)
                     .then(response => {
+                        if (props.isProfile) {
+                            navigate(0);
+                            return;
+                        }
                         props.setPosts(
                             [
                                 <Post
@@ -46,42 +52,34 @@ export default function CreatePost(props) {
     }
 
     return (
-        <div className="pop-up" id="create-post" onClick={ handleClick }>
-            <div 
-                id={ 
-                    !isCropped 
-                        ? "create-post-popup"
-                        : "extended-create-post-popup"
+        <div id={ !isCropped ? "create-post-popup" : "extended-create-post-popup" }>
+            <CreatePostHeader 
+                file={ file }
+                isCropped={ isCropped }
+                setFile={ setFile }
+                setIsCropped={ setIsCropped }
+                handleShare={ handleShare }
+            />
+            <div id="create-post-content">
+                {   
+                    !file ? <CreatePostUpload 
+                                setFile={ setFile }
+                            /> :
+                !isCropped ? <CreatePostCrop
+                                file={ file }
+                                setFile={ setFile }
+                                setIsCropped={ setIsCropped }
+                            /> :
+                            <CreatePostSubmit 
+                                posts={ props.posts }
+                                setPosts={ props.setPosts }
+                                setIsPostIconClicked={ props.setIsPostIconClicked }
+                                file={ file }
+                                setFile={ setFile }
+                                setIsCropped={ setIsCropped }
+                                ref={ inputRef }
+                            />
                 }
-            >
-                <CreatePostHeader 
-                    file={ file }
-                    isCropped={ isCropped }
-                    setFile={ setFile }
-                    setIsCropped={ setIsCropped }
-                    handleShare={ handleShare }
-                />
-                <div id="create-post-content">
-                    {   
-                        !file ? <CreatePostUpload 
-                                    setFile={ setFile }
-                                /> :
-                   !isCropped ? <CreatePostCrop
-                                    file={ file }
-                                    setFile={ setFile }
-                                    setIsCropped={ setIsCropped }
-                                /> :
-                                <CreatePostSubmit 
-                                    posts={ props.posts }
-                                    setPosts={ props.setPosts }
-                                    setIsPostIconClicked={ props.setIsPostIconClicked }
-                                    file={ file }
-                                    setFile={ setFile }
-                                    setIsCropped={ setIsCropped }
-                                    ref={ inputRef }
-                                />
-                    }
-                </div>
             </div>
         </div>
     )

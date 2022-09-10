@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from 'react';
-import { Routes, Navigate, Route, useLocation } from "react-router-dom";
+import { Routes, Navigate, Route, useLocation, useNavigate } from "react-router-dom";
 import { UserProvider } from './UserProvider';
 import Layout from './components/Layout/Layout';
 import Content from "./components/Content/Content";
@@ -23,11 +23,14 @@ function App() {
     const [loading, setLoading] = useState(true);
 
     const location = useLocation();
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         PostDataService.checkLogin()
             .then(response => {
                 setLoading(false);
+                console.log(response.data.loggedIn)
                 if (response.data.loggedIn) {
                     if (!response.data.userInfo.profilePicture) {
                         response.data.userInfo.profilePicture = DefaultProfilePicture;
@@ -43,7 +46,7 @@ function App() {
     }, [location.pathname]);
 
     return (
-        <UserProvider userInfo={ userInfo }>
+        <UserProvider userInfo={ [userInfo, setUserInfo] }>
             <Routes>
                 <Route path="/" element={
                     !loading
@@ -64,6 +67,7 @@ function App() {
                 <Route path="/register" element={ <RegisterPage setUserInfo={ setUserInfo } /> } />
             </Routes>
         </UserProvider>
+        
     );
 }
 

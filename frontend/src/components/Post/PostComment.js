@@ -11,7 +11,7 @@ export default function PostComment(props) {
         profilePicture: ""
     });
 
-    const userInfo = useContext(UserContext);
+    const [userInfo, setUserInfo] = useContext(UserContext);
     
     useEffect(() => {
         if (props.isUserComment) {
@@ -33,7 +33,9 @@ export default function PostComment(props) {
                 profilePicture={ commentUserInfo.profilePicture }
                 username={ commentUserInfo.username }
             />
-            { props.comment.comment }
+            <span className="post-comment-content">
+                { props.comment.comment }
+            </span>
         </div>
     )
 }

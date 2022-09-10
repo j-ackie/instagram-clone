@@ -29,7 +29,7 @@ export default function SearchPopup(props) {
     }
 
     return (
-        <div id="search-popup" className="popup" onMouseDown={ props.onMouseDown }>
+        <div id="search-popup" className="navbar-pop-up" onMouseDown={ props.onMouseDown }>
             {
                 suggestedUsersList
             }

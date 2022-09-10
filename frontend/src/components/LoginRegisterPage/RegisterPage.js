@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import PostDataService from "../../services/PostDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
 import PasswordField from "./PasswordField";
@@ -11,6 +11,7 @@ export default function RegisterPage(props) {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const navigate = useNavigate();
+    const { state } = useLocation();
 
     const isFilledOut = () => {
         return username !== "" && password !== "" && confirmPassword !== "";
@@ -34,6 +35,12 @@ export default function RegisterPage(props) {
                         profilePicture: ""
                     };
                     props.setUserInfo(userInfo);
+                    
+                    if (state) {
+                        navigate(state);
+                        return;
+                    }
+
                     navigate("/");
                 }
             })

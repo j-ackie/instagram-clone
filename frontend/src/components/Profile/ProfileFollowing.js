@@ -1,13 +1,7 @@
 import ProfilePopupUser from "./ProfilePopupUser";
 
 export default function ProfileFollowing(props) {
-    const handleClick = event => {
-        if (event.target.id === "profile-following") {
-            props.setIsFollowingClicked(false);
-        }
-    }
-
-    const handleUserClick = event => {
+    const handleUserClick = () => {
         props.setIsFollowingClicked(false);
     }
 
@@ -23,14 +17,12 @@ export default function ProfileFollowing(props) {
     }
 
     return (
-        <div className="pop-up" id="profile-following" onClick={ handleClick }>
-            <div className="profile-popup">
-                <div className="popup-header">
-                    Following
-                </div>
-                <div>
-                    { followingList }
-                </div>
+        <div className="profile-popup">
+            <div className="popup-header">
+                Following
+            </div>
+            <div>
+                { followingList }
             </div>
         </div>
     )

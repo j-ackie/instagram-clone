@@ -7,6 +7,8 @@ import UnlikedIcon from "../Icons/UnlikedIcon";
 import CommentIcon from "../Icons/CommentIcon"
 import ShareIcon from "../Icons/ShareIcon";
 import SaveIcon from "../Icons/SaveIcon";
+import saveIcon from "../../icons/bookmark.svg";
+import filledSaveIcon from "../../icons/bookmark-fill.svg";
 import { renderTimestamp } from "../../helpers";
 import PostDataService from "../../services/PostDataService";
 
@@ -16,8 +18,9 @@ export default function PostFooter(props) {
     const [numLikes, setNumLikes] = useState(0);
     const [numComments, setNumComments] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
 
-    const userInfo = useContext(UserContext);
+    const [userInfo, setUserInfo] = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,18 +39,24 @@ export default function PostFooter(props) {
                     }
                 }
             });
+
         PostDataService.getComments(props.postInfo._id)
             .then(response => {
-                console.log(response);
                 setNumComments(response.data.comments.length);
             });
+
+        PostDataService.getSaveByPostId(props.postInfo._id)
+            .then(response => {
+                setIsSaved(response.data.saves.length !== 0);
+            });
+        
     }, [props.postInfo, userInfo.userId]);
 
     useEffect(() => {
         setTimestamp(renderTimestamp(props.postInfo.date).toUpperCase());
     }, [props.postInfo.date]);
 
-    const handleLikeIconClick = () => {
+    const handleLike = () => {
         const data = {
             postId: props.postInfo._id
         };
@@ -61,6 +70,14 @@ export default function PostFooter(props) {
             });
     }
 
+    const handleUnlike = () => {
+        PostDataService.unlikePost(props.postInfo._id)
+            .then(response => {
+                setIsLiked(false);
+                setNumLikes(numLikes - 1);
+            });
+    }
+
     const handleCommentIconClick = () => {
         if (props.isExtendedPost) {
             props.commentRef.current.focus();
@@ -70,19 +87,34 @@ export default function PostFooter(props) {
         }
     }
 
+    const handleSaveIconClick = () => {
+        const data = {
+            postId: props.postInfo._id
+        };
+        PostDataService.savePost(data)
+            .then(response => {
+                setIsSaved(true);
+            })
+    }
+
     return (
         <div className="footer">
             <div className="icons">
                 <span id="left-hand">
                     { isLiked
-                        ? <LikedIcon onClick={ handleLikeIconClick }/>
-                        : <UnlikedIcon onClick={ handleLikeIconClick }/> 
+                        ? <LikedIcon onClick={ handleUnlike }/>
+                        : <UnlikedIcon onClick={ handleLike }/> 
                     }
                     <CommentIcon onClick={ handleCommentIconClick }/>
                     <ShareIcon onClick={ () => {} }/>
                 </span>
                 <span id="right-hand">
-                    <SaveIcon onClick={ () => {} } />
+                    {
+                        isSaved
+                            ? <img src={ filledSaveIcon } onClick={ handleSaveIconClick }/>
+                            : <img src={ saveIcon } onClick={ handleSaveIconClick } />
+                    }
+                    
                 </span>
             </div>
             {

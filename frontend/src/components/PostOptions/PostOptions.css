@@ -1,10 +1,5 @@
-#post-options div {
-    font-size: 14px;
-    border-radius: 10px;
-    background-color: white;
-    text-align: center;
-    overflow: hidden;
-    width: 30%;
+#post-options {
+    width: 350px;
 }
 
 #post-options ul {

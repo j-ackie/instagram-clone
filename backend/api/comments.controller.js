@@ -3,19 +3,14 @@ import CommentsDAO from "../dao/commentsDAO.js"
 export default class CommentsController {
     static async apiGetComments(req, res, next) {
         try {
-            const getCommentsResponse = await CommentsDAO.getComments(req.params.postId);
+            const getCommentsResponse = await CommentsDAO.getComments(req.query.postId);
 
-            let response = {
-                comments: getCommentsResponse
-            };
-
-            res.json(response);
+            res.json({ comments: getCommentsResponse });
         }
         catch (err) {
             res.status(500).json({ error: err });
         }
     }
-
 
     static async apiCommentPost(req, res, next) {
         try {

@@ -29,8 +29,10 @@ export default function PostCommentSection(props) {
                             profilePicture={ props.profilePicture }
                             username={ props.username }
                         />
-                        { props.caption }
-                     </div>
+                        <span className="post-comment-content">
+                            { props.caption }
+                        </span>
+                       </div>
                     : ""
             }
             { props.comments }

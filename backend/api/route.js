@@ -3,7 +3,6 @@ import multer from "multer";
 import PostsController from "./posts.controller.js";
 import UsersController from "./users.controller.js";
 import CommentsController from "./comments.controller.js";
-import LikesController from "./likes.controller.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
@@ -21,6 +20,7 @@ const auth = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
         if (err) {
+            res.clearCookie("token");
             res.status(401).json({ error: err.message });
             return;
         }
@@ -29,14 +29,16 @@ const auth = (req, res, next) => {
     });
 }
 
-router.route("/").get(auth, PostsController.apiGetPosts);
-router.route("/likes/:postId").get(PostsController.apiGetLikesById);
-router.route("/users/:userId").get(UsersController.apiGetUser);
-router.route("/comments/:postId").get(CommentsController.apiGetComments);
+router.route("/")
+    .get(auth, PostsController.apiGetPosts);
 
 router
     .route("/users")
     .get(UsersController.apiSearchUsers)
+
+router
+    .route("/users/:userId")
+    .get(UsersController.apiGetUser);
 
 router
     .route("/posts/:postId")
@@ -51,17 +53,24 @@ router
 router
     .route("/likes")
     .get(PostsController.apiGetLikesById)
-    .post(auth, PostsController.apiLikePost);
+    .post(auth, PostsController.apiLikePost)
+    .delete(auth, PostsController.apiUnlikePost);
 
 router
+    .route("/saves")
+    .get(auth, PostsController.apiGetSaves)
+    .post(auth, PostsController.apiSavePost);
+    
+router
     .route("/comments")
+    .get(CommentsController.apiGetComments)
     .post(auth, CommentsController.apiCommentPost);
 
 router
     .route("/followers")
     .get(UsersController.apiGetFollowers)
-    .post(auth, UsersController.apiFollowUser);
-
+    .post(auth, UsersController.apiFollowUser)
+    .delete(auth, UsersController.apiUnfollowUser);
 
 router
     .route("/login")

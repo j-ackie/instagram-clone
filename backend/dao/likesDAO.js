@@ -1,5 +1,4 @@
-import { response } from "express";
-import mongodb, { ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 let likes;
 
@@ -76,6 +75,20 @@ export default class LikesDAO {
         }
         catch (err) {
             console.error(err);
+            return { error: err };
+        }
+    }
+
+    static async deleteLike(postId, userId) {
+        const query = {
+            postId: ObjectId(postId),
+            userId: ObjectId(userId)
+        };
+
+        try {
+            return await likes.deleteOne(query);
+        }
+        catch (err) {
             return { error: err };
         }
     }

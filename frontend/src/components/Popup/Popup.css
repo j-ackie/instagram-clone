@@ -10,3 +10,13 @@
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 99;
 }
+
+.pop-up > div {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    text-align: center;
+    overflow: hidden;
+    font-size: 14px;
+    border-radius: 10px;
+}

@@ -1,5 +1,4 @@
-import mongodb from "mongodb";
-const ObjectId = mongodb.ObjectID;
+import { ObjectId } from "mongodb";
 
 let comments;
 
@@ -20,20 +19,20 @@ export default class CommentsDAO {
         let query = { "postId": ObjectId(data) }
         let cursor;
         try {
-            cursor = await comments.find(query).sort({'_id': -1});
+            cursor = await comments.find(query).sort({'_id': 1});
             const commentsList = await cursor.toArray();
             return commentsList;
         }
         catch (err) {
             console.error(err);
-            return;
+            return { error: err };
         }
 
     }
 
     static async addComment(data, userId) {
-        data.postId = new ObjectId(data.postId);
-        data.userId = new ObjectId(userId);
+        data.postId = ObjectId(data.postId);
+        data.userId = ObjectId(userId);
         try {
             return await comments.insertOne(data);
         }

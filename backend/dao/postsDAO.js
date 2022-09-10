@@ -1,5 +1,4 @@
-import mongodb, { ObjectID } from "mongodb";
-const ObjectId = mongodb.ObjectID;
+import { ObjectId } from "mongodb";
 
 let posts;
 
@@ -60,7 +59,7 @@ export default class PostsDAO {
         let query = { "userId": ObjectId(userId) };
         
         try {
-            const postsList = await posts.find(query).toArray();
+            const postsList = await posts.find(query).sort({ date: -1 }).toArray();
             return postsList;
         }
         catch (err) {

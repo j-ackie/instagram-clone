@@ -1,6 +1,25 @@
 import http from "../http-common";
 
+// PostDataService.getAuthorization(data, http.get("/"))
+
 class PostDataService {
+    // getAuthorization(payload, action){
+    //     this.checkLogin()
+    //     action(payload)
+    // }
+
+    // checkAuth(action) {
+    //     action()
+    //         .then(response => {
+    //             return response;
+    //         })
+    //         .catch(err => {
+    //             if (err.message === "not logged in") {
+
+    //             }
+    //         })
+    // }
+
     getAll() {
         return http.get("/");
     }
@@ -25,8 +44,24 @@ class PostDataService {
         return http.post("/likes", data);
     }
 
+    unlikePost(postId) {
+        return http.delete("/likes?postId=" + postId);
+    }
+
     getLikesById(postId) {
         return http.get("/likes?postId=" + postId);
+    }
+
+    savePost(data) {
+        return http.post("/saves", data);
+    }
+    
+    getSaves() {
+        return http.get("/saves");
+    }
+
+    getSaveByPostId(postId) {
+        return http.get("/saves?postId=" + postId);
     }
 
     commentPost(data) {
@@ -34,7 +69,7 @@ class PostDataService {
     }
 
     getComments(postId) {
-        return http.get("/comments/" + postId);
+        return http.get("/comments?postId=" + postId);
     }
 
     searchUsers(query) {
@@ -55,6 +90,10 @@ class PostDataService {
 
     followUser(data) {
         return http.post("/followers", data);
+    }
+
+    unfollowUser(userId) {
+        return http.delete("/followers?userId=" + userId)
     }
 
     checkLogin() {

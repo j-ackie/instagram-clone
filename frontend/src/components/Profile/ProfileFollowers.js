@@ -7,7 +7,7 @@ export default function ProfileFollowers(props) {
         }
     }
 
-    const handleUserClick = event => {
+    const handleUserClick = () => {
         props.setIsFollowersClicked(false);
     }
 
@@ -23,14 +23,12 @@ export default function ProfileFollowers(props) {
     }
 
     return (
-        <div className="pop-up" id="profile-followers" onClick={ handleClick }>
-            <div className="profile-popup">
-                <div className="popup-header">
-                    Followers
-                </div>
-                <div className="profile-popup-users">
-                    { followersList }
-                </div>
+        <div className="profile-popup">
+            <div className="popup-header">
+                Followers
+            </div>
+            <div className="profile-popup-users">
+                { followersList }
             </div>
         </div>
     )

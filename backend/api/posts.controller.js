@@ -1,21 +1,22 @@
 import PostsDAO from "../dao/postsDAO.js";
 import FollowersDAO from "../dao/followersDAO.js";
 import LikesDAO from "../dao/likesDAO.js";
+import SavesDAO from "../dao/savesDAO.js";
 import upload, { get } from "../s3.js";
 
 export default class PostsController {
     static async apiGetPosts(req, res, next) {
         try {
-            const getFollowersResponse = await FollowersDAO.getFollowers({
-                userId: req.userId
+            const getFollowingResponse = await FollowersDAO.getFollowers({
+                followerId: req.userId
             });
 
-            const followersList = getFollowersResponse.map(element => {
-                return element.followerId;
+            const followingList = getFollowingResponse.map(element => {
+                return element.userId;
             });
 
             // const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
-            const getPostsResponse = await PostsDAO.getPosts(req.userId, followersList);
+            const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList);
             for (const post of getPostsResponse) {
                 post.file = await get(post.filename);
                 delete post.filename;
@@ -120,11 +121,28 @@ export default class PostsController {
             const getResponse = await LikesDAO.getLikeByIds(req.body.postId, req.userId);
             
             if (getResponse) {
-                res.status(401).json({ error: "already liked" });
+                res.status(400).json({ error: "already liked" });
                 return;
             }
 
             const createResponse = await LikesDAO.createLike(req.body.postId, req.userId);
+            res.json({ status: "success" });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiUnlikePost(req, res, next) {
+        try {
+            const getResponse = await LikesDAO.getLikeByIds(req.query.postId, req.userId);
+
+            if (!getResponse) {
+                res.status(400).json({ error: "already unliked" });
+                return;
+            }
+
+            const deleteResponse = LikesDAO.deleteLike(req.query.postId, req.userId);
             res.json({ status: "success" });
         }
         catch (err) {
@@ -138,6 +156,48 @@ export default class PostsController {
             res.json({
                 likes: getResponse
             });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiGetSaveByPostId(req, res, next) {
+        console.log(req.query.postId)
+        try {
+            const getResponse = await SavesDAO.getSaveByIds(req.query.postId, req.userId);
+            res.json({
+                save: getResponse
+            });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiGetSaves(req, res, next) {
+        console.log(req.query)
+        try {
+            const getResponse = await SavesDAO.getSaves(req.query.postId, req.userId);
+            console.log(getResponse);
+            res.json({ saves: getResponse });
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiSavePost(req, res, next) {
+        try {
+            const getResponse = await SavesDAO.getSaveByIds(req.body.postId, req.userId);
+
+            if (getResponse) {
+                res.status(400).json({ error: "already saved" });
+                return;
+            }
+
+            const createResponse = await SavesDAO.createSave(req.body.postId, req.userId);
+            res.json({ status: "success" });
         }
         catch (err) {
             res.status(500).json({ error: err.message });

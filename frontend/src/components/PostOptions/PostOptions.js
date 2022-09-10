@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router";
+import Popup from "../Popup/Popup";
 import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
 import "./PostOptions.css"
 
 export default function PostOptions(props) {
-    const userInfo = useContext(UserContext);
+    const [userInfo, setUserInfo] = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleClick = (event) => {
@@ -76,10 +77,8 @@ export default function PostOptions(props) {
     }
 
     return (
-        <div className="pop-up" id="post-options" onClick={ handleClick }>
-            <div>
-                { options }
-            </div>
+        <div id="post-options">
+            { options }
         </div>
     )
 }
