@@ -3,7 +3,6 @@ import "./Post.css"
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 import PostAddComment from "./PostAddComment";
-import PostLikesPopup from "./PostLikesPopup";
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png"
 import { useState, useEffect, createRef } from "react";
 
@@ -11,14 +10,12 @@ export default function Post(props) {
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(null);
     const [comments, setComments] = useState([]);
-    const [isLikesClicked, setIsLikesClicked] = useState(false);
 
     const commentRef = createRef();
 
     useEffect(() => {
         PostDataService.getUserById(props.postInfo.userId)
             .then(response => {
-                console.log(response);
                 if (response.data.profilePicture) {
                     setProfilePicture(response.data.profilePicture);
                 }
@@ -47,7 +44,6 @@ export default function Post(props) {
                 postInfo={ props.postInfo }
                 comments={ comments }
                 setComments={ setComments }
-                setIsLikesClicked={ setIsLikesClicked }
             />
             <PostAddComment
                 ref={ commentRef }
@@ -55,11 +51,6 @@ export default function Post(props) {
                 comments={ comments }
                 setComments={ setComments }
             />
-            {
-                isLikesClicked
-                    ? <PostLikesPopup />
-                    : ""
-            }
         </div>
     )
 }

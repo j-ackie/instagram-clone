@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../../UserProvider";
 import { Link, useNavigate } from "react-router-dom";
+import Popup from "../Popup/Popup";
+import PostLikesPopup from "./PostLikesPopup";
 import PostDescription from "./PostDescription";
 import LikedIcon from "../Icons/LikedIcon";
 import UnlikedIcon from "../Icons/UnlikedIcon";
@@ -19,6 +21,7 @@ export default function PostFooter(props) {
     const [numComments, setNumComments] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [isLikesClicked, setIsLikesClicked] = useState(false);
 
     const [userInfo, setUserInfo] = useContext(UserContext);
     const navigate = useNavigate();
@@ -29,7 +32,6 @@ export default function PostFooter(props) {
         }
         PostDataService.getLikesById(props.postInfo._id)
             .then(response => {
-                console.log(response);
                 setLikes(response.data.likes);
                 setNumLikes(response.data.likes.length);
                 for (const like of response.data.likes) {
@@ -119,7 +121,7 @@ export default function PostFooter(props) {
             </div>
             {
                 numLikes !== 0
-                    ? <div className="likes" onClick={ () => props.setIsLikesClicked(true) }>
+                    ? <div className="likes" onClick={ () => setIsLikesClicked(true) }>
                         <span>
                             <p>
                                 Liked by { numLikes } others
@@ -163,7 +165,16 @@ export default function PostFooter(props) {
                     { timestamp }
                 </span>
             </div>
-            {/* <div className="pop-up">hey</div> */}
+            <Popup 
+                variable={ isLikesClicked }
+                setVariable={ setIsLikesClicked }
+                content={
+                    <PostLikesPopup
+                        likes={ likes }
+                        setIsLikesClicked={ setIsLikesClicked }
+                    />
+                }
+            />
         </div>
     )
 }

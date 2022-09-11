@@ -1,13 +1,26 @@
+import { useEffect } from "react";
+import ProfilePopupUser from "../Profile/ProfilePopupUser";
+import PostDataService from "../../services/PostDataService";
+
 export default function PostLikesPopup(props) {
+    let likes = [];
+    for (const like of props.likes) {
+        console.log(props.likes)
+        likes.push(
+            <ProfilePopupUser
+                key={ like.userId }
+                userId={ like.userId }
+            />
+        )
+    }
+
     return (
-        <div className="pop-up" id="post-likes">
-            <div className="post-popup">
-                <div className="popup-header">
-                    Likes
-                </div>
-                <div>
-                    
-                </div>
+        <div id="post-likes">
+            <div className="popup-header">
+                Likes
+            </div>
+            <div>
+                { likes }
             </div>
         </div>
     )

@@ -15,7 +15,7 @@ export default class PostsDAO {
         }
     }
 
-    static async getPosts(userId, followers) {
+    static async getPosts(userId, followers, postsPerPage=20, page=0) {
         const query = {
             $or: [
                 {
@@ -28,12 +28,18 @@ export default class PostsDAO {
         };
 
         try {
-            return await posts.find(query).sort({ date: -1 }).toArray();
-            // const displayCursor = cursor.limit(postsPerPage).skip(postsPerPage * page).sort({'_id': -1});
+            const cursor = await posts.find(query).sort({ date: -1 });
 
-            // const postsList = await displayCursor.toArray();
+            const displayCursor = await cursor.limit(postsPerPage).skip(postsPerPage * page);
+
+            const postsList = await displayCursor.toArray();
+
+            const numPosts = await posts.countDocuments(query);
     
-            // return postsList;
+            return {
+                posts: postsList,
+                numPosts: numPosts
+            };
         }
         catch (err) {
             return { error: err };

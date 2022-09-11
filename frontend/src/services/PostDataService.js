@@ -1,27 +1,8 @@
 import http from "../http-common";
 
-// PostDataService.getAuthorization(data, http.get("/"))
-
 class PostDataService {
-    // getAuthorization(payload, action){
-    //     this.checkLogin()
-    //     action(payload)
-    // }
-
-    // checkAuth(action) {
-    //     action()
-    //         .then(response => {
-    //             return response;
-    //         })
-    //         .catch(err => {
-    //             if (err.message === "not logged in") {
-
-    //             }
-    //         })
-    // }
-
-    getAll() {
-        return http.get("/");
+    getAll(page=0) {
+        return http.get("/?page=" + page);
     }
 
     getPostById(postId) {

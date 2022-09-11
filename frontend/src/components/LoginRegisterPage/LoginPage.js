@@ -12,7 +12,7 @@ export default function LoginPage(props) {
 
     return (
         <div className="login-register-page">
-            <LoginContainer />
+            <LoginContainer isLoginPage={ true }/>
             <div className="alternative-container">
                 <span>
                     <p>

@@ -34,6 +34,9 @@ export default function LoginContainer(props) {
                     navigate(state);
                     return;
                 }
+                if (props.isLoginPage) {
+                    navigate("/");
+                }
                 navigate(0);
             })
             .catch(err => {

@@ -23,14 +23,11 @@ function App() {
     const [loading, setLoading] = useState(true);
 
     const location = useLocation();
-    const navigate = useNavigate();
-
 
     useEffect(() => {
         PostDataService.checkLogin()
             .then(response => {
                 setLoading(false);
-                console.log(response.data.loggedIn)
                 if (response.data.loggedIn) {
                     if (!response.data.userInfo.profilePicture) {
                         response.data.userInfo.profilePicture = DefaultProfilePicture;
@@ -51,14 +48,12 @@ function App() {
                 <Route path="/" element={
                     !loading
                         ? <Layout setUserInfo={ setUserInfo }/>
-                        : ""
+                        : <div>hey</div>
                 }>
                     <Route index element={ 
-                        loading
-                            ? <RegisterPage />
-                            : userInfo.userId !== ""
-                                ? <Content /> 
-                                : <Navigate to="/login" />
+                        userInfo.userId !== ""
+                            ? <Content /> 
+                            : <Navigate to="/login" />
                     }/>
                     <Route path="post/:postId" element={ <ExtendedPost /> } />
                     <Route path="user/:username" element={ <Profile /> } />

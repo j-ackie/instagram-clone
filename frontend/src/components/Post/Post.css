@@ -51,7 +51,7 @@
     padding: 10px;
 }
 
-.footer div {
+.footer > div {
     margin-top: 10px;
 }
 
@@ -171,13 +171,7 @@
     text-decoration: none;
 }
 
-.post-popup {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
+#post-likes {
     width: 400px;
     height: 250px;
-    text-align: center;
-    border-radius: 10px;
-    overflow: hidden;
 }

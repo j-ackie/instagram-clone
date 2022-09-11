@@ -16,14 +16,15 @@ export default class PostsController {
             });
 
             // const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
-            const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList);
-            for (const post of getPostsResponse) {
+            const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList, 5, parseInt(req.query.page));
+            for (const post of getPostsResponse.posts) {
                 post.file = await get(post.filename);
                 delete post.filename;
             }
 
             res.json({
-                posts: getPostsResponse
+                posts: getPostsResponse.posts,
+                numPosts: getPostsResponse.numPosts
             });
         }
         catch (err) {
@@ -163,7 +164,6 @@ export default class PostsController {
     }
 
     static async apiGetSaveByPostId(req, res, next) {
-        console.log(req.query.postId)
         try {
             const getResponse = await SavesDAO.getSaveByIds(req.query.postId, req.userId);
             res.json({
@@ -176,10 +176,8 @@ export default class PostsController {
     }
 
     static async apiGetSaves(req, res, next) {
-        console.log(req.query)
         try {
             const getResponse = await SavesDAO.getSaves(req.query.postId, req.userId);
-            console.log(getResponse);
             res.json({ saves: getResponse });
         }
         catch (err) {
