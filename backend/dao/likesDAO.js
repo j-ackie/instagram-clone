@@ -8,7 +8,7 @@ export default class LikesDAO {
             return;
         }
         try {
-            likes = await conn.db(process.env.DB).collection("likes")
+            likes = await conn.db(process.env.DB).collection("likes");
         }
         catch (err) {
             console.error('Unable to establish a connection handle in likesDAO: ');
@@ -93,5 +93,16 @@ export default class LikesDAO {
         }
     }
 
+    static async deleteLikesByPostId(postId) {
+        const query = {
+            postId: ObjectId(postId)
+        };
+        try {
+            return await likes.deleteMany(query);
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
 }
 

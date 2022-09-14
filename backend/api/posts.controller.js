@@ -2,7 +2,8 @@ import PostsDAO from "../dao/postsDAO.js";
 import FollowersDAO from "../dao/followersDAO.js";
 import LikesDAO from "../dao/likesDAO.js";
 import SavesDAO from "../dao/savesDAO.js";
-import upload, { get } from "../s3.js";
+import upload, { get, del } from "../s3.js";
+import CommentsDAO from "../dao/commentsDAO.js";
 
 export default class PostsController {
     static async apiGetPosts(req, res, next) {
@@ -87,11 +88,11 @@ export default class PostsController {
         const filename = await upload(req.file);
         req.body.userId = req.userId;
         req.body.filename = filename;
-        req.body.date = new Date();
+        req.body.date = new Date(req.body.date);
 
         try {
             const createResponse = await PostsDAO.addPost(req.body);
-            res.json({ status: "success", postId: createResponse.insertedId });
+            res.json({ postId: createResponse.insertedId });
         }
         catch (err) {
             res.status(500).json({ error: err.message });
@@ -109,8 +110,24 @@ export default class PostsController {
                 res.status(401).json({ error: "not user's post" });
                 return;
             }
-            const deleteResponse = await PostsDAO.deletePost(req.params.postId);
-            res.json({ status: "success" });
+
+            const deletePostResponse = await PostsDAO.deletePost(req.params.postId);
+
+            if (deletePostResponse.error) {
+                res.status(500).json({ error: deletePostResponse.error.message });
+            }
+
+            await del(getResponse.filename);
+
+            const deleteCommentsResponse = await CommentsDAO.deleteCommentsByPostId(req.params.postId);
+            const deleteLikesResponse = await LikesDAO.deleteLikesByPostId(req.params.postId);
+            const deleteSavesResponse = await SavesDAO.deleteSavesByPostId(req.params.postId);
+
+            if (deleteCommentsResponse.error || deleteLikesResponse.error || deleteSavesResponse.error) {
+                res.status(500).json({ error: "error while deleting associated resources" });
+            }
+
+            res.status(204).json();
         }
         catch (err) {
             res.status(500).json({ error: err.message });

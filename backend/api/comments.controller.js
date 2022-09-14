@@ -14,6 +14,7 @@ export default class CommentsController {
 
     static async apiCommentPost(req, res, next) {
         try {
+            req.body.date = new Date(req.body.date);
             const createResponse = await CommentsDAO.addComment(req.body, req.userId);
             res.json({ status: "success", insertedId: createResponse.insertedId });
         }

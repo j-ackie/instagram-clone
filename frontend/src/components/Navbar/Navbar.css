@@ -92,10 +92,6 @@ nav input:focus {
     position: relative;
 }
 
-#navbar-profile-picture {
-    border-radius: 50%;
-}
-
 .navbar-pop-up {
     position: absolute;
     top: 45px;

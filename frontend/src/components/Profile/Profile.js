@@ -12,7 +12,8 @@ export default function Profile() {
     const [profileUserInfo, setProfileUserInfo] = useState({
         userId: "",
         username: "",
-        profilePicture: ""
+        profilePicture: "",
+        bio: ""
     });
 
     const [posts, setPosts] = useState([]);

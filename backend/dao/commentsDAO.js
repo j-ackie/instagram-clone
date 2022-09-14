@@ -8,7 +8,7 @@ export default class CommentsDAO {
             return;
         }
         try {
-            comments = await conn.db(process.env.DB).collection("comments")
+            comments = await conn.db(process.env.DB).collection("comments");
         }
         catch (err) {
             console.error('Unable to establish a connection handle in postsDAO: ');
@@ -38,6 +38,18 @@ export default class CommentsDAO {
         }
         catch (err) {
             console.error(err);
+            return { error: err };
+        }
+    }
+
+    static async deleteCommentsByPostId(postId) {
+        const query = {
+            postId: ObjectId(postId)
+        };
+        try {
+            return await comments.deleteMany(query);
+        }
+        catch (err) {
             return { error: err };
         }
     }

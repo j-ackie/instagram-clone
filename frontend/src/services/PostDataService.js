@@ -77,22 +77,6 @@ class PostDataService {
         return http.delete("/followers?userId=" + userId)
     }
 
-    checkLogin() {
-        return http.get("/login");
-    }
-
-    login(data) {
-        return http.post("/login", data);
-    }
-
-    logout() {
-        return http.post("/logout");
-    }
-
-    register(data) {
-        return http.post("/register", data);
-    }
-
     reset() {
         return http.post("/reset")
     }

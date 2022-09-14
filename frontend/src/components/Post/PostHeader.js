@@ -34,18 +34,6 @@ export default function PostHeader(props) {
                     />
                 }
             />
-            {/* {
-                isOptionsIconClicked
-                    ? <PostOptions
-                        isUserPost={ props.postInfo.userId === userInfo.userId }
-                        isExtendedPost={ props.isExtendedPost }
-                        selectedPostId={ props.postInfo._id }
-                        setIsOptionsIconClicked={ setIsOptionsIconClicked }
-                        posts={ posts }
-                        setPosts={ setPosts }
-                      />
-                    : ''
-            } */}
         </div>
     )
 }

@@ -8,7 +8,7 @@ export default class FollowersDAO {
             return;
         }
         try {
-            followers = await conn.db(process.env.DB).collection("followers")
+            followers = await conn.db(process.env.DB).collection("followers");
         }
         catch (err) {
             console.error('Unable to establish a connection handle in followersDAO: ');

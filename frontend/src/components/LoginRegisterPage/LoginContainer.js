@@ -5,6 +5,7 @@ import PasswordField from "./PasswordField";
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
 import instagramLogo from "../../icons/instagram_logo.png";
 import UserContext from "../../UserProvider";
+import UserDataService from "../../services/UserDataService";
 
 export default function LoginContainer(props) {
     const [username, setUsername] = useState("");
@@ -20,24 +21,33 @@ export default function LoginContainer(props) {
             username: username,
             password: password
         };
-        PostDataService.login(data)
+        UserDataService.login(data)
             .then(response => {
-                const newUserInfo = {
-                    userId: response.data.userId,
-                    username: data.username,
-                    profilePicture: response.data.profilePicture === ""
-                                        ? DefaultProfilePicture
-                                        : response.data.profilePicture
-                };
-                setUserInfo(newUserInfo);
-                if (state) {
-                    navigate(state);
-                    return;
-                }
-                if (props.isLoginPage) {
-                    navigate("/");
-                }
-                navigate(0);
+                UserDataService.getLogin()
+                    .then(response => {
+                        if (!response.data.loggedIn) {
+                            return;
+                        }
+
+                        const newUserInfo = response.data.userInfo;
+
+                        if (newUserInfo.profilePicture === "") {
+                            newUserInfo.profilePicture = DefaultProfilePicture;
+                        }
+
+                        setUserInfo(newUserInfo);
+
+                        if (state) {
+                            navigate(state);
+                            return;
+                        }
+                        if (props.isLoginPage) {
+                            navigate("/");
+                        }
+                        else {
+                            navigate(0);
+                        }
+                    })
             })
             .catch(err => {
                 // Alert that user has inputted an incorrect password
@@ -46,7 +56,7 @@ export default function LoginContainer(props) {
     }
 
     return (
-        <div id="login-container">
+        <div className="login-register-container" id="login-container">
             <img
                 src={ instagramLogo }
             />

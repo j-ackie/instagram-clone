@@ -1,6 +1,5 @@
 import PostDataService from "./services/PostDataService";
 import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
-import { Navigate } from "react-router-dom";
 
 export default function loadPost(postInfo, setProfilePicture, setUsername, setComments, setLikes) {
     PostDataService.getUserById(postInfo.userId)
@@ -61,7 +60,8 @@ export function resetUserInfo(setUserInfo) {
     setUserInfo({
         userId: "",
         username: "",
-        profilePicture: ""
+        profilePicture: "",
+        bio: ""
     });
 }
 
@@ -74,4 +74,8 @@ export function handleError(error, functions) {
     }
 
     console.error("error");
+}
+
+export function isLoggedIn(userInfo) {
+    return userInfo.userId !== "";
 }

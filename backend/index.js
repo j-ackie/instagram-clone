@@ -7,6 +7,7 @@ import CommentsDAO from "./dao/commentsDAO.js";
 import LikesDAO from "./dao/likesDAO.js";
 import FollowersDAO from "./dao/followersDAO.js";
 import SavesDAO from "./dao/savesDAO.js";
+import AuthDAO from "./dao/authDAO.js";
 import { S3Client } from "@aws-sdk/client-s3";
 
 dotenv.config();
@@ -34,6 +35,7 @@ MongoClient.connect(
     process.exit(1);
 })
 .then(async client => {
+    await AuthDAO.injectDB(client);
     await PostsDAO.injectDB(client);
     await UsersDAO.injectDB(client);
     await CommentsDAO.injectDB(client);

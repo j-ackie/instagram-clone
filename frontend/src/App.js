@@ -5,12 +5,14 @@ import Layout from './components/Layout/Layout';
 import Content from "./components/Content/Content";
 import ExtendedPost from './components/Post/ExtendedPost';
 import Profile from './components/Profile/Profile';
+import Settings from './components/Settings/Settings';
 import LoginPage from './components/LoginRegisterPage/LoginPage';
 import RegisterPage from './components/LoginRegisterPage/RegisterPage';
 
 import "./App.css"
 import PostDataService from './services/PostDataService';
 import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
+import UserDataService from './services/UserDataService';
 
 export const UserContext = createContext();
 
@@ -18,15 +20,17 @@ function App() {
     const [userInfo, setUserInfo] = useState({
         userId: "",
         username: "",
-        profilePicture: ""
+        profilePicture: "",
+        bio: ""
     });
     const [loading, setLoading] = useState(true);
 
     const location = useLocation();
 
     useEffect(() => {
-        PostDataService.checkLogin()
+        UserDataService.getLogin()
             .then(response => {
+                console.log(response.data)
                 setLoading(false);
                 if (response.data.loggedIn) {
                     if (!response.data.userInfo.profilePicture) {
@@ -36,7 +40,6 @@ function App() {
                 }
             });
     }, []);
-
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -57,6 +60,10 @@ function App() {
                     }/>
                     <Route path="post/:postId" element={ <ExtendedPost /> } />
                     <Route path="user/:username" element={ <Profile /> } />
+                    <Route path="settings">
+                        <Route path="edit" element={ <Settings /> } />
+                        <Route path="activity" />
+                    </Route>
                 </Route>
                 <Route path="/login" element={ <LoginPage setUserInfo={ setUserInfo } /> } />
                 <Route path="/register" element={ <RegisterPage setUserInfo={ setUserInfo } /> } />

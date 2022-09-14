@@ -29,7 +29,8 @@ const PostAddComment = forwardRef((props, ref) => {
         const data = {
             postId: props.postId,
             userId: userInfo.userId,
-            comment: currComment
+            comment: currComment,
+            date: new Date()
         }
         PostDataService.commentPost(data)
             .then(response => {

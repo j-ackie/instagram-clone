@@ -10,6 +10,7 @@ export default function PasswordField(props) {
                         ? "text"
                         : "password"
                 }
+                autoComplete={ props.isNewPassword ? "new-password" : "" }
                 value={ props.password }
                 placeholder={ props.placeholder }
                 onChange={ event => props.setPassword(event.target.value) }

@@ -70,6 +70,8 @@ export default function NavbarIcons(props) {
                     setVariable={ setIsPostIconClicked }
                     content={
                         <CreatePost
+                            posts={ props.posts }
+                            setPosts={ props.setPosts }
                             setIsPostIconClicked={ setIsPostIconClicked }
                             isProfile={ location.pathname === "/user/" + userInfo.username }
                         />
@@ -105,8 +107,9 @@ export default function NavbarIcons(props) {
                     id="navbar-profile-picture"
                     className={
                         location.pathname === "/user/" + userInfo.username
-                            ? "clicked"
-                            : ""
+                            ? "clicked profile-picture"
+                            : "profile-picture"
+                        
                     }
                     src={
                         userInfo.profilePicture === ""

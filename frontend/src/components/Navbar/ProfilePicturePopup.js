@@ -8,6 +8,8 @@ import gearIcon from "../../icons/gear.svg";
 import switchIcon from "../../icons/switch.svg";
 import UserContext from "../../UserProvider";
 import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
+import { resetUserInfo } from "../../helpers";
 
 export default function ProfilePicturePopup(props) {
     const [userInfo, setUserInfo] = useContext(UserContext);
@@ -25,16 +27,12 @@ export default function ProfilePicturePopup(props) {
     }
 
     const handleLogout = () => {
-        PostDataService.logout()
+        UserDataService.logout()
             .catch(err => {
                 console.error(err);
             })
             .finally(() => {
-                props.setUserInfo({
-                    userId: "",
-                    username: "",
-                    profilePicture: ""
-                });
+                resetUserInfo(props.setUserInfo);
                 navigate("/login")
             })
     };
@@ -48,7 +46,7 @@ export default function ProfilePicturePopup(props) {
                 <li onClick={ handleSavedClick }>
                     <img alt="Saved" src={ bookmarkIcon } />Saved
                 </li>
-                <li>
+                <li onClick={ () => navigate("/settings") }>
                     <img alt="Settings" src={ gearIcon } />Settings
                 </li>
                 <li onClick={ () => props.setIsSwitchIconClicked(true) }>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
 import PasswordField from "./PasswordField";
 import "./LoginRegisterPage.css"
@@ -22,33 +23,21 @@ export default function RegisterPage(props) {
             alert("Passwords do not match");
             return;
         }
-        let data = {
+        const data = {
             username: username,
             password: password
         };
-        PostDataService.register(data)
+        UserDataService.register(data)
             .then(response => {
-                if (response.data.status === "success") {
-                    let userInfo = {
-                        userId: response.data.userId,
-                        username: data.username,
-                        profilePicture: ""
-                    };
-                    props.setUserInfo(userInfo);
-                    
-                    if (state) {
-                        navigate(state);
-                        return;
-                    }
-
-                    navigate("/");
-                }
-            })
+                navigate("/login", {
+                    state: state
+                });
+            });
     }
 
     return (
         <div className="login-register-page">
-            <div id="register-container">
+            <div className="login-register-container" id="register-container">
                 <img
                     src={ instagramLogo }
                 />
@@ -61,11 +50,13 @@ export default function RegisterPage(props) {
                     password={ password }
                     setPassword={ setPassword }
                     placeholder="Password"
+                    isNewPassword={ true }
                 />
                 <PasswordField
                     password={ confirmPassword }
                     setPassword={ setConfirmPassword }
                     placeholder="Confirm password"
+                    isNewPassword={ true }
                 />
                 <button
                     onClick={ handleSubmit }

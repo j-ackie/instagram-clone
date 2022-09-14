@@ -42,10 +42,6 @@ export default function ExtendedPost(props) {
                     });
             });
     }, [postId]);
-
-    useEffect(() => {
-        console.log(comments);
-    }, [comments])
     
     return (
         <div className="extended-post-container">
@@ -69,6 +65,7 @@ export default function ExtendedPost(props) {
                         username={ username }
                         profilePicture={ profilePicture }
                         caption={ postInfo.caption }
+                        date={ postInfo.date }
                         comments={ comments }
                         setComments={ setComments }
                     />

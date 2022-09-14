@@ -1,5 +1,5 @@
 import { useContext, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import CreatePostUpload from "./CreatePostUpload";
 import CreatePostCrop from "./CreatePostCrop"
 import CreatePostSubmit from "./CreatePostSubmit";
@@ -12,22 +12,16 @@ import UserContext from "../../UserProvider";
 export default function CreatePost(props) {
     const [file, setFile] = useState(null);
     const [isCropped, setIsCropped] = useState(false);
-
     const [userInfo, setUserInfo] = useContext(UserContext);
     const inputRef = useRef(null);
     const navigate = useNavigate();
-
-    const handleClick = (event) => {
-        if (event.target.id === "create-post") {
-            props.setIsPostIconClicked(false);
-        }
-    }
 
     const handleShare = () => {
         let data = new FormData();
         data.append("userId", userInfo.userId);
         data.append("file", file);
         data.append("caption", inputRef.current.value);
+        data.append("date", new Date());
 
         PostDataService.createPost(data)
             .then(response => {
@@ -41,7 +35,7 @@ export default function CreatePost(props) {
                         props.setPosts(
                             [
                                 <Post
-                                    key={ response.data.postId }
+                                    key={ response.data._id }
                                     postInfo={ response.data }
                                 />,
                                 ... props.posts
@@ -67,16 +61,9 @@ export default function CreatePost(props) {
                             /> :
                 !isCropped ? <CreatePostCrop
                                 file={ file }
-                                setFile={ setFile }
-                                setIsCropped={ setIsCropped }
                             /> :
                             <CreatePostSubmit 
-                                posts={ props.posts }
-                                setPosts={ props.setPosts }
-                                setIsPostIconClicked={ props.setIsPostIconClicked }
                                 file={ file }
-                                setFile={ setFile }
-                                setIsCropped={ setIsCropped }
                                 ref={ inputRef }
                             />
                 }

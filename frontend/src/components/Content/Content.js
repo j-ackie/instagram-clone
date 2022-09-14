@@ -1,15 +1,21 @@
 import Post from '../Post/Post';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./Content.css"
 import PostDataService from '../../services/PostDataService';
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { handleError } from '../../helpers';
+import UserContext from '../../UserProvider';
 
 export default function Content(props) {
     const [page, setPage] = useState(0);
     const [hasNext, setHasNext] = useState(true);
     const [isScrolling, setIsScrolling] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [userInfo, setUserInfo] = useContext(UserContext);
+    
     const { posts, setPosts } = useOutletContext();
+    const navigate = useNavigate();
+
 
     const createPostsList = posts => {
         let postsList = [];
@@ -53,6 +59,9 @@ export default function Content(props) {
                     if (newPostsList.length === response.data.numPosts) {
                         setHasNext(false);
                     }
+                })
+                .catch(err => {
+                    handleError(err, { navigate, setUserInfo });
                 });
         }
     }

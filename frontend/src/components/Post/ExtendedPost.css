@@ -52,13 +52,21 @@
     padding: 10px;
     display: flex;
     flex-direction: row;
-    align-items: center;
     overflow-wrap: anywhere;
 }
 
-.post-comment span {
-    display: flex;
-    align-items: center;
+.post-comment-content-container {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.post-comment-content-container > span > div {
+    margin-top: 5px;
+}
+
+.post-comment-content-container a {
+    margin: 0 !important;
+    margin-right: 5px !important;
 }
 
 .post-user {

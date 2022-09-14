@@ -8,7 +8,7 @@ export default class PostsDAO {
             return;
         }
         try {
-            posts = await conn.db(process.env.DB).collection("posts")
+            posts = await conn.db(process.env.DB).collection("posts");
         }
         catch (err) {
             console.error('Unable to establish a connection handle in postsDAO: ');

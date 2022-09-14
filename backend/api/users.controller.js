@@ -1,7 +1,7 @@
 import UsersDAO from "../dao/usersDAO.js";
 import FollowersDAO from "../dao/followersDAO.js";
 import jwt from "jsonwebtoken";
-import upload, { get } from "../s3.js"
+import upload, { get, del } from "../s3.js"
 import { hash, compare } from "bcrypt";
 
 export default class UsersController {
@@ -44,7 +44,8 @@ export default class UsersController {
                 username: getResponse.username,
                 profilePicture: getResponse.profilePicture
                                     ? await get(getResponse.profilePicture)
-                                    : ""
+                                    : "",
+                bio: getResponse.bio
             };
 
             res.json(userInfo);
@@ -54,108 +55,52 @@ export default class UsersController {
         }
     }
 
-    // Consider changing to apiGetLogin
-    static async apiCheckLogin(req, res, next) {
-        const token = req.cookies.token;
-
-        if (!token) {
-            res.json({ loggedIn: false });
+    static async apiUpdateUser(req, res) {
+        if (req.userId !== req.params.userId) {
+            res.status(401).json("cannot update another user");
             return;
         }
-
-        jwt.verify(token, process.env.JWT_SECRET_KEY, async(err, decoded) => {
-            if (err) {
-                res.clearCookie("token");
-                res.json({
-                    loggedIn: false
-                });
-                return;
-            }
-            
-            const getResponse = await UsersDAO.getUserById(decoded.userId);
-
-            const userInfo = {
-                userId: getResponse._id,
-                username: getResponse.username,
-                profilePicture: getResponse.profilePicture
-                                    ? await get(getResponse.profilePicture)
-                                    : ""
-            };
-
-            res.json({
-                loggedIn: true,
-                userInfo: userInfo
-            });
-        });
-    }
-
-    static async apiLogin(req, res, next) {
         try {
-            const getResponse = await UsersDAO.getUserByName(req.body.username);
-
-            if (!getResponse) {
-                res.status(401).json({ error: "user not found" });
-                return;
-            }
-
-            if (! await compare(req.body.password, getResponse.password)) {
-                res.status(401).json({ error: "incorrect password" });
-                return;
-            }
-
-            let userInfo = {
-                userId: getResponse._id,
-                username: req.body.username,
-                profilePicture: getResponse.profilePicture
-                                    ? await get(getResponse.profilePicture)
-                                    : ""
-            };
-
-            const payload = { userId: userInfo.userId };
-
-            const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-                expiresIn: "1h"
-            });
-
-            res.cookie("token", token, {
-                httpOnly: true
-            });
-
-            res.json(userInfo);
-        }
-        catch (err) {
-            res.status(500).json({ error: err.message });
-        }
-    }
-
-    static async apiLogout(req, res, next) {
-        res.clearCookie("token");
-        res.status(201).json({ status: "logged out" });
-    }
-
-    static async apiRegister(req, res, next) {
-        try {
-            const getResponse = await UsersDAO.getUserByName(req.body.username);
-            
-            if (getResponse) {
-                res.status(401).json({ error: "user already exists" });
-                return;
-            }
-
-            req.body.password = await hash(req.body.password, 10);
-
-            const registerResponse = await UsersDAO.register(req.body);
-            if (registerResponse) {
-                let data = {
-                    status: "success",
-                    userId: registerResponse.insertedId,
-                    profilePicture: ""
+            const data = {};
+            if (req.body.username) {
+                if (req.body.username === "") {
+                    res.status(400).json({ error: "username cannot be empty" });
+                    return;
                 }
-                res.status(201).json(data);
+
+                const getUsernameResponse = await UsersDAO.getUserByName(req.body.username);
+                if (getUsernameResponse) {
+                    res.status(409).json({ error: "username already taken" });
+                    return;
+                }
+
+                data.username = req.body.username;
             }
-            else {
-                res.status(401).json({ error: "unable to register" });
+            if (req.body.bio) {
+                data.bio = req.body.bio;
             }
+
+            const getUserIdResponse = await UsersDAO.getUserById(req.params.userId);
+            const prevFilename = getUserIdResponse.profilePicture;
+            if (req.file) {
+                const filename = await upload(req.file);
+                data.profilePicture = filename;
+            }
+            else if (req.body.profilePicture === "") {
+                data.profilePicture = "";
+            }
+
+            const updateResponse = await UsersDAO.updateUser(req.params.userId, data);
+
+            const { error } = updateResponse;
+            if (error) { 
+                res.status(500).json({ error: error.message });
+                return;
+            }
+            if (req.file && prevFilename) {
+                await del(prevFilename);
+            }
+            res.status(204).json();
         }
         catch (err) {
             res.status(500).json({ error: err.message });

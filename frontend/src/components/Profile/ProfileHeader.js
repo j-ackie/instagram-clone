@@ -8,6 +8,7 @@ import ProfileUnfollow from "./ProfileUnfollow";
 import followingIcon from "../../icons/person-check-fill.svg";
 import gearIcon from "../../icons/gear.svg";
 import settingsIcon from "../../icons/three-dots.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileHeader(props) {
     const [followers, setFollowers] = useState([]);
@@ -20,6 +21,8 @@ export default function ProfileHeader(props) {
     const [isFollowingClicked, setIsFollowingClicked] = useState(false);
 
     const [isUnfollowClicked, setIsUnfollowClicked] = useState(false);
+
+    const navigate = useNavigate();
 
     const createFollower = (followerId) => {
         return {
@@ -71,6 +74,7 @@ export default function ProfileHeader(props) {
                 className="profile-page-picture" 
                 src={ props.profileUserInfo.profilePicture }
             />
+            <div className="profile-page-header-info-container">
             <div className="profile-page-header-info">
                 <div className="profile-page-header-info-top">
                     <p className="profile-page-username">{ props.profileUserInfo.username }</p>
@@ -78,7 +82,7 @@ export default function ProfileHeader(props) {
                         props.profileUserInfo.userId === userInfo.userId
                             ? <span>
                                 <button className="header-button">Edit profile</button>
-                                <img alt="Options" src={ gearIcon } />
+                                <img alt="Options" src={ gearIcon } onClick={ () => navigate("/settings") }/>
                             </span>
                             : <span>
                                 {
@@ -94,7 +98,7 @@ export default function ProfileHeader(props) {
                             </span>
                     }
                 </div>
-                <div className="profile-page-header-info-bottom">
+                <div className="profile-page-header-info-middle">
                     <span>
                         <strong>
                             { props.posts.length}
@@ -127,6 +131,12 @@ export default function ProfileHeader(props) {
                         }
                     </span>
                 </div>
+                <div className="profile-page-header-info-bottom">
+                    <p>
+                        { props.profileUserInfo.bio }
+                    </p>
+                </div>
+            </div>
             </div>
             <Popup
                 variable={ isFollowersClicked }

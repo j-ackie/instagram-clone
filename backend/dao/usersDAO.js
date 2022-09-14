@@ -70,14 +70,25 @@ export default class UsersDAO {
         return doc;
     }
 
-    static async register(data) {
+    static async createUser(userInfo) {
         try {
-            data.profilePicture = "";
-            return await users.insertOne(data);
+            return await users.insertOne(userInfo);
         }
         catch (err) {
             console.err(err);
             return;
+        }
+    }
+
+    static async updateUser(userId, data) {
+        try {
+            return await users.updateOne(
+                { _id: ObjectId(userId) },
+                { $set: data }
+            );
+        }
+        catch (err) {
+            return { error: err };
         }
     }
 }

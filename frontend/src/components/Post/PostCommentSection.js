@@ -1,6 +1,6 @@
 import { useEffect } from "react";
+import PostCaption from "./PostCaption";
 import PostComment from "./PostComment";
-import PostUser from "./PostUser";
 import PostDataService from "../../services/PostDataService";
 
 export default function PostCommentSection(props) {
@@ -24,15 +24,12 @@ export default function PostCommentSection(props) {
         <div className="comment-section">
             {
                 props.caption !== ""
-                    ? <div className="post-comment">
-                        <PostUser
-                            profilePicture={ props.profilePicture }
-                            username={ props.username }
-                        />
-                        <span className="post-comment-content">
-                            { props.caption }
-                        </span>
-                       </div>
+                    ? <PostCaption
+                        username={ props.username }
+                        profilePicture={ props.profilePicture }
+                        caption={ props.caption }
+                        date={ props.date }
+                      />
                     : ""
             }
             { props.comments }

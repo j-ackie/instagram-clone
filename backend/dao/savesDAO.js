@@ -72,4 +72,16 @@ export default class SavesDAO {
             return { error: err };
         }
     }
+
+    static async deleteSavesByPostId(postId) {
+        const query = {
+            postId: ObjectId(postId)
+        };
+        try {
+            return await saves.deleteMany(query);
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
 }

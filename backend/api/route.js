@@ -3,6 +3,7 @@ import multer from "multer";
 import PostsController from "./posts.controller.js";
 import UsersController from "./users.controller.js";
 import CommentsController from "./comments.controller.js";
+import AuthController from "./auth.controller.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
@@ -12,7 +13,7 @@ const upload = multer({ storage: storage });
 
 const auth = (req, res, next) => {
     const token = req.cookies.token;
-
+    
     if (!token) {
         res.status(401).json({ error: "not logged in" });
         return;
@@ -29,6 +30,23 @@ const auth = (req, res, next) => {
     });
 }
 
+const createToken = (req, res) => {
+    if (!req.payload) {
+        res.status(500).json({ error: "could not create jwt" });
+        return;
+    }
+
+    const token = jwt.sign(req.payload, process.env.JWT_SECRET_KEY, {
+        expiresIn: "1h"
+    });
+
+    res.cookie("token", token, {
+        httpOnly: true
+    });
+
+    res.status(204).json();
+}
+
 router.route("/")
     .get(auth, PostsController.apiGetPosts);
 
@@ -38,7 +56,8 @@ router
 
 router
     .route("/users/:userId")
-    .get(UsersController.apiGetUser);
+    .get(UsersController.apiGetUser)
+    .put(auth, upload.single("profilePicture"), UsersController.apiUpdateUser);
 
 router
     .route("/posts/:postId")
@@ -73,17 +92,20 @@ router
     .delete(auth, UsersController.apiUnfollowUser);
 
 router
-    .route("/login")
-    .get(UsersController.apiCheckLogin)
-    .post(UsersController.apiLogin);
+    .route("/auth/register")
+    .post(AuthController.apiRegister, createToken);
 
 router
-    .route("/logout")
-    .post(auth, UsersController.apiLogout);
+    .route("/auth/login")
+    .post(AuthController.apiLogin, createToken);
 
 router
-    .route("/register")
-    .post(UsersController.apiRegister);
+    .route("/auth/me")
+    .get(AuthController.apiGetLogin);
+
+router
+    .route("/auth/logout")
+    .post(auth, AuthController.apiLogout);
 
 router
     .route("/reset")

@@ -78,6 +78,8 @@ export default function Navbar(props) {
                 userInfo.userId !== ""
                     ? <NavbarIcons
                         event={ props.event }
+                        posts={ props.posts }
+                        setPosts={ props.setPosts }
                       />
                     : <NavbarLogin
 
