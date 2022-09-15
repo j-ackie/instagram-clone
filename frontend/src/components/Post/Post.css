@@ -10,7 +10,8 @@
 
 .post-photo {
     margin-top: 1px;
-    max-width: 400px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .post a {
@@ -118,8 +119,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     margin-top: 0 !important;
+}
+
+.icons > span {
+    flex: 1;
 }
 
 .icons img {
@@ -136,7 +140,15 @@
     opacity: 50%;
 }
 
-#left-hand svg {
+.right-hand {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.left-hand svg {
     padding-right: 10px;
 }
 
@@ -174,4 +186,17 @@
 #post-likes {
     width: 400px;
     height: 250px;
+}
+
+.post-photo-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#arrows-container > img {
+    width: 30px;
 }

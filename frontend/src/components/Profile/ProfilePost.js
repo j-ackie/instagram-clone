@@ -57,7 +57,7 @@ export default function ProfilePost(props) {
                         ? "darken"
                         : ""
                 }
-                src={ props.postInfo.file }
+                src={ props.postInfo.files[0] }
             />
         </div>
     )

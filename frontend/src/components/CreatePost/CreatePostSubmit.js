@@ -1,5 +1,6 @@
 import { useContext, forwardRef } from "react";
 import UserContext from "../../UserProvider";
+import CreatePostPreview from "./CreatePostPreview";
 
 const CreatePostSubmit = forwardRef((props, ref) => {
     const [userInfo, setUserInfo] = useContext(UserContext);
@@ -7,10 +8,7 @@ const CreatePostSubmit = forwardRef((props, ref) => {
     return (
         <div id="create-post-submit">
             <div id="create-post-submit-preview">
-                <img 
-                    className="create-post-preview"
-                    src={ URL.createObjectURL(props.file) }
-                />
+                <CreatePostPreview files={ props.files } />
             </div>
             <div id="create-post-options">
                 <div id="create-post-options-user">

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Popup from "../Popup/Popup";
 import PostLikesPopup from "./PostLikesPopup";
 import PostDescription from "./PostDescription";
+import PageIndicatorDots from "../PageIndicator/PageIndicatorDots";
 import LikedIcon from "../Icons/LikedIcon";
 import UnlikedIcon from "../Icons/UnlikedIcon";
 import CommentIcon from "../Icons/CommentIcon"
@@ -102,7 +103,7 @@ export default function PostFooter(props) {
     return (
         <div className="footer">
             <div className="icons">
-                <span id="left-hand">
+                <span className="left-hand">
                     { isLiked
                         ? <LikedIcon onClick={ handleUnlike }/>
                         : <UnlikedIcon onClick={ handleLike }/> 
@@ -110,13 +111,22 @@ export default function PostFooter(props) {
                     <CommentIcon onClick={ handleCommentIconClick }/>
                     <ShareIcon onClick={ () => {} }/>
                 </span>
-                <span id="right-hand">
+                {
+                    !props.isExtendedPost
+                        ? <span className="center">
+                            <PageIndicatorDots
+                                length={ props.postInfo.files.length }
+                                currImageIndex={ props.currImageIndex }
+                            />
+                          </span>
+                        : ""
+                }
+                <span className="right-hand">
                     {
                         isSaved
                             ? <img src={ filledSaveIcon } onClick={ handleSaveIconClick }/>
                             : <img src={ saveIcon } onClick={ handleSaveIconClick } />
                     }
-                    
                 </span>
             </div>
             {

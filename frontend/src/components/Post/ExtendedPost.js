@@ -1,6 +1,7 @@
 import { useState, useEffect, createRef } from "react";
 import { useParams } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
+import PostPhoto from "./PostPhoto";
 import PostHeader from "./PostHeader";
 import PostCommentSection from "./PostCommentSection";
 import PostFooter from "./PostFooter";
@@ -15,12 +16,13 @@ export default function ExtendedPost(props) {
         postId: postId,
         userId: "",
         caption: "",
-        file: "",
+        files: [],
         date: ""
     });
     const [profilePicture, setProfilePicture] = useState("");
     const [username, setUsername] = useState("");
     const [comments, setComments] = useState([]);
+    const [currImageIndex, setCurrImageIndex] = useState(0);
 
     const commentRef = createRef();
 
@@ -42,17 +44,16 @@ export default function ExtendedPost(props) {
                     });
             });
     }, [postId]);
-    
+
     return (
         <div className="extended-post-container">
             <div className="extended-post">
-                <div className="extended-post-image-container">
-                    <img 
-                        alt="Post"
-                        src={ postInfo.file } 
-                        className="extended-post-image"
-                    />
-                </div>
+                <PostPhoto
+                    showPageIndicator={ true }
+                    files={ postInfo.files }
+                    currImageIndex={ currImageIndex }
+                    setCurrImageIndex={ setCurrImageIndex }
+                />
                 <div className="extended-post-info">
                     <PostHeader
                         profilePicture={ profilePicture }

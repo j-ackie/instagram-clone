@@ -1,6 +1,7 @@
 import PostDataService from "../../services/PostDataService";
 import "./Post.css"
 import PostHeader from "./PostHeader";
+import PostPhoto from "./PostPhoto";
 import PostFooter from "./PostFooter";
 import PostAddComment from "./PostAddComment";
 import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png"
@@ -10,9 +11,10 @@ export default function Post(props) {
     const [username, setUsername] = useState("");
     const [profilePicture, setProfilePicture] = useState(null);
     const [comments, setComments] = useState([]);
+    const [currImageIndex, setCurrImageIndex] = useState(0);
 
     const commentRef = createRef();
-
+    
     useEffect(() => {
         PostDataService.getUserById(props.postInfo.userId)
             .then(response => {
@@ -34,9 +36,10 @@ export default function Post(props) {
                 postInfo={ props.postInfo }
                 isExtendedPost={ false }
             />
-            <img className="post-photo"
-                alt="Post"
-                src={ props.postInfo.file }
+            <PostPhoto
+                files={ props.postInfo.files }
+                currImageIndex={ currImageIndex }
+                setCurrImageIndex={ setCurrImageIndex }
             />
             <PostFooter
                 isExtendedPost={ false }
@@ -44,6 +47,7 @@ export default function Post(props) {
                 postInfo={ props.postInfo }
                 comments={ comments }
                 setComments={ setComments }
+                currImageIndex={ currImageIndex }
             />
             <PostAddComment
                 ref={ commentRef }

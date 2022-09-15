@@ -9,7 +9,21 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 50 * 1024 * 1024
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
+            cb(null, true);
+        }
+        else {
+            cb(null, false);
+            return cb(new Error("invalid file type"));
+        }
+    }
+});
 
 const auth = (req, res, next) => {
     const token = req.cookies.token;
@@ -67,7 +81,7 @@ router
 router
     .route("/posts")
     .get(PostsController.apiGetPostsByUserId)
-    .post(auth, upload.single("file"), PostsController.apiCreatePost)
+    .post(auth, upload.array("file"), PostsController.apiCreatePost)
 
 router
     .route("/likes")

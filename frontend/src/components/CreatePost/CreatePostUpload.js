@@ -8,28 +8,42 @@ export default function CreatePostUpload(props) {
         event.stopPropagation();
     };
 
+
+
+    const isFilesValid = files => {
+        const fileSizeLimit = 50 * 1024 * 1024; // 50 MB
+
+        if (files.length > 10) {
+            console.error("maximum files is 10");
+            return false;
+        }
+
+        for (const file of files) {
+            if (file.type !== "image/jpeg" && file.type !== "image/png") {
+                console.error("incompatible file type");
+                return false;
+            }
+            if (file.size > fileSizeLimit) {
+                console.error(`${file.name} is too large`);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     const handleDrop = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        if (event.dataTransfer.files) {
-            for (const file of event.dataTransfer.files) {
-                if (file.type !== "image/jpeg" && file.type !== "image/png") {
-                    console.error("incompatible file type");
-                    return;
-                }
-            }
-            props.setFile(event.dataTransfer.files[0]);
+        if (isFilesValid(event.dataTransfer.files)) {
+            props.setFiles(event.dataTransfer.files);
         }
     }
-
+    
     const handleSubmit = (event) => {
-        for (const file of event.target.files) {
-            if (file.type !== "image/jpeg" && file.type !== "image/png") {
-                console.error("incompatible file type");
-                return;
-            }
+        if (isFilesValid(event.target.files)) {
+            props.setFiles(event.target.files);
         }
-        props.setFile(event.target.files[0]);
     }
 
     return (
@@ -44,6 +58,7 @@ export default function CreatePostUpload(props) {
                 Drag photos and videos here
             </p>
             <input
+                multiple
                 type="file"
                 accept="image/png, image/jpeg"
                 ref={inputFile}

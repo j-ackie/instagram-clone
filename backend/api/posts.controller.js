@@ -19,8 +19,13 @@ export default class PostsController {
             // const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
             const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList, 5, parseInt(req.query.page));
             for (const post of getPostsResponse.posts) {
-                post.file = await get(post.filename);
-                delete post.filename;
+                let files = [];
+                for (const filename of post.filenames) {
+                    files.push(await get(filename));
+                }
+
+                post.files = files;
+                delete post.filenames;
             }
 
             res.json({
@@ -42,16 +47,12 @@ export default class PostsController {
                 return;
             }
 
-            post.file = await get(post.filename);
-            delete post.filename;
-
-            // let data = {
-            //     postId: post._id,
-            //     userId: post.userId,
-            //     caption: post.caption,
-            //     file: await get(post.filename),
-            //     date: post.date
-            // }
+            let files = [];
+            for (const filename of post.filenames) {
+                files.push(await get(filename));
+            }
+            post.files = files;
+            delete post.filenames;
 
             res.json(post);
         }
@@ -66,8 +67,12 @@ export default class PostsController {
             const getResponse = await PostsDAO.getPostsByUserId(req.query.userId);
 
             for (const post of getResponse) {
-                post.file = await get(post.filename);
-                delete post.filename;
+                let files = [];
+                for (const filename of post.filenames) {
+                    files.push(await get(filename));
+                }
+                post.files = files;
+                delete post.filenames;
             }
 
             res.json({
@@ -80,14 +85,18 @@ export default class PostsController {
     }
 
     static async apiCreatePost(req, res, next) {
-        if (!req.file) {
-            res.status(401).json({ error: "no file" });
+        if (req.files.length === 0) {
+            res.status(401).json({ error: "no files" });
             return;
         }
 
-        const filename = await upload(req.file);
+        let filenames = [];
+        for (const file of req.files) {
+            filenames.push(await upload(file));
+        }
+
         req.body.userId = req.userId;
-        req.body.filename = filename;
+        req.body.filenames = filenames;
         req.body.date = new Date(req.body.date);
 
         try {
@@ -117,7 +126,9 @@ export default class PostsController {
                 res.status(500).json({ error: deletePostResponse.error.message });
             }
 
-            await del(getResponse.filename);
+            for (const filename of getResponse.filenames) {
+                await del(filename);
+            }
 
             const deleteCommentsResponse = await CommentsDAO.deleteCommentsByPostId(req.params.postId);
             const deleteLikesResponse = await LikesDAO.deleteLikesByPostId(req.params.postId);

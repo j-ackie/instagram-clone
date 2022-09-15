@@ -3,7 +3,7 @@ import BackIcon from "../Icons/BackIcon";
 export default function CreatePostHeader(props) {
     let headers = [];
     
-    if (!props.file) {
+    if (props.files.length === 0) {
         headers = [
             <span className=""/>,
             <span>Create new post</span>,
@@ -12,7 +12,7 @@ export default function CreatePostHeader(props) {
     }
     else if (!props.isCropped) {
         headers = [
-            <BackIcon onClick={ () => props.setFile(null) }/>,
+            <BackIcon onClick={ () => props.setFiles([]) }/>,
             <span>Crop</span>,
             <span onClick={ () => props.setIsCropped(true) } className="action">Next</span>
         ];

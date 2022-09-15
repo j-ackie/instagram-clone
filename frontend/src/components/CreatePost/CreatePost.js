@@ -10,7 +10,7 @@ import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
 
 export default function CreatePost(props) {
-    const [file, setFile] = useState(null);
+    const [files, setFiles] = useState([]);
     const [isCropped, setIsCropped] = useState(false);
     const [userInfo, setUserInfo] = useContext(UserContext);
     const inputRef = useRef(null);
@@ -19,9 +19,12 @@ export default function CreatePost(props) {
     const handleShare = () => {
         let data = new FormData();
         data.append("userId", userInfo.userId);
-        data.append("file", file);
         data.append("caption", inputRef.current.value);
         data.append("date", new Date());
+
+        for (const file of files) {
+            data.append("file", file);
+        };
 
         PostDataService.createPost(data)
             .then(response => {
@@ -44,28 +47,29 @@ export default function CreatePost(props) {
                     });
             });
     }
-
+    
     return (
         <div id={ !isCropped ? "create-post-popup" : "extended-create-post-popup" }>
             <CreatePostHeader 
-                file={ file }
+                files={ files }
                 isCropped={ isCropped }
-                setFile={ setFile }
+                setFiles={ setFiles }
                 setIsCropped={ setIsCropped }
                 handleShare={ handleShare }
             />
             <div id="create-post-content">
                 {   
-                    !file ? <CreatePostUpload 
-                                setFile={ setFile }
-                            /> :
-                !isCropped ? <CreatePostCrop
-                                file={ file }
-                            /> :
-                            <CreatePostSubmit 
-                                file={ file }
-                                ref={ inputRef }
-                            />
+                    files.length === 0 ? <CreatePostUpload 
+                                            setFiles={ setFiles }
+                                          /> :
+                             !isCropped ? <CreatePostCrop
+                                            files={ files }
+                                            setFiles={ setFiles }
+                                          /> :
+                                          <CreatePostSubmit 
+                                            files={ files }
+                                            ref={ inputRef }
+                                          />
                 }
             </div>
         </div>
