@@ -1,4 +1,4 @@
-import { useState, useRef, forwardRef, useContext, useEffect } from "react";
+import { useState, forwardRef, useContext } from "react";
 import { useNavigate } from "react-router";
 import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
@@ -38,7 +38,7 @@ const PostAddComment = forwardRef((props, ref) => {
                 ref.current.textContent = "";
                 props.setComments(
                     [
-                        ... props.comments,
+                        ...props.comments,
                         <PostComment 
                             key={ response.data.insertedId } 
                             comment={ data } 

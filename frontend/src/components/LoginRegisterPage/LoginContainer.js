@@ -1,8 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router";
-import PostDataService from "../../services/PostDataService";
 import PasswordField from "./PasswordField";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 import instagramLogo from "../../icons/instagram_logo.png";
 import UserContext from "../../UserProvider";
 import UserDataService from "../../services/UserDataService";
@@ -14,7 +13,7 @@ export default function LoginContainer(props) {
     const navigate = useNavigate();
     const { state } = useLocation();
 
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [, setUserInfo] = useContext(UserContext);
 
     const handleSubmit = () => {
         const data = {
@@ -32,7 +31,7 @@ export default function LoginContainer(props) {
                         const newUserInfo = response.data.userInfo;
 
                         if (newUserInfo.profilePicture === "") {
-                            newUserInfo.profilePicture = DefaultProfilePicture;
+                            newUserInfo.profilePicture = defaultProfilePicture;
                         }
 
                         setUserInfo(newUserInfo);
@@ -50,14 +49,14 @@ export default function LoginContainer(props) {
                     })
             })
             .catch(err => {
-                // Alert that user has inputted an incorrect password
-                console.log(err);
+                alert(err.response.data.error)
             });
     }
 
     return (
         <div className="login-register-container" id="login-container">
             <img
+                alt="Instagram logo"
                 src={ instagramLogo }
             />
             <input 

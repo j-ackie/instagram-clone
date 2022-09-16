@@ -1,10 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import UserContext from "../../UserProvider";
 import { handleError } from "../../helpers";
 import PostDataService from "../../services/PostDataService"
 import ProfilePost from "./ProfilePost";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileSaves(props) {
     const [saves, setSaves] = useState([]);
+    const [, setUserInfo] = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         PostDataService.getSaves()
@@ -23,7 +28,10 @@ export default function ProfileSaves(props) {
                         }));
                     });
             })
-    }, [])
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
+            });
+    }, [navigate, setUserInfo]);
 
     return (
         <div className="profile-page-images">

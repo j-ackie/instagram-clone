@@ -10,3 +10,7 @@ body {
     aspect-ratio: 1;
     border-radius: 50%;
 }
+
+#root > div {
+    height: 100vh;
+}

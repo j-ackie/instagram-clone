@@ -1,12 +1,12 @@
 import { useState, useEffect, createRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
 import PostPhoto from "./PostPhoto";
 import PostHeader from "./PostHeader";
 import PostCommentSection from "./PostCommentSection";
 import PostFooter from "./PostFooter";
 import PostAddComment from "./PostAddComment";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 import "./ExtendedPost.css";
 import "./Post.css"
 
@@ -24,6 +24,7 @@ export default function ExtendedPost(props) {
     const [comments, setComments] = useState([]);
     const [currImageIndex, setCurrImageIndex] = useState(0);
 
+    const navigate = useNavigate();
     const commentRef = createRef();
 
     useEffect(() => {
@@ -38,18 +39,22 @@ export default function ExtendedPost(props) {
                             setProfilePicture(response.data.profilePicture);
                         }
                         else {
-                            setProfilePicture(DefaultProfilePicture);
+                            setProfilePicture(defaultProfilePicture);
                         }
                         setUsername(response.data.username);
                     });
+            })
+            .catch(err => {
+                navigate("/does-not-exist");
             });
-    }, [postId]);
+    }, [navigate, postId]);
 
     return (
         <div className="extended-post-container">
             <div className="extended-post">
                 <PostPhoto
                     showPageIndicator={ true }
+                    width={ 500 }
                     files={ postInfo.files }
                     currImageIndex={ currImageIndex }
                     setCurrImageIndex={ setCurrImageIndex }

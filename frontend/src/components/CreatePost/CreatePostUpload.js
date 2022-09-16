@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export default function CreatePostUpload(props) {
     const inputFile = useRef(null);
@@ -8,23 +8,21 @@ export default function CreatePostUpload(props) {
         event.stopPropagation();
     };
 
-
-
     const isFilesValid = files => {
         const fileSizeLimit = 50 * 1024 * 1024; // 50 MB
 
         if (files.length > 10) {
-            console.error("maximum files is 10");
+            alert("maximum files is 10");
             return false;
         }
 
         for (const file of files) {
             if (file.type !== "image/jpeg" && file.type !== "image/png") {
-                console.error("incompatible file type");
+                alert("incompatible file type");
                 return false;
             }
             if (file.size > fileSizeLimit) {
-                console.error(`${file.name} is too large`);
+                alert(`${file.name} is too large`);
                 return false;
             }
         }

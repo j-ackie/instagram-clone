@@ -1,10 +1,5 @@
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoginContainer from "./LoginContainer";
-import PostDataService from "../../services/PostDataService";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
-import instagramLogo from "../../icons/instagram_logo.png";
-import PasswordField from "./PasswordField";
 import "./LoginRegisterPage.css"
 
 export default function LoginPage(props) {

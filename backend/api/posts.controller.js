@@ -17,7 +17,7 @@ export default class PostsController {
             });
 
             // const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
-            const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList, 5, parseInt(req.query.page));
+            const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList, 10, parseInt(req.query.page));
             for (const post of getPostsResponse.posts) {
                 let files = [];
                 for (const filename of post.filenames) {

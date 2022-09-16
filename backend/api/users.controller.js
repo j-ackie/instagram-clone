@@ -3,6 +3,9 @@ import FollowersDAO from "../dao/followersDAO.js";
 import jwt from "jsonwebtoken";
 import upload, { get, del } from "../s3.js"
 import { hash, compare } from "bcrypt";
+import CommentsDAO from "../dao/commentsDAO.js";
+import PostsDAO from "../dao/postsDAO.js";
+import LikesDAO from "../dao/likesDAO.js";
 
 export default class UsersController {
     static async apiSearchUsers(req, res, next) {
@@ -175,11 +178,46 @@ export default class UsersController {
             
             const { error } = deleteResponse;
             if (error) {
-                throw new Error("hey")
+                res.status(500).json({ error: err.message });
+                return;
             }
 
             res.status(201).json({ status: "success" });
         }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiGetActivity(req, res) {
+        if (req.userId !== req.params.userId) {
+            res.status(401).json("cannot view activity of another user");
+        }
+        try {
+            const getFollowersResponse = await FollowersDAO.getFollowers({ userId: req.params.userId });
+            getFollowersResponse.forEach(element => {
+                element.action = "follow";
+                element.date = element._id.getTimestamp();
+            });
+
+            const getPostsResponse = await PostsDAO.getPostsByUserId(req.params.userId);
+            
+            const posts = getPostsResponse.map(element => element._id);
+
+            const getCommentsResponse = await CommentsDAO.getComments(posts);
+            getCommentsResponse.forEach(element => element.action = "comment");
+
+            const getLikesResponse = await LikesDAO.getLikes(posts);
+            getLikesResponse.forEach(element => {
+                element.action = "like";
+                element.date = element._id.getTimestamp();
+            });
+
+            const combinedArr = [...getFollowersResponse, ...getCommentsResponse, ...getLikesResponse];
+            combinedArr.sort((a, b) => b.date - a.date);
+
+            res.json({ activity: combinedArr.slice(0, 5) });
+        }   
         catch (err) {
             res.status(500).json({ error: err.message });
         }

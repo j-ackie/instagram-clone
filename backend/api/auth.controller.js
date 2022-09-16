@@ -105,4 +105,33 @@ export default class AuthController {
         res.clearCookie("token");
         res.status(204).json();
     }
+
+    static async apiUpdatePassword(req, res, next) {
+        if (req.userId !== req.params.userId) {
+            res.status(401).json({ error: "cannot update another user" });
+        }
+        try {
+            const getAuthResponse = await AuthDAO.getUserById(req.params.userId);
+
+            if (! await compare(req.body.oldPassword, getAuthResponse.password)) {
+                res.status(401).json({ error: "incorrect password" });
+                return;
+            }
+
+            const hashedPassword = await hash(req.body.newPassword, 10);
+
+            const updateResponse = await AuthDAO.updatePassword(req.params.userId, hashedPassword);
+            const { error } = updateResponse;
+
+            if (error) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+
+            res.status(204).json();
+        }
+        catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
 }

@@ -27,7 +27,7 @@ export async function get(filename) {
     };
 
     const getCommand = new GetObjectCommand(getParams);
-    const url = await getSignedUrl(s3, getCommand, { expiresIn: 600 });
+    const url = await getSignedUrl(s3, getCommand, { expiresIn: 3600 });
 
     return url;
 }

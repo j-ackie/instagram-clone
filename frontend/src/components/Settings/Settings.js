@@ -1,12 +1,11 @@
 import { useState, useContext } from "react";
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import UserContext from "../../UserProvider";
-import SettingsTabs from "./SettingsTabs";
 import SettingsTop from "./SettingsTop";
 import SettingsSection from "./SettingsSection";
 import SettingsField from "./SettingsField";
 import SettingsPassword from "./SettingsPassword"
-import { isLoggedIn } from "../../helpers";
+import { handleError, isLoggedIn } from "../../helpers";
 import "./Settings.css";
 import UserDataService from "../../services/UserDataService";
 
@@ -14,6 +13,8 @@ export default function Settings(props) {
     const [userInfo, setUserInfo] = useContext(UserContext);
     const [username, setUsername] = useState(userInfo.username);
     const [bio, setBio] = useState(userInfo.bio);
+
+    const navigate = useNavigate();
 
     if (!isLoggedIn(userInfo)) {
         return <Navigate to="/login" />
@@ -46,12 +47,15 @@ export default function Settings(props) {
                     bio: data.bio ? data.bio : userInfo.bio
                 });
             })
-    }
+            .catch(err => {
+                alert(err.response.data.error);
+                handleError(err, { navigate, setUserInfo });
+            });
+    };
 
     return (
         <div id="settings-container">
             <div id="settings">
-                <SettingsTabs />
                 <SettingsTop />
                 <SettingsSection 
                     subheading="Profile Information"

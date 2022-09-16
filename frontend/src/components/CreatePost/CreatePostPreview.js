@@ -1,6 +1,4 @@
 import { useState } from "react";
-import leftArrow from "../../icons/arrow-left-circle-fill.svg";
-import rightArrow from "../../icons/arrow-right-circle-fill.svg";
 import Arrows from "../Arrows/Arrows";
 import PageIndicator from "../PageIndicator/PageIndicator";
 import dot from "../../icons/dot.svg";
@@ -12,6 +10,7 @@ export default function CreatePostPreview(props) {
 
     const preview = (
         <img
+            alt="Preview"
             className="create-post-preview"
             src={ URL.createObjectURL(props.files[currImageIndex]) }
         />
@@ -21,12 +20,12 @@ export default function CreatePostPreview(props) {
     for (let i = 0; i < props.files.length; i++) {
         if (i === currImageIndex) {
             dotList.push(
-                <img key={ i } src={ selectedDot } />
+                <img alt="Selected dot" key={ i } src={ selectedDot } />
             );
         }
         else {
             dotList.push(
-                <img key={ i } src={ dot } />
+                <img alt="Dot" key={ i } src={ dot } />
             );
         }
     }

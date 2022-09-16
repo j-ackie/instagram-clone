@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useLocation, Link } from "react-router-dom";
 import Popup from "../Popup/Popup";
 import LoginContainer from "../LoginRegisterPage/LoginContainer";
 import UserContext from "../../UserProvider";
@@ -13,51 +13,30 @@ import filledPlusIcon from "../../icons/plus-fill.svg";
 import chatIcon from "../../icons/chat.svg";
 import heartIcon from "../../icons/heart.svg";
 import filledHeartIcon from "../../icons/heart-fill.svg";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 
 export default function NavbarIcons(props) {
     const [isSwitchIconClicked, setIsSwitchIconClicked] = useState(false);
     const [isPostIconClicked, setIsPostIconClicked] = useState(false);
-    const [isProfilePictureClicked, setIsProfilePictureClicked] = useState(false);
-    const [isActivityIconClicked, setIsActivityIconClicked] = useState(false);
 
     const [userInfo, setUserInfo] = useContext(UserContext);
     const location = useLocation();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!props.event) {
-            return;
-        }
-        if (isProfilePictureClicked && props.event.target.parentElement.parentElement.id !== "profile-picture-popup") {
-            setIsProfilePictureClicked(false);
-        }
-        if (isActivityIconClicked && props.event.target.parentElement.parentElement.id !== "activity-icon-popup") {
-            setIsActivityIconClicked(false);
-        }
-        if (props.event.target.id === "navbar-profile-picture" && !isProfilePictureClicked) {
-            setIsProfilePictureClicked(true);
-        }
-        else if (props.event.target.id === "navbar-activity-icon" && !isActivityIconClicked) {
-            setIsActivityIconClicked(true);
-        }
-    }, [props.event]);
 
     return (
         <div id="right-container">
-            <img
-                src={
-                    location.pathname === "/"
-                        ? filledHomeIcon
-                        : homeIcon
-                }
-                onClick={ () => navigate("/") }
-            />
-            <img 
-                src={ chatIcon }
-            />
+            <Link to="/">
+                <img
+                    alt="Home icon"
+                    src={
+                        location.pathname === "/"
+                            ? filledHomeIcon
+                            : homeIcon
+                    }
+                />
+            </Link>
             <div id="navbar-create-post-container">
                 <img
+                    alt="Post icon"
                     src={
                         isPostIconClicked
                             ? filledPlusIcon
@@ -70,40 +49,38 @@ export default function NavbarIcons(props) {
                     setVariable={ setIsPostIconClicked }
                     content={
                         <CreatePost
-                            posts={ props.posts }
-                            setPosts={ props.setPosts }
                             setIsPostIconClicked={ setIsPostIconClicked }
-                            isProfile={ location.pathname === "/user/" + userInfo.username }
                         />
                     }
                 />
             </div>
             <div id="navbar-activity-icon-container">
                 <img
+                    alt="Activity icon"
                     id="navbar-activity-icon"
                     src={
-                        isActivityIconClicked
+                        props.isActivityIconClicked
                             ? filledHeartIcon
                             : heartIcon
                     }
+                    onClick={ () => props.setIsActivityIconClicked(true) }
                 />
                 {
-                    isActivityIconClicked
-                        ? <ActivityIconPopup
-
-                            />
+                    props.isActivityIconClicked
+                        ? <ActivityIconPopup />
                         : ""
                 }
             </div>
             <div 
                 id="navbar-profile-picture-container"
                 className={
-                    isProfilePictureClicked
+                    props.isProfilePictureClicked
                         ? "clicked"
                         : ""
                 }        
             >
                 <img
+                    alt="Profile icon"
                     id="navbar-profile-picture"
                     className={
                         location.pathname === "/user/" + userInfo.username
@@ -113,15 +90,16 @@ export default function NavbarIcons(props) {
                     }
                     src={
                         userInfo.profilePicture === ""
-                            ? DefaultProfilePicture
+                            ? defaultProfilePicture
                             : userInfo.profilePicture
                     }
+                    onClick={ () => props.setIsProfilePictureClicked(true) }
                 />
                 {
-                    isProfilePictureClicked
+                    props.isProfilePictureClicked
                         ? <ProfilePicturePopup
                             setIsSwitchIconClicked={ setIsSwitchIconClicked }
-                            setIsProfilePictureClicked={ setIsProfilePictureClicked }
+                            setIsProfilePictureClicked={ props.setIsProfilePictureClicked }
                             setUserInfo={ setUserInfo }
                             />
                         : ""

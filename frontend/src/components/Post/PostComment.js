@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import PostUser from "./PostUser";
 import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
-import { renderTimestamp } from "../../helpers";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
+import renderTimestamp from "../../helpers";
 
 export default function PostComment(props) {
     const [commentUserInfo, setCommentUserInfo] = useState({
@@ -14,7 +13,7 @@ export default function PostComment(props) {
         bio: ""
     });
 
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [userInfo] = useContext(UserContext);
     
     useEffect(() => {
         if (props.isUserComment) {
@@ -24,20 +23,22 @@ export default function PostComment(props) {
         PostDataService.getUserById(props.comment.userId)
             .then(response => {
                 if (response.data.profilePicture === "") {
-                    response.data.profilePicture = DefaultProfilePicture;
+                    response.data.profilePicture = defaultProfilePicture;
                 }
                 setCommentUserInfo(response.data);
             });
-    }, []);
+    }, [userInfo, props.comment.userId, props.isUserComment]);
 
     return (
         <div className="post-comment">
             <span className="post-comment-profile-picture">
-                <img 
-                    alt="Profile" 
-                    className="post-profile-photo profile-picture"
-                    src={ commentUserInfo.profilePicture }
-                />
+                <Link to={ `/user/${commentUserInfo.username}` }>
+                    <img 
+                        alt="Profile" 
+                        className="post-profile-photo profile-picture"
+                        src={ commentUserInfo.profilePicture }
+                    />
+                </Link>
             </span>
             <span className="post-comment-content-container">
                 <span>

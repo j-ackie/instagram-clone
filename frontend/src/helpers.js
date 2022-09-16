@@ -1,29 +1,4 @@
-import PostDataService from "./services/PostDataService";
-import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
-
-export default function loadPost(postInfo, setProfilePicture, setUsername, setComments, setLikes) {
-    PostDataService.getUserById(postInfo.userId)
-        .then(response => {
-            if (response.data.profilePicture) {
-                setProfilePicture(response.data.profilePicture);
-            }
-            else {
-                setProfilePicture(DefaultProfilePicture);
-            }
-            setUsername(response.data.username);
-        });
-    PostDataService.getComments(postInfo._id)
-        .then(response => {
-            
-            setComments(response.data.comments);
-        });
-    PostDataService.getLikesById(postInfo._id)
-        .then(response => {
-            setLikes(response.data);
-        });
-}
-
-export function renderTimestamp(timestamp) {
+export default function renderTimestamp(timestamp) {
     timestamp = new Date(timestamp);
     const msInHour = 1000 * 60 * 60;
     const timePassed = new Date() - timestamp;
@@ -72,8 +47,6 @@ export function handleError(error, functions) {
         resetUserInfo(functions.setUserInfo);
         return;
     }
-
-    console.error("error");
 }
 
 export function isLoggedIn(userInfo) {

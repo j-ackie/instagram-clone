@@ -3,7 +3,7 @@ import UserContext from "../../UserProvider";
 import CreatePostPreview from "./CreatePostPreview";
 
 const CreatePostSubmit = forwardRef((props, ref) => {
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [userInfo] = useContext(UserContext);
 
     return (
         <div id="create-post-submit">
@@ -13,6 +13,7 @@ const CreatePostSubmit = forwardRef((props, ref) => {
             <div id="create-post-options">
                 <div id="create-post-options-user">
                     <img
+                        alt="Profile"
                         className="profile-picture"
                         src={ userInfo.profilePicture }
                     />

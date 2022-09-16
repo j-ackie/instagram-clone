@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import { handleError } from "../../helpers";
 import UserDataService from "../../services/UserDataService";
 import UserContext from "../../UserProvider";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 import { useNavigate } from "react-router-dom";
 
 export default function ProfilePhotoChangePopup(props) {
@@ -36,7 +36,7 @@ export default function ProfilePhotoChangePopup(props) {
                 setUserInfo({
                     userId: userInfo.userId,
                     username: userInfo.username,
-                    profilePicture: DefaultProfilePicture,
+                    profilePicture: defaultProfilePicture,
                     bio: userInfo.bio
                 });
                 props.setIsProfilePhotoChangeClicked(false);

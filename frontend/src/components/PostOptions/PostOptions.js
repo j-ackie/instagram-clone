@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router";
-import Popup from "../Popup/Popup";
+import { handleError } from "../../helpers";
 import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
 import "./PostOptions.css"
@@ -9,25 +9,26 @@ export default function PostOptions(props) {
     const [userInfo, setUserInfo] = useContext(UserContext);
     const navigate = useNavigate();
 
-    const handleClick = (event) => {
-        if (event.target.id === "post-options") {
-            props.setIsOptionsIconClicked(false);
-        }
-    };
-
     const handleDelete = () => {
         PostDataService.deletePost(props.selectedPostId)
             .then(response => {
                 props.setIsOptionsIconClicked(false);
-                props.setPosts(props.posts.filter(post => {
-                    return post.props.postInfo._id !== props.selectedPostId;
-                }));
-                
                 if (props.isExtendedPost) {
                     navigate("/user/" + userInfo.username);
                 }
+                else {
+                    navigate(0);
+                }
+            })
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
             })
     };
+
+    const handleCopy = async() => {
+        props.setIsOptionsIconClicked(false);
+        return await navigator.clipboard.writeText(`localhost:3000/post/${props.selectedPostId}`)
+    }
 
     const GoToPost = () => {
         return (
@@ -57,9 +58,6 @@ export default function PostOptions(props) {
         options = (
             <ul>
                 <li className="important" onClick={ handleDelete }>Delete</li>
-                <li>Edit</li>
-                <li>Hide like count</li>
-                <li>Turn off commenting</li>
                 <GoToPost />
                 <Cancel />
             </ul>
@@ -69,8 +67,7 @@ export default function PostOptions(props) {
         options = (
             <ul>
                 <GoToPost />
-                <li>Share to...</li>
-                <li>Copy link</li>
+                <li onClick={ handleCopy }>Copy link</li>
                 <Cancel />
             </ul>
         )

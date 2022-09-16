@@ -8,7 +8,6 @@
 
 .extended-post {
     width: fit-content;
-    height: 500px;
     display: flex;
     flex-direction: row;
     background-color: white;
@@ -53,6 +52,11 @@
     display: flex;
     flex-direction: row;
     overflow-wrap: anywhere;
+}
+
+.post-comment-profile-picture > a {
+    display: flex;
+    margin: 0 !important;
 }
 
 .post-comment-content-container {

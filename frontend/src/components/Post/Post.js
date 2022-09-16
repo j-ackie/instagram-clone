@@ -4,7 +4,7 @@ import PostHeader from "./PostHeader";
 import PostPhoto from "./PostPhoto";
 import PostFooter from "./PostFooter";
 import PostAddComment from "./PostAddComment";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png"
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 import { useState, useEffect, createRef } from "react";
 
 export default function Post(props) {
@@ -22,7 +22,7 @@ export default function Post(props) {
                     setProfilePicture(response.data.profilePicture);
                 }
                 else {
-                    setProfilePicture(DefaultProfilePicture);
+                    setProfilePicture(defaultProfilePicture);
                 }
                 setUsername(response.data.username);
             });
@@ -37,6 +37,7 @@ export default function Post(props) {
                 isExtendedPost={ false }
             />
             <PostPhoto
+                width={ 400 }
                 files={ props.postInfo.files }
                 currImageIndex={ currImageIndex }
                 setCurrImageIndex={ setCurrImageIndex }

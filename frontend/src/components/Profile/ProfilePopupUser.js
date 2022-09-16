@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import PostDataService from "../../services/PostDataService";
 import PostUser from "../Post/PostUser";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 
 export default function ProfilePopupUser(props) {
     const [followerUserInfo, setFollowerUserInfo] = useState({
@@ -14,7 +14,7 @@ export default function ProfilePopupUser(props) {
         PostDataService.getUserById(props.userId)
             .then(response => {
                 if (response.data.profilePicture === "") {
-                    response.data.profilePicture = DefaultProfilePicture;
+                    response.data.profilePicture = defaultProfilePicture;
                 }
                 setFollowerUserInfo(response.data);
             })

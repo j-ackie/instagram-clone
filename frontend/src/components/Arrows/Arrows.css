@@ -1,0 +1,16 @@
+#arrows-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+#arrows-container > img {
+    margin: 5px !important;
+    height: fit-content;
+    cursor: pointer;
+    width: 30px;
+}
+

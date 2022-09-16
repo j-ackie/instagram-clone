@@ -10,12 +10,12 @@ export default function PageIndicatorDots(props) {
     for (let i = 0; i < props.length; i++) {
         if (i === props.currImageIndex) {
             dotList.push(
-                <img key={ i } src={ selectedDot } />
+                <img alt="Selected dot" key={ i } src={ selectedDot } />
             );
         }
         else {
             dotList.push(
-                <img key={ i } src={ dot } />
+                <img alt="Dot" key={ i } src={ dot } />
             );
         }
     }

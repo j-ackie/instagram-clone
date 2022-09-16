@@ -15,6 +15,17 @@ export default class LikesDAO {
         }
     }
 
+    static async getLikes(posts) {
+        try {
+            return await likes.find({
+                postId: { $in: posts }
+            }).toArray();
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
+
     static async getNumLikesById(postId) {
         const query = {
             "postId": ObjectId(postId)

@@ -106,6 +106,10 @@ router
     .delete(auth, UsersController.apiUnfollowUser);
 
 router
+    .route("/activity/:userId")
+    .get(auth, UsersController.apiGetActivity);
+
+router
     .route("/auth/register")
     .post(AuthController.apiRegister, createToken);
 
@@ -116,6 +120,10 @@ router
 router
     .route("/auth/me")
     .get(AuthController.apiGetLogin);
+
+router
+    .route("/auth/:userId")
+    .put(auth, AuthController.apiUpdatePassword);
 
 router
     .route("/auth/logout")

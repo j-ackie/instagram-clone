@@ -1,7 +1,7 @@
-import Post from '../Post/Post';
 import { useState, useEffect, useContext } from "react";
 import "./Content.css"
 import PostDataService from '../../services/PostDataService';
+import Post from '../Post/Post';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { handleError } from '../../helpers';
 import UserContext from '../../UserProvider';
@@ -11,11 +11,10 @@ export default function Content(props) {
     const [hasNext, setHasNext] = useState(true);
     const [isScrolling, setIsScrolling] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [, setUserInfo] = useContext(UserContext);
     
     const { posts, setPosts } = useOutletContext();
     const navigate = useNavigate();
-
 
     const createPostsList = posts => {
         let postsList = [];
@@ -30,7 +29,7 @@ export default function Content(props) {
         return postsList;
     }
 
-    const getAllPosts = () => {
+    useEffect(() => {
         PostDataService.getAll()
             .then(response => {
                 const postsList = createPostsList(response.data.posts);
@@ -38,53 +37,47 @@ export default function Content(props) {
                 setIsLoading(false);
             })
             .catch(err => {
-                console.log(err);
+                handleError(err, { navigate, setUserInfo });
             });
-    }
+    }, [navigate, setUserInfo, setPosts]);
 
-    const getMorePosts = () => {
-        if (isLoading) {
-            return;
+    useEffect(() => {
+        const getMorePosts = () => {
+            if (isLoading) {
+                return;
+            }
+            if ((window.innerHeight + window.scrollY) >= 0.75 * document.body.offsetHeight && hasNext) {
+                PostDataService.getAll(page + 1)
+                    .then(response => {
+                        const postsList = createPostsList(response.data.posts);
+    
+                        const newPostsList = [...posts, ...postsList];
+    
+                        setPosts(newPostsList);
+                        setPage(page => page + 1);
+    
+                        if (newPostsList.length >= response.data.numPosts) {
+                            setHasNext(false);
+                        }
+                    })
+                    .catch(err => {
+                        handleError(err, { navigate, setUserInfo });
+                    });
+            }
         }
-        if ((window.innerHeight + window.scrollY) >= 0.75 * document.body.offsetHeight && hasNext) {
-            PostDataService.getAll(page + 1)
-                .then(response => {
-                    const postsList = createPostsList(response.data.posts);
 
-                    const newPostsList = [...posts, ...postsList];
-
-                    setPosts(newPostsList);
-                    setPage(page + 1);
-
-                    if (newPostsList.length === response.data.numPosts) {
-                        setHasNext(false);
-                    }
-                })
-                .catch(err => {
-                    handleError(err, { navigate, setUserInfo });
-                });
-        }
-    }
-
-    const scrollHandler = () => {
-        setIsScrolling(!isScrolling);
-    }
-
-    useEffect(() => {
-        getAllPosts();
-    }, []);
-
-    useEffect(() => {
-        window.addEventListener("scroll", scrollHandler);
-
-        return () => window.removeEventListener("scroll", scrollHandler);
-    }, [scrollHandler])
-
-    useEffect(() => {
         if (isScrolling) {
             getMorePosts();
         }   
-    }, [isScrolling]);
+
+        const scrollHandler = () => {
+            setIsScrolling(!isScrolling);
+        }
+
+        window.addEventListener("scroll", scrollHandler);
+
+        return () => window.removeEventListener("scroll", scrollHandler);
+    }, [isScrolling, hasNext, isLoading, navigate, page, posts, setPosts, setUserInfo]);
 
     return (
         <div id="content">

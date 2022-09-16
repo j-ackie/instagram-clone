@@ -29,6 +29,7 @@ export default function ProfileUnfollow(props) {
             <ul>
                 <li>
                     <img
+                        alt="Unfollow"
                         className="unfollow-profile-picture"
                         src={ props.profileUserInfo.profilePicture }  
                     />

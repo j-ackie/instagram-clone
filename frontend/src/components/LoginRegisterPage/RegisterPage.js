@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
-import PostDataService from "../../services/PostDataService";
 import UserDataService from "../../services/UserDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
 import PasswordField from "./PasswordField";
@@ -20,7 +19,7 @@ export default function RegisterPage(props) {
 
     const handleSubmit = () => {
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            alert("passwords do not match");
             return;
         }
         const data = {
@@ -32,13 +31,17 @@ export default function RegisterPage(props) {
                 navigate("/login", {
                     state: state
                 });
+            })
+            .catch(err => {
+                alert(err.response.data.error);
             });
-    }
+    };
 
     return (
         <div className="login-register-page">
             <div className="login-register-container" id="register-container">
                 <img
+                    alt="Instagram logo"
                     src={ instagramLogo }
                 />
                 <input 

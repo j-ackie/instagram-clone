@@ -74,6 +74,10 @@ nav input:focus {
     margin: 0;
 }
 
+#right-container > a {
+    display: flex;
+}
+
 .register {
     margin-left: 10px !important;
     cursor: pointer;
@@ -112,6 +116,11 @@ nav input:focus {
     padding: 0;
 }
 
+.navbar-pop-up a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .navbar-pop-up li {
     display: flex;
     align-items: center;
@@ -135,7 +144,14 @@ nav input:focus {
 
 #activity-icon-popup {
     width: 450px;
+    height: 260px;
     right: -10px;
+    overflow: auto;
+    padding: 20px;
+}
+
+#activity-icon-popup > span{
+    font-weight: bold;
 }
 
 #follow-requests {
@@ -162,3 +178,39 @@ nav input:focus {
 #search-popup a span {
     padding: 10px;
 }
+
+.activity-action {
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.activity-action > img {
+    margin-right: 10px !important;
+}
+
+.activity-post > a {
+    display: flex;
+}
+
+.activity-post > a > img {
+    object-fit: cover;
+    width: 40px !important;
+    height: 40px;
+    margin-right: 0 !important;
+}
+
+.activity-message {
+    flex-grow: 1;
+}
+
+.activity-message-content {
+    cursor: pointer;
+}
+
+.activity-post {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+}
+

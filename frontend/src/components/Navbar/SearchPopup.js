@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import PostUser from "../Post/PostUser";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import NavbarUser from "./NavbarUser";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 
 export default function SearchPopup(props) {
     const handleClick = () => {
@@ -11,7 +11,7 @@ export default function SearchPopup(props) {
     let suggestedUsersList = [];
     for (const user of props.suggestedUsers) {
         if (user.profilePicture === "") {
-            user.profilePicture = DefaultProfilePicture;
+            user.profilePicture = defaultProfilePicture;
         }
         suggestedUsersList.push(
             <Link 
@@ -19,8 +19,7 @@ export default function SearchPopup(props) {
                 to={ "/user/" + user.username } 
                 onClick={ handleClick }
             >
-                <PostUser
-                    suggestedUser={ true }
+                <NavbarUser
                     username={ user.username }
                     profilePicture={ user.profilePicture }
                 />

@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import ProfilePopupUser from "../Profile/ProfilePopupUser";
-import PostDataService from "../../services/PostDataService";
 
 export default function PostLikesPopup(props) {
     let likes = [];

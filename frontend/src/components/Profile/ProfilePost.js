@@ -19,7 +19,7 @@ export default function ProfilePost(props) {
             .then(response => {
                 setNumComments(response.data.comments.length);
             });
-    }, []);
+    }, [props.postInfo._id]);
 
     return (
         <div 
@@ -36,13 +36,13 @@ export default function ProfilePost(props) {
                         >
                          
                         <span className="num-likes">
-                            <img src={ heartIcon } />
+                            <img alt="Likes" src={ heartIcon } />
                             &nbsp;
                             { numLikes }
                         </span>
 
                         <span className="num-comments">
-                            <img src={ chatIcon } />
+                            <img alt="Comments" src={ chatIcon } />
                             &nbsp;
                             { numComments }
                         </span>
@@ -52,6 +52,7 @@ export default function ProfilePost(props) {
                     : ""
             }
             <img
+                alt="Profile post"
                 className={
                     isHovering
                         ? "darken"

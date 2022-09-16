@@ -61,6 +61,10 @@
     width: 25px;
 }
 
+.profile-page-header-info-top a {
+    text-decoration: none;
+}
+
 .profile-page-header-info-top button {
     cursor: pointer;
     display: flex;

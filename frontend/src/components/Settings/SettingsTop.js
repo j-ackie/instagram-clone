@@ -5,12 +5,13 @@ import UserContext from "../../UserProvider";
 
 export default function SettingsTop(props) {
     const [isProfilePhotoChangeClicked, setIsProfilePhotoChangeClicked] = useState(false);
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [userInfo] = useContext(UserContext);
 
     return (
         <div id="settings-top">
             <span className="settings-field-left">
                 <img
+                    alt="Profile"
                     className="profile-picture"
                     src={ userInfo.profilePicture }
                 />

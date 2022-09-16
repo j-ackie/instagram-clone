@@ -1,5 +1,3 @@
-import { useState, useEffect, useRef } from "react"
-import PostDataService from "../../services/PostDataService";
 import CreatePostPreview from "./CreatePostPreview";
 
 

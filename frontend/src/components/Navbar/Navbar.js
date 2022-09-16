@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import UserContext from "../../UserProvider";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NavbarIcons from "./NavbarIcons";
 import NavbarLogin from "./NavbarLogin";
 import SearchPopup from "./SearchPopup";
@@ -13,7 +13,7 @@ export default function Navbar(props) {
     const [suggestedUsers, setSuggestedUsers] = useState([]);
     const [search, setSearch] = useState("");
 
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [userInfo] = useContext(UserContext);
     const searchRef = useRef(null);
 
     const handleChange = event => {
@@ -50,6 +50,7 @@ export default function Navbar(props) {
                     to="/"
                 >
                     <img
+                        alt="Instagram logo"
                         src={ instagramLogo }
                     />
                 </Link>
@@ -77,9 +78,12 @@ export default function Navbar(props) {
             {
                 userInfo.userId !== ""
                     ? <NavbarIcons
-                        event={ props.event }
                         posts={ props.posts }
                         setPosts={ props.setPosts }
+                        isActivityIconClicked={ props.isActivityIconClicked }
+                        setIsActivityIconClicked={ props.setIsActivityIconClicked }
+                        isProfilePictureClicked={ props.isProfilePictureClicked }
+                        setIsProfilePictureClicked={ props.setIsProfilePictureClicked }
                       />
                     : <NavbarLogin
 

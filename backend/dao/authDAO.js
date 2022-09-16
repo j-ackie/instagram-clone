@@ -28,6 +28,21 @@ export default class AuthDAO {
         }
     }
 
+    static async updatePassword(userId, password) {
+        const query = {
+            _id: ObjectId(userId)
+        };
+        
+        try {
+            return await auth.updateOne(query, {
+                $set: { password }
+            });
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
+
     static async getUserById(userId) {
         const query = { _id: ObjectId(userId) };
         try {

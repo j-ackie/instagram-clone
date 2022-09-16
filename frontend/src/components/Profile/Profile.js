@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
 import ProfilePost from "./ProfilePost";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
-import DefaultProfilePicture from "../../icons/DefaultProfilePicture.png";
+import defaultProfilePicture from "../../defaultProfilePicture.png";
 import "./Profile.css";
 import UserContext from "../../UserProvider";
 
@@ -19,15 +19,15 @@ export default function Profile() {
     const [posts, setPosts] = useState([]);
 
     const { username } = useParams();
-
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const navigate = useNavigate();
+    const [userInfo] = useContext(UserContext);
 
     useEffect(() => {
         PostDataService.getUserByName(username)
             .then(response => {
                 let profile = response.data;
                 if (profile.profilePicture === "") {
-                    profile.profilePicture = DefaultProfilePicture;
+                    profile.profilePicture = defaultProfilePicture;
                 }
                 setProfileUserInfo(profile);
                 PostDataService.getPostsByUserId(profile.userId)
@@ -43,8 +43,11 @@ export default function Profile() {
                         }
                         setPosts(postsList);
                     });
-            });
-    }, [username, userInfo.userId]);
+            })
+            .catch(err => {
+                navigate("/does-not-exist");
+            })
+    }, [navigate, username, userInfo.userId]);
 
     return (
         <div className="profile-page-container">

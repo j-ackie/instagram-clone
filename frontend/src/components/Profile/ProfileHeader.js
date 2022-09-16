@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import UserContext from "../../UserProvider";
 import PostDataService from "../../services/PostDataService";
 import Popup from "../Popup/Popup";
@@ -6,9 +7,9 @@ import ProfileFollowers from "./ProfileFollowers";
 import ProfileFollowing from "./ProfileFollowing";
 import ProfileUnfollow from "./ProfileUnfollow";
 import followingIcon from "../../icons/person-check-fill.svg";
-import gearIcon from "../../icons/gear.svg";
 import settingsIcon from "../../icons/three-dots.svg";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "../../helpers";
 
 export default function ProfileHeader(props) {
     const [followers, setFollowers] = useState([]);
@@ -42,8 +43,11 @@ export default function ProfileHeader(props) {
                     ...followers,
                     createFollower(userInfo.userId)
                 ]);
-            });
-    }
+            })
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
+            })
+    };
 
     useEffect(() => {
         if (!props.profileUserInfo.userId) {
@@ -65,7 +69,7 @@ export default function ProfileHeader(props) {
                 setFollowing(response.data.followers);
             });
 
-    }, [props.profileUserInfo])
+    }, [props.profileUserInfo, userInfo.userId]);
 
     return (
         <div className="profile-page-header">
@@ -81,8 +85,9 @@ export default function ProfileHeader(props) {
                     {   
                         props.profileUserInfo.userId === userInfo.userId
                             ? <span>
-                                <button className="header-button">Edit profile</button>
-                                <img alt="Options" src={ gearIcon } onClick={ () => navigate("/settings") }/>
+                                <Link to="/settings">
+                                    <button className="header-button">Edit profile</button>
+                                </Link>
                             </span>
                             : <span>
                                 {

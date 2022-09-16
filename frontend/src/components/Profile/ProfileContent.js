@@ -10,7 +10,7 @@ import bookmarkIcon from "../../icons/bookmark.svg";
 export default function ProfileContent(props) {
     const [selectedTab, setSelectedTab] = useState("posts");
 
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [userInfo] = useContext(UserContext);
 
     const { state } = useLocation();
 

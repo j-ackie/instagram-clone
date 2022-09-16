@@ -15,8 +15,19 @@ export default class CommentsDAO {
         }
     }
 
-    static async getComments(data) {
-        let query = { "postId": ObjectId(data) }
+    static async getComments(posts) {
+        try {
+            return await comments.find({
+                postId: { $in: posts }
+            }).toArray();
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
+
+    static async getCommentsByPostId(postId) {
+        let query = { "postId": ObjectId(postId) }
         let cursor;
         try {
             cursor = await comments.find(query).sort({'_id': 1});

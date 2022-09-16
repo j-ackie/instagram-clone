@@ -9,7 +9,7 @@ import OptionsIcon from "../Icons/OptionsIcon";
 export default function PostHeader(props) {
     const [isOptionsIconClicked, setIsOptionsIconClicked] = useState(false);
 
-    const [userInfo, setUserInfo] = useContext(UserContext);
+    const [userInfo] = useContext(UserContext);
     const { posts, setPosts } = useOutletContext();
 
     

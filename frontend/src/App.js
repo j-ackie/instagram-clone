@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from 'react';
-import { Routes, Navigate, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Navigate, Route, useLocation } from "react-router-dom";
 import { UserProvider } from './UserProvider';
 import Layout from './components/Layout/Layout';
 import Content from "./components/Content/Content";
@@ -8,11 +8,10 @@ import Profile from './components/Profile/Profile';
 import Settings from './components/Settings/Settings';
 import LoginPage from './components/LoginRegisterPage/LoginPage';
 import RegisterPage from './components/LoginRegisterPage/RegisterPage';
-
-import "./App.css"
-import PostDataService from './services/PostDataService';
-import DefaultProfilePicture from "./icons/DefaultProfilePicture.png";
+import NotFound from './components/NotFound/NotFound';
+import defaultProfilePicture from "./defaultProfilePicture.png";
 import UserDataService from './services/UserDataService';
+import "./App.css"
 
 export const UserContext = createContext();
 
@@ -23,23 +22,25 @@ function App() {
         profilePicture: "",
         bio: ""
     });
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     const location = useLocation();
 
     useEffect(() => {
         UserDataService.getLogin()
             .then(response => {
-                console.log(response.data)
-                setLoading(false);
                 if (response.data.loggedIn) {
+                    console.log("yes")
                     if (!response.data.userInfo.profilePicture) {
-                        response.data.userInfo.profilePicture = DefaultProfilePicture;
+                        response.data.userInfo.profilePicture = defaultProfilePicture;
                     }
                     setUserInfo(response.data.userInfo);
                 }
+                setIsLoading(false);
             });
     }, []);
+
+    console.log(userInfo.userId !== "")
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -49,9 +50,9 @@ function App() {
         <UserProvider userInfo={ [userInfo, setUserInfo] }>
             <Routes>
                 <Route path="/" element={
-                    !loading
-                        ? <Layout setUserInfo={ setUserInfo }/>
-                        : <div>hey</div>
+                    !isLoading
+                        ? <Layout />
+                        : ""
                 }>
                     <Route index element={ 
                         userInfo.userId !== ""
@@ -60,10 +61,8 @@ function App() {
                     }/>
                     <Route path="post/:postId" element={ <ExtendedPost /> } />
                     <Route path="user/:username" element={ <Profile /> } />
-                    <Route path="settings">
-                        <Route path="edit" element={ <Settings /> } />
-                        <Route path="activity" />
-                    </Route>
+                    <Route path="settings" element={ <Settings /> } />
+                    <Route path="*" element={ <NotFound /> } />
                 </Route>
                 <Route path="/login" element={ <LoginPage setUserInfo={ setUserInfo } /> } />
                 <Route path="/register" element={ <RegisterPage setUserInfo={ setUserInfo } /> } />

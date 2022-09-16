@@ -1,13 +1,13 @@
 import { useContext, useState, useRef } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CreatePostUpload from "./CreatePostUpload";
 import CreatePostCrop from "./CreatePostCrop"
 import CreatePostSubmit from "./CreatePostSubmit";
 import CreatePostHeader from "./CreatePostHeader";
-import "./CreatePost.css";
-import Post from "../Post/Post";
 import PostDataService from "../../services/PostDataService";
 import UserContext from "../../UserProvider";
+import "./CreatePost.css";
+import { handleError } from "../../helpers";
 
 export default function CreatePost(props) {
     const [files, setFiles] = useState([]);
@@ -15,6 +15,7 @@ export default function CreatePost(props) {
     const [userInfo, setUserInfo] = useContext(UserContext);
     const inputRef = useRef(null);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     const handleShare = () => {
         let data = new FormData();
@@ -31,22 +32,15 @@ export default function CreatePost(props) {
                 props.setIsPostIconClicked(false);
                 PostDataService.getPostById(response.data.postId)
                     .then(response => {
-                        if (props.isProfile) {
+                        if (pathname === `/user/${userInfo.username}` || pathname === `/`) {
                             navigate(0);
-                            return;
                         }
-                        props.setPosts(
-                            [
-                                <Post
-                                    key={ response.data._id }
-                                    postInfo={ response.data }
-                                />,
-                                ... props.posts
-                            ]
-                        );
                     });
+            })
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
             });
-    }
+    };
     
     return (
         <div id={ !isCropped ? "create-post-popup" : "extended-create-post-popup" }>

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { renderTimestamp } from "../../helpers";
+import renderTimestamp from "../../helpers";
 
 export default function PostCaption(props) {
     return (

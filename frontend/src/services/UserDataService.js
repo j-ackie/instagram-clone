@@ -26,6 +26,10 @@ class UserDataService {
     updatePassword(userId, data) {
         return http.put(`/users/${userId}`, data);
     }
+
+    getActivity(userId) {
+        return http.get(`/activity/${userId}`);
+    }
 }
 
 export default new UserDataService();

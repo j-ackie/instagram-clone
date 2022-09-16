@@ -9,10 +9,9 @@ import LikedIcon from "../Icons/LikedIcon";
 import UnlikedIcon from "../Icons/UnlikedIcon";
 import CommentIcon from "../Icons/CommentIcon"
 import ShareIcon from "../Icons/ShareIcon";
-import SaveIcon from "../Icons/SaveIcon";
 import saveIcon from "../../icons/bookmark.svg";
 import filledSaveIcon from "../../icons/bookmark-fill.svg";
-import { renderTimestamp } from "../../helpers";
+import renderTimestamp, { handleError } from "../../helpers";
 import PostDataService from "../../services/PostDataService";
 
 export default function PostFooter(props) {
@@ -69,17 +68,20 @@ export default function PostFooter(props) {
                 setNumLikes(numLikes + 1);
             })
             .catch(err => {
-                console.error(err);
+                handleError(err, { navigate, setUserInfo });
             });
-    }
+    };
 
     const handleUnlike = () => {
         PostDataService.unlikePost(props.postInfo._id)
             .then(response => {
                 setIsLiked(false);
                 setNumLikes(numLikes - 1);
+            })
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
             });
-    }
+    };
 
     const handleCommentIconClick = () => {
         if (props.isExtendedPost) {
@@ -98,7 +100,10 @@ export default function PostFooter(props) {
             .then(response => {
                 setIsSaved(true);
             })
-    }
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
+            });
+    };
 
     return (
         <div className="footer">
@@ -124,8 +129,8 @@ export default function PostFooter(props) {
                 <span className="right-hand">
                     {
                         isSaved
-                            ? <img src={ filledSaveIcon } onClick={ handleSaveIconClick }/>
-                            : <img src={ saveIcon } onClick={ handleSaveIconClick } />
+                            ? <img alt="Save" src={ filledSaveIcon } onClick={ handleSaveIconClick }/>
+                            : <img alt="Save" src={ saveIcon } onClick={ handleSaveIconClick } />
                     }
                 </span>
             </div>

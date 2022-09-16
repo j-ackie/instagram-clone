@@ -1,12 +1,6 @@
 import ProfilePopupUser from "./ProfilePopupUser";
 
 export default function ProfileFollowers(props) {
-    const handleClick = event => {
-        if (event.target.id === "profile-followers") {
-            props.setIsFollowersClicked(false);
-        }
-    }
-
     const handleUserClick = () => {
         props.setIsFollowersClicked(false);
     }
