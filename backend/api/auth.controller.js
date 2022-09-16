@@ -67,7 +67,7 @@ export default class AuthController {
     }
 
     static async apiGetLogin(req, res) {
-        const token = req.cookies.token;
+        const token = req.headers["authorization"];
 
         if (!token) {
             res.json({ loggedIn: false });
@@ -76,7 +76,6 @@ export default class AuthController {
 
         jwt.verify(token, process.env.JWT_SECRET_KEY, async(err, decoded) => {
             if (err) {
-                res.clearCookie("token");
                 res.json({
                     loggedIn: false
                 });
@@ -99,11 +98,6 @@ export default class AuthController {
                 userInfo: userInfo
             });
         });
-    }
-
-    static async apiLogout(req, res, next) {
-        res.clearCookie("token");
-        res.status(204).json();
     }
 
     static async apiUpdatePassword(req, res, next) {

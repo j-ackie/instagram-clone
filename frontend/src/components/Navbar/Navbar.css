@@ -185,8 +185,10 @@ nav input:focus {
     align-items: center;
 }
 
-.activity-action > img {
-    margin-right: 10px !important;
+.activity-action > a > img {
+    border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 
 .activity-post > a {

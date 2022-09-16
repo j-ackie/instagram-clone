@@ -6,15 +6,11 @@ class AuthDataService {
     }
 
     login(data) {
-        return http.post(`/auth/login`, data);
+        return http.post(`/auth/login`, data, );
     }
 
     getLogin() {
         return http.get(`/auth/me`);
-    }
-
-    logout() {
-        return http.post(`/auth/logout`);
     }
     
     updatePassword(userId, data) {

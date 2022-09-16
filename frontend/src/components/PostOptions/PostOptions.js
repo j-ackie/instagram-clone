@@ -27,7 +27,9 @@ export default function PostOptions(props) {
 
     const handleCopy = async() => {
         props.setIsOptionsIconClicked(false);
-        return await navigator.clipboard.writeText(`localhost:3000/post/${props.selectedPostId}`)
+        return await navigator.clipboard.writeText(
+            `https://j-ackie.github.io/instagram-clone-client/post/${props.selectedPostId}`
+        );
     }
 
     const GoToPost = () => {

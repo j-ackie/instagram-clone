@@ -4,8 +4,6 @@ export default function NavbarLogin(props) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    console.log(location)
-
     return (
         <div id="right-container">
             <button className="submit" onClick={ () => navigate("/login", {

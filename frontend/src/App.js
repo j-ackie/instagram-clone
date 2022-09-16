@@ -11,6 +11,7 @@ import RegisterPage from './components/LoginRegisterPage/RegisterPage';
 import NotFound from './components/NotFound/NotFound';
 import defaultProfilePicture from "./defaultProfilePicture.png";
 import AuthDataService from './services/AuthDataService';
+import { setAuthHeader } from './http-common';
 import "./App.css"
 
 export const UserContext = createContext();
@@ -27,6 +28,7 @@ function App() {
     const location = useLocation();
 
     useEffect(() => {
+        setAuthHeader();
         AuthDataService.getLogin()
             .then(response => {
                 if (response.data.loggedIn) {
@@ -43,14 +45,14 @@ function App() {
         window.scrollTo(0, 0);
     }, [location.pathname]);
 
+    if (isLoading) {
+        return;
+    }
+
     return (
         <UserProvider userInfo={ [userInfo, setUserInfo] }>
             <Routes>
-                <Route path="/" element={
-                    !isLoading
-                        ? <Layout />
-                        : ""
-                }>
+                <Route path="/" element={ <Layout /> }>
                     <Route index element={ 
                         userInfo.userId !== ""
                             ? <Content /> 

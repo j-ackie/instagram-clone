@@ -5,6 +5,7 @@ import defaultProfilePicture from "../../defaultProfilePicture.png";
 import instagramLogo from "../../icons/instagram_logo.png";
 import UserContext from "../../UserProvider";
 import AuthDataService from "../../services/AuthDataService";
+import { setAuthHeader } from "../../http-common";
 
 export default function LoginContainer(props) {
     const [username, setUsername] = useState("");
@@ -22,6 +23,8 @@ export default function LoginContainer(props) {
         };
         AuthDataService.login(data)
             .then(response => {
+                localStorage.setItem("token", response.data.token);
+                setAuthHeader();
                 AuthDataService.getLogin()
                     .then(response => {
                         if (!response.data.loggedIn) {

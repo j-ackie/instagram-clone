@@ -31,7 +31,6 @@ export default function ExtendedPost(props) {
     useEffect(() => {
         PostDataService.getPostById(postId)
             .then(response => {
-                console.log(response.data)
                 setPostInfo(response.data);
 
                 UserDataService.getUserById(response.data.userId)

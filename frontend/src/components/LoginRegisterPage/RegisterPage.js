@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthDataService from "../../services/AuthDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
 import PasswordField from "./PasswordField";

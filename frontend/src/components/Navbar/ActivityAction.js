@@ -23,7 +23,6 @@ export default function ActivityAction(props) {
         else {
             navigate(`/user/${actionUserInfo.username}`);
         }
-        props.setIsActivityIconClicked(false);
     };
 
     useEffect(() => {

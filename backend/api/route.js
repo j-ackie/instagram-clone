@@ -25,16 +25,15 @@ const upload = multer({
 });
 
 const auth = (req, res, next) => {
-    const token = req.cookies.token;
-    
+    const token = req.headers["authorization"];
+
     if (!token) {
-        res.status(401).json({ error: "not logged in" });
+        res.status(401).json("not logged in");
         return;
     }
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
         if (err) {
-            res.clearCookie("token");
             res.status(401).json({ error: err.message });
             return;
         }
@@ -53,11 +52,7 @@ const createToken = (req, res) => {
         expiresIn: "1h"
     });
 
-    res.cookie("token", token, {
-        httpOnly: true
-    });
-
-    res.status(204).json();
+    res.json({ token: token });
 }
 
 router.route("/")
@@ -123,10 +118,6 @@ router
 router
     .route("/auth/:userId")
     .put(auth, AuthController.apiUpdatePassword);
-
-router
-    .route("/auth/logout")
-    .post(auth, AuthController.apiLogout);
 
 router
     .route("/reset")

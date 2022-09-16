@@ -5,7 +5,6 @@ import bookmarkIcon from "../../icons/bookmark.svg";
 import gearIcon from "../../icons/gear.svg";
 import switchIcon from "../../icons/switch.svg";
 import UserContext from "../../UserProvider";
-import AuthDataService from "../../services/AuthDataService";
 import { resetUserInfo } from "../../helpers";
 
 export default function ProfilePicturePopup(props) {
@@ -14,16 +13,14 @@ export default function ProfilePicturePopup(props) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        AuthDataService.logout()
-            .finally(() => {
-                resetUserInfo(props.setUserInfo);
-                navigate("/login");
-            });
+        localStorage.removeItem("token");
+        resetUserInfo(props.setUserInfo);
+        navigate("/login");
     };
 
     return (
         <div id="profile-picture-popup" className="navbar-pop-up">
-            <ul onClick={ () => props.setIsProfilePictureClicked(false) }>
+            <ul>
                 <Link to={ `/user/${userInfo.username}` }>
                     <li>
                         <img alt="Profile" src={ defaultProfilePicture } />Profile

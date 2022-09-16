@@ -16,6 +16,8 @@
     border-radius: 50%;
     width: 150px;
     margin-right: 100px;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 
 .profile-page-header {
