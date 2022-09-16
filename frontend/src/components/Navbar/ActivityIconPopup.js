@@ -28,7 +28,7 @@ export default function ActivityIconPopup(props) {
             .catch(err => {
                 handleError(err, { navigate, setUserInfo });
             });
-    }, [navigate, setUserInfo, userInfo.userId]);
+    }, [navigate, setUserInfo, userInfo.userId, props.setIsActivityIconClicked]);
 
     return (
         <div id="activity-icon-popup" className="navbar-pop-up">
