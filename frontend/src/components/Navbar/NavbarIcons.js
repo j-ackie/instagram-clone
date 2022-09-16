@@ -10,7 +10,6 @@ import homeIcon from "../../icons/home.svg";
 import filledHomeIcon from "../../icons/home-fill.svg";
 import plusIcon from "../../icons/plus.svg";
 import filledPlusIcon from "../../icons/plus-fill.svg";
-import chatIcon from "../../icons/chat.svg";
 import heartIcon from "../../icons/heart.svg";
 import filledHeartIcon from "../../icons/heart-fill.svg";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
@@ -67,7 +66,9 @@ export default function NavbarIcons(props) {
                 />
                 {
                     props.isActivityIconClicked
-                        ? <ActivityIconPopup />
+                        ? <ActivityIconPopup 
+                            setIsActivityIconClicked={ props.setIsActivityIconClicked }
+                          />
                         : ""
                 }
             </div>

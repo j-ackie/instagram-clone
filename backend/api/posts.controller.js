@@ -16,7 +16,6 @@ export default class PostsController {
                 return element.userId;
             });
 
-            // const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20;
             const getPostsResponse = await PostsDAO.getPosts(req.userId, followingList, 10, parseInt(req.query.page));
             for (const post of getPostsResponse.posts) {
                 let files = [];
@@ -223,7 +222,7 @@ export default class PostsController {
             }
 
             const createResponse = await SavesDAO.createSave(req.body.postId, req.userId);
-            res.json({ status: "success" });
+            res.status(204).json();
         }
         catch (err) {
             res.status(500).json({ error: err.message });
@@ -237,6 +236,28 @@ export default class PostsController {
         }
         catch (err) {
             res.status(500).json({ error: err.message });
+        }
+    }
+
+    static async apiGetComments(req, res, next) {
+        try {
+            const getCommentsResponse = await CommentsDAO.getCommentsByPostId(req.query.postId);
+
+            res.json({ comments: getCommentsResponse });
+        }
+        catch (err) {
+            res.status(500).json({ error: err });
+        }
+    }
+
+    static async apiCommentPost(req, res, next) {
+        try {
+            req.body.date = new Date(req.body.date);
+            const createResponse = await CommentsDAO.addComment(req.body, req.userId);
+            res.json({ insertedId: createResponse.insertedId });
+        }
+        catch (err) {
+            res.status(500).json({ error: err });
         }
     }
 }

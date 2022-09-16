@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
 import renderTimestamp from "../../helpers";
 
@@ -22,6 +23,7 @@ export default function ActivityAction(props) {
         else {
             navigate(`/user/${actionUserInfo.username}`);
         }
+        props.setIsActivityIconClicked(false);
     };
 
     useEffect(() => {
@@ -33,7 +35,7 @@ export default function ActivityAction(props) {
             id = props.action.userId;
         }
 
-        PostDataService.getUserById(id)
+        UserDataService.getUserById(id)
             .then(response => {
                 if (response.data.profilePicture === "") {
                     response.data.profilePicture = defaultProfilePicture;

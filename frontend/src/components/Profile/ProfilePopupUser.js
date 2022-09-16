@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import PostUser from "../Post/PostUser";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
 
@@ -11,7 +11,7 @@ export default function ProfilePopupUser(props) {
     });
 
     useEffect(() => {
-        PostDataService.getUserById(props.userId)
+        UserDataService.getUserById(props.userId)
             .then(response => {
                 if (response.data.profilePicture === "") {
                     response.data.profilePicture = defaultProfilePicture;

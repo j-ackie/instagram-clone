@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "../../helpers";
-import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import UserContext from "../../UserProvider";
 
 export default function ProfileUnfollow(props) {
@@ -10,7 +10,7 @@ export default function ProfileUnfollow(props) {
     const navigate = useNavigate();
 
     const handleUnfollow = () => {
-        PostDataService.unfollowUser(props.profileUserInfo.userId)
+        UserDataService.unfollowUser(props.profileUserInfo.userId)
             .then(response => {
                 console.log(response);
                 props.setIsUnfollowClicked(false);

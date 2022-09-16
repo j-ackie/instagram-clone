@@ -1,12 +1,11 @@
-import express, { Router } from "express";
+import { Router } from "express";
 import multer from "multer";
 import PostsController from "./posts.controller.js";
 import UsersController from "./users.controller.js";
-import CommentsController from "./comments.controller.js";
 import AuthController from "./auth.controller.js";
 import jwt from "jsonwebtoken";
 
-const router = express.Router();
+const router = Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ 
@@ -96,8 +95,8 @@ router
     
 router
     .route("/comments")
-    .get(CommentsController.apiGetComments)
-    .post(auth, CommentsController.apiCommentPost);
+    .get(PostsController.apiGetComments)
+    .post(auth, PostsController.apiCommentPost);
 
 router
     .route("/followers")
@@ -106,7 +105,7 @@ router
     .delete(auth, UsersController.apiUnfollowUser);
 
 router
-    .route("/activity/:userId")
+    .route("/users/:userId/activity/")
     .get(auth, UsersController.apiGetActivity);
 
 router

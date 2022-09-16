@@ -19,6 +19,7 @@ export default function ActivityIconPopup(props) {
                         <ActivityAction
                             key={ action._id }
                             action={ action }
+                            setIsActivityIconClicked={ props.setIsActivityIconClicked }
                         />
                     )
                 }
@@ -27,7 +28,7 @@ export default function ActivityIconPopup(props) {
             .catch(err => {
                 handleError(err, { navigate, setUserInfo });
             });
-    }, []);
+    }, [navigate, setUserInfo, userInfo.userId]);
 
     return (
         <div id="activity-icon-popup" className="navbar-pop-up">

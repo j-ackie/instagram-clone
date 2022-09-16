@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { useOutletContext } from "react-router-dom";
 import UserContext from "../../UserProvider";
 import Popup from "../Popup/Popup";
 import PostOptions from "../PostOptions/PostOptions";
@@ -10,8 +9,6 @@ export default function PostHeader(props) {
     const [isOptionsIconClicked, setIsOptionsIconClicked] = useState(false);
 
     const [userInfo] = useContext(UserContext);
-    const { posts, setPosts } = useOutletContext();
-
     
     return (
         <div className="header">
@@ -29,8 +26,6 @@ export default function PostHeader(props) {
                         isExtendedPost={ props.isExtendedPost }
                         selectedPostId={ props.postInfo._id }
                         setIsOptionsIconClicked={ setIsOptionsIconClicked }
-                        posts={ posts }
-                        setPosts={ setPosts }
                     />
                 }
             />

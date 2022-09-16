@@ -1,4 +1,4 @@
-import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import "./Post.css"
 import PostHeader from "./PostHeader";
 import PostPhoto from "./PostPhoto";
@@ -16,7 +16,7 @@ export default function Post(props) {
     const commentRef = createRef();
     
     useEffect(() => {
-        PostDataService.getUserById(props.postInfo.userId)
+        UserDataService.getUserById(props.postInfo.userId)
             .then(response => {
                 if (response.data.profilePicture) {
                     setProfilePicture(response.data.profilePicture);

@@ -1,6 +1,7 @@
 import { useState, useEffect, createRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import PostPhoto from "./PostPhoto";
 import PostHeader from "./PostHeader";
 import PostCommentSection from "./PostCommentSection";
@@ -33,7 +34,7 @@ export default function ExtendedPost(props) {
                 console.log(response.data)
                 setPostInfo(response.data);
 
-                PostDataService.getUserById(response.data.userId)
+                UserDataService.getUserById(response.data.userId)
                     .then(response => {
                         if (response.data.profilePicture) {
                             setProfilePicture(response.data.profilePicture);

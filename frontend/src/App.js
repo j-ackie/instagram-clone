@@ -10,7 +10,7 @@ import LoginPage from './components/LoginRegisterPage/LoginPage';
 import RegisterPage from './components/LoginRegisterPage/RegisterPage';
 import NotFound from './components/NotFound/NotFound';
 import defaultProfilePicture from "./defaultProfilePicture.png";
-import UserDataService from './services/UserDataService';
+import AuthDataService from './services/AuthDataService';
 import "./App.css"
 
 export const UserContext = createContext();
@@ -27,10 +27,9 @@ function App() {
     const location = useLocation();
 
     useEffect(() => {
-        UserDataService.getLogin()
+        AuthDataService.getLogin()
             .then(response => {
                 if (response.data.loggedIn) {
-                    console.log("yes")
                     if (!response.data.userInfo.profilePicture) {
                         response.data.userInfo.profilePicture = defaultProfilePicture;
                     }
@@ -39,8 +38,6 @@ function App() {
                 setIsLoading(false);
             });
     }, []);
-
-    console.log(userInfo.userId !== "")
 
     useEffect(() => {
         window.scrollTo(0, 0);

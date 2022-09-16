@@ -7,6 +7,7 @@ import ProfileContent from "./ProfileContent";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
 import "./Profile.css";
 import UserContext from "../../UserProvider";
+import UserDataService from "../../services/UserDataService";
 
 export default function Profile() {
     const [profileUserInfo, setProfileUserInfo] = useState({
@@ -23,7 +24,7 @@ export default function Profile() {
     const [userInfo] = useContext(UserContext);
 
     useEffect(() => {
-        PostDataService.getUserByName(username)
+        UserDataService.getUserByName(username)
             .then(response => {
                 let profile = response.data;
                 if (profile.profilePicture === "") {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 import UserContext from "../../UserProvider";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
 import renderTimestamp from "../../helpers";
@@ -20,7 +20,7 @@ export default function PostComment(props) {
             setCommentUserInfo(userInfo);
             return;
         }
-        PostDataService.getUserById(props.comment.userId)
+        UserDataService.getUserById(props.comment.userId)
             .then(response => {
                 if (response.data.profilePicture === "") {
                     response.data.profilePicture = defaultProfilePicture;

@@ -4,7 +4,7 @@ import PasswordField from "./PasswordField";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
 import instagramLogo from "../../icons/instagram_logo.png";
 import UserContext from "../../UserProvider";
-import UserDataService from "../../services/UserDataService";
+import AuthDataService from "../../services/AuthDataService";
 
 export default function LoginContainer(props) {
     const [username, setUsername] = useState("");
@@ -20,9 +20,9 @@ export default function LoginContainer(props) {
             username: username,
             password: password
         };
-        UserDataService.login(data)
+        AuthDataService.login(data)
             .then(response => {
-                UserDataService.getLogin()
+                AuthDataService.getLogin()
                     .then(response => {
                         if (!response.data.loggedIn) {
                             return;
@@ -49,7 +49,7 @@ export default function LoginContainer(props) {
                     })
             })
             .catch(err => {
-                alert(err.response.data.error)
+                alert(err.response.data.error);
             });
     }
 

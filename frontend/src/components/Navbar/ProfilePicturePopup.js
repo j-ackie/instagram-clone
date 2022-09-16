@@ -5,7 +5,7 @@ import bookmarkIcon from "../../icons/bookmark.svg";
 import gearIcon from "../../icons/gear.svg";
 import switchIcon from "../../icons/switch.svg";
 import UserContext from "../../UserProvider";
-import UserDataService from "../../services/UserDataService";
+import AuthDataService from "../../services/AuthDataService";
 import { resetUserInfo } from "../../helpers";
 
 export default function ProfilePicturePopup(props) {
@@ -14,7 +14,7 @@ export default function ProfilePicturePopup(props) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        UserDataService.logout()
+        AuthDataService.logout()
             .finally(() => {
                 resetUserInfo(props.setUserInfo);
                 navigate("/login");

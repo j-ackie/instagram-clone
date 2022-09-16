@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../UserProvider";
-import PostDataService from "../../services/PostDataService";
 import Popup from "../Popup/Popup";
 import ProfileFollowers from "./ProfileFollowers";
 import ProfileFollowing from "./ProfileFollowing";
@@ -10,6 +9,7 @@ import followingIcon from "../../icons/person-check-fill.svg";
 import settingsIcon from "../../icons/three-dots.svg";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "../../helpers";
+import UserDataService from "../../services/UserDataService";
 
 export default function ProfileHeader(props) {
     const [followers, setFollowers] = useState([]);
@@ -36,7 +36,7 @@ export default function ProfileHeader(props) {
         const data = {
             userId: props.profileUserInfo.userId
         };
-        PostDataService.followUser(data)
+        UserDataService.followUser(data)
             .then(response => {
                 setIsFollowing(true);
                 setFollowers([
@@ -54,7 +54,7 @@ export default function ProfileHeader(props) {
             return;
         }
 
-        PostDataService.getFollowers("userId", props.profileUserInfo.userId)
+        UserDataService.getFollowers("userId", props.profileUserInfo.userId)
             .then(response => {
                 setFollowers(response.data.followers);
                 if (props.profileUserInfo.userId !== userInfo.userId) {
@@ -64,7 +64,7 @@ export default function ProfileHeader(props) {
                 }
             });
 
-        PostDataService.getFollowers("followerId", props.profileUserInfo.userId)
+        UserDataService.getFollowers("followerId", props.profileUserInfo.userId)
             .then(response => {
                 setFollowing(response.data.followers);
             });

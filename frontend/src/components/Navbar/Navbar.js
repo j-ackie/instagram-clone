@@ -6,7 +6,7 @@ import NavbarLogin from "./NavbarLogin";
 import SearchPopup from "./SearchPopup";
 import instagramLogo from "../../icons/instagram_logo.png"
 import "./Navbar.css";
-import PostDataService from "../../services/PostDataService";
+import UserDataService from "../../services/UserDataService";
 
 export default function Navbar(props) {
     const [isSearchClicked, setIsSearchClicked] = useState(false);
@@ -27,7 +27,7 @@ export default function Navbar(props) {
             return;
         }
 
-        PostDataService.searchUsers(query)
+        UserDataService.searchUsers(query)
             .then(response => {
                 setSuggestedUsers(response.data.users);
             });
@@ -78,8 +78,6 @@ export default function Navbar(props) {
             {
                 userInfo.userId !== ""
                     ? <NavbarIcons
-                        posts={ props.posts }
-                        setPosts={ props.setPosts }
                         isActivityIconClicked={ props.isActivityIconClicked }
                         setIsActivityIconClicked={ props.setIsActivityIconClicked }
                         isProfilePictureClicked={ props.isProfilePictureClicked }

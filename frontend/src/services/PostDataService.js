@@ -52,34 +52,6 @@ class PostDataService {
     getComments(postId) {
         return http.get("/comments?postId=" + postId);
     }
-
-    searchUsers(query) {
-        return http.get("/users?username=" + query);
-    }
-
-    getUserById(userId) {
-        return http.get("/users/" + userId);
-    }
-
-    getUserByName(username) {
-        return http.get("/users/" + username + "?getBy=username")
-    }
-
-    getFollowers(by, query) {
-        return http.get("/followers?" + by + "=" + query);
-    }
-
-    followUser(data) {
-        return http.post("/followers", data);
-    }
-
-    unfollowUser(userId) {
-        return http.delete("/followers?userId=" + userId)
-    }
-
-    reset() {
-        return http.post("/reset")
-    }
 }
 
 export default new PostDataService();

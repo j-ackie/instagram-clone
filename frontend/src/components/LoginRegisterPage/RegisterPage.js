@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
-import UserDataService from "../../services/UserDataService";
+import AuthDataService from "../../services/AuthDataService";
 import instagramLogo from "../../icons/instagram_logo.png";
 import PasswordField from "./PasswordField";
 import "./LoginRegisterPage.css"
@@ -26,7 +26,7 @@ export default function RegisterPage(props) {
             username: username,
             password: password
         };
-        UserDataService.register(data)
+        AuthDataService.register(data)
             .then(response => {
                 navigate("/login", {
                     state: state

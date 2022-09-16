@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 
 export default function Layout(props) {
-    const [posts, setPosts] = useState([]);
     const [isProfilePictureClicked, setIsProfilePictureClicked] = useState(false);
     const [isActivityIconClicked, setIsActivityIconClicked] = useState(false);
     
@@ -25,19 +24,12 @@ export default function Layout(props) {
     return (
         <div onClick={ handleClick }>
             <Navbar
-                posts={ posts }
-                setPosts={ setPosts }
                 isActivityIconClicked={ isActivityIconClicked }
                 setIsActivityIconClicked={ setIsActivityIconClicked }
                 isProfilePictureClicked={ isProfilePictureClicked }
                 setIsProfilePictureClicked={ setIsProfilePictureClicked }
             />
-            <Outlet
-                context={ {
-                    posts: posts,
-                    setPosts: setPosts,
-                } }
-            />
+            <Outlet />
         </div>
     )
 }
