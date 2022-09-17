@@ -119,9 +119,5 @@ router
     .route("/auth/:userId")
     .put(auth, AuthController.apiUpdatePassword);
 
-router
-    .route("/reset")
-    .post(PostsController.apiResetPosts);
-
 
 export default router;
