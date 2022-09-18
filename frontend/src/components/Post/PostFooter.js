@@ -16,7 +16,6 @@ import PostDataService from "../../services/PostDataService";
 
 export default function PostFooter(props) {
     const [timestamp, setTimestamp] = useState("");
-    const [likes, setLikes] = useState([]);
     const [numLikes, setNumLikes] = useState(0);
     const [numComments, setNumComments] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
@@ -32,7 +31,6 @@ export default function PostFooter(props) {
         }
         PostDataService.getLikesById(props.postInfo._id)
             .then(response => {
-                setLikes(response.data.likes);
                 setNumLikes(response.data.likes.length);
                 for (const like of response.data.likes) {
                     if (like.userId === userInfo.userId) {
@@ -184,9 +182,8 @@ export default function PostFooter(props) {
                 variable={ isLikesClicked }
                 setVariable={ setIsLikesClicked }
                 content={
-                    <PostLikesPopup
-                        likes={ likes }
-                        setIsLikesClicked={ setIsLikesClicked }
+                    <PostLikesPopup 
+                        postId={ props.postInfo._id }
                     />
                 }
             />
