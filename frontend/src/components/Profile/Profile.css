@@ -180,6 +180,10 @@
     height: 250px;
 }
 
+.profile-popup > div {
+    overflow: auto;
+}
+
 .profile-popup-user {
     padding: 10px;
 }
