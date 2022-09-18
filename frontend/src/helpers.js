@@ -52,3 +52,29 @@ export function handleError(error, functions) {
 export function isLoggedIn(userInfo) {
     return userInfo.userId !== "";
 }
+
+export function isFilesValid(files) {
+    const fileSizeLimit = 50 * 1024 * 1024; // 50 MB
+
+    if (files.length > 10) {
+        alert("maximum files is 10");
+        return false;
+    }
+
+    for (const file of files) {
+        if (file.type !== "image/jpeg" && file.type !== "image/png") {
+            alert("incompatible file type");
+            return false;
+        }
+        if (file.size > fileSizeLimit) {
+            alert(`${file.name} is too large`);
+            return false;
+        }
+    }
+
+    for (const file of files) {
+        file.filename = Math.random().toString(36).slice(2);
+    }
+
+    return true;
+}

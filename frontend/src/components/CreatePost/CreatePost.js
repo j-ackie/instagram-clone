@@ -12,6 +12,7 @@ import { handleError } from "../../helpers";
 export default function CreatePost(props) {
     const [files, setFiles] = useState([]);
     const [isCropped, setIsCropped] = useState(false);
+    const [currImageIndex, setCurrImageIndex] = useState(0);
     const [userInfo, setUserInfo] = useContext(UserContext);
     const inputRef = useRef(null);
     const navigate = useNavigate();
@@ -50,6 +51,7 @@ export default function CreatePost(props) {
                 setFiles={ setFiles }
                 setIsCropped={ setIsCropped }
                 handleShare={ handleShare }
+                setCurrImageIndex={ setCurrImageIndex }
             />
             <div id="create-post-content">
                 {   
@@ -59,10 +61,14 @@ export default function CreatePost(props) {
                              !isCropped ? <CreatePostCrop
                                             files={ files }
                                             setFiles={ setFiles }
+                                            currImageIndex={ currImageIndex }
+                                            setCurrImageIndex={ setCurrImageIndex }
                                           /> :
                                           <CreatePostSubmit 
                                             files={ files }
                                             ref={ inputRef }
+                                            currImageIndex={ currImageIndex }
+                                            setCurrImageIndex={ setCurrImageIndex }
                                           />
                 }
             </div>

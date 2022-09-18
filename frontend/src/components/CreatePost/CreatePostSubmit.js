@@ -8,7 +8,11 @@ const CreatePostSubmit = forwardRef((props, ref) => {
     return (
         <div id="create-post-submit">
             <div id="create-post-submit-preview">
-                <CreatePostPreview files={ props.files } />
+                <CreatePostPreview 
+                    files={ props.files } 
+                    currImageIndex={ props.currImageIndex }
+                    setCurrImageIndex={ props.setCurrImageIndex }
+                />
             </div>
             <div id="create-post-options">
                 <div id="create-post-options-user">
