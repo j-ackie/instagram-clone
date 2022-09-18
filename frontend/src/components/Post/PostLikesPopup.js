@@ -1,9 +1,15 @@
 import ProfilePopupUser from "../Profile/ProfilePopupUser";
 import PostDataService from "../../services/PostDataService";
-import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { handleError } from "../../helpers";
+import UserContext from "../../UserProvider";
 
 export default function PostLikesPopup(props) {
     const [likes, setLikes] = useState([]);
+    const [, setUserInfo] = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         PostDataService.getLikesById(props.postId)
@@ -18,8 +24,11 @@ export default function PostLikesPopup(props) {
                     )
                 }
                 setLikes(likesList);
-            });
-    }, []);
+            })
+            .catch(err => {
+                handleError(err, { navigate, setUserInfo });
+            })
+    }, [navigate, props.postId, setUserInfo]);
 
     return (
         <div id="post-likes">
