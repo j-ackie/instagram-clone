@@ -1,26 +1,23 @@
 import UsersDAO from "../dao/usersDAO.js";
 import FollowersDAO from "../dao/followersDAO.js";
-import jwt from "jsonwebtoken";
 import upload, { get, del } from "../s3.js"
-import { hash, compare } from "bcrypt";
 import CommentsDAO from "../dao/commentsDAO.js";
 import PostsDAO from "../dao/postsDAO.js";
 import LikesDAO from "../dao/likesDAO.js";
 
 export default class UsersController {
     static async apiSearchUsers(req, res, next) {
-        // Handling for if req.query.username is not defined
         try {
             const searchResponse = await UsersDAO.searchUsers(req.query.username);
             
             for (const user of searchResponse) {
-                delete user.password;
                 if (user.profilePicture) {
                     user.profilePicture = await get(user.profilePicture);
                 }
             }
 
             res.json({ users: searchResponse });
+            console.log(searchResponse)
         }
         catch (err) {
             res.status(500).json({ error: err.message });
