@@ -1,4 +1,5 @@
 import { useState, useContext, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import UserContext from "../../UserProvider";
 import { Link } from "react-router-dom";
 import NavbarIcons from "./NavbarIcons";
@@ -15,6 +16,7 @@ export default function Navbar(props) {
 
     const [userInfo] = useContext(UserContext);
     const searchRef = useRef(null);
+    const location = useLocation();
 
     const handleChange = event => {
         setSearch(event.target.value);
@@ -42,6 +44,11 @@ export default function Navbar(props) {
             setSuggestedUsers([]);
         }
     }, [search]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        setSearch("");
+    }, [location.pathname]);
 
     return (
         <nav>

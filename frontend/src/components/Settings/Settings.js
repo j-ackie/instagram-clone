@@ -21,7 +21,6 @@ export default function Settings(props) {
     }
 
     const isProfileButtonDisabled = () => {
-        console.log(username === userInfo.username && bio === userInfo.bio);
         return (username === userInfo.username && bio === userInfo.bio) || username === "";
     }
 

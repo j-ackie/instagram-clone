@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from 'react';
-import { Routes, Navigate, Route, useLocation } from "react-router-dom";
+import { Routes, Navigate, Route } from "react-router-dom";
 import { UserProvider } from './UserProvider';
 import Layout from './components/Layout/Layout';
 import Content from "./components/Content/Content";
@@ -25,8 +25,6 @@ function App() {
     });
     const [isLoading, setIsLoading] = useState(true);
 
-    const location = useLocation();
-
     useEffect(() => {
         setAuthHeader();
         AuthDataService.getLogin()
@@ -40,10 +38,6 @@ function App() {
                 setIsLoading(false);
             });
     }, []);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [location.pathname]);
 
     if (isLoading) {
         return;

@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const http = axios.create({
-    baseURL: "https://instagram-clone-api.vercel.app/api/v1",
+    baseURL: "http://localhost:5000/api/v1",
     headers: {
         "Content-type": "application/json",
-        "Access-Control-Allow-Origin": "https://instagram-clone-api.vercel.app/api/v1"
+        "Access-Control-Allow-Origin": "http://localhost:5000/api/v1"
     },
     withCredentials: true
 });

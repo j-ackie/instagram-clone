@@ -6,7 +6,7 @@ import router from "./api/route.js";
 const app = express();
 
 app.use(cors({
-    origin: "https://instagram-clone-j-ackie.vercel.app",
+    origin: "http://localhost:3000",
     credentials: true
 }));
 app.use(express.json({limit: '50mb'}));

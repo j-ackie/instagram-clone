@@ -46,7 +46,7 @@ export default function Profile() {
                     });
             })
             .catch(err => {
-                navigate("/does-not-exist");
+                navigate("/does-not-exist", { replace: true });
             })
     }, [navigate, username, userInfo.userId]);
 

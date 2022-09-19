@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Text from "../Text/Text";
 import renderTimestamp from "../../helpers";
 
 export default function PostCaption(props) {
@@ -19,9 +20,9 @@ export default function PostCaption(props) {
                     >
                         { props.username }
                     </Link>
-                    <p>
-                        { props.caption }
-                    </p>
+                    <Text
+                        content={ props.caption }
+                    />
                     <div className="timestamp">
                         { renderTimestamp(props.date) }
                     </div>

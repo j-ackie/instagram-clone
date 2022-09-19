@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import Text from "../Text/Text";
 import UserDataService from "../../services/UserDataService";
 import UserContext from "../../UserProvider";
 import defaultProfilePicture from "../../defaultProfilePicture.png";
@@ -48,9 +49,9 @@ export default function PostComment(props) {
                     >
                         { commentUserInfo.username }
                     </Link>
-                    <p>
-                        { props.comment.comment }
-                    </p>
+                    <Text
+                        content={ props.comment.comment }
+                    />
                     <div className="timestamp">
                         { renderTimestamp(props.comment.date) }
                     </div>

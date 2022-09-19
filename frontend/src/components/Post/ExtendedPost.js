@@ -45,7 +45,7 @@ export default function ExtendedPost(props) {
                     });
             })
             .catch(err => {
-                navigate("/does-not-exist");
+                navigate("/does-not-exist", { replace: true });
             });
     }, [navigate, postId]);
 

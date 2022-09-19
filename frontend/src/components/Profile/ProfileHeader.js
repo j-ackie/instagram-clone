@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../UserProvider";
+import Text from "../Text/Text";
 import Popup from "../Popup/Popup";
 import ProfileFollowers from "./ProfileFollowers";
 import ProfileFollowing from "./ProfileFollowing";
@@ -137,9 +138,9 @@ export default function ProfileHeader(props) {
                     </span>
                 </div>
                 <div className="profile-page-header-info-bottom">
-                    <p>
-                        { props.profileUserInfo.bio }
-                    </p>
+                    <Text
+                        content={ props.profileUserInfo.bio }
+                    />
                 </div>
             </div>
             </div>
